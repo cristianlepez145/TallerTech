@@ -1,0 +1,5 @@
+# Ignorar archivo de variables de entorno (contraseñas)
+.env
+conexion.php
+# Ignorar carpeta de dependencias de PHP (si usas Composer después)
+/vendor/
