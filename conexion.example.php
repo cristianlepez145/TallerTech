@@ -25,3 +25,5 @@ try {
     die("Error de conexión: " . $e->getMessage());
 }
 ?>
+//favor de copiar este archivo y modificar la copia este dejarlo tal cual 
+// el archivo copia poner conexion.php sin el example
