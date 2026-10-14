@@ -1,0 +1,598 @@
+/**
+ * TallerTech - Módulo de Reseñas CSS (Dark Mode Elegante)
+ * Cuadrícula responsiva de 3 columnas, tarjetas con esquinas redondeadas,
+ * calificación con estrellas doradas y modal interactivo.
+ */
+
+:root {
+    --bg-page: #121212;
+    --bg-card: #1c1c1c;
+    --bg-card-hover: #212121;
+    --bg-input: #141414;
+    --border-card: #2e2e2e;
+    --border-card-hover: rgba(196, 136, 73, 0.45);
+    --border-input: #333333;
+    --border-focus: #c48849;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-muted: #737373;
+    
+    --wood-accent: #c48849;
+    --wood-accent-hover: #dc9b57;
+    --gold-star: #e5a534;
+    --gold-star-bg: rgba(229, 165, 52, 0.12);
+    
+    --radius-card: 20px;
+    --radius-modal: 24px;
+    --radius-pill: 9999px;
+    --transition-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   ESTRUCTURA Y ENCABEZADO
+   ========================================================================== */
+
+.resenas-page-wrapper {
+    background-color: var(--bg-page);
+    min-height: calc(100vh - 160px);
+    padding: 3.5rem 0 5.5rem;
+}
+
+.resenas-header-section {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.25rem;
+}
+
+.resenas-header-info {
+    max-width: 680px;
+}
+
+.resenas-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: rgba(196, 136, 73, 0.12);
+    border: 1px solid rgba(196, 136, 73, 0.3);
+    color: var(--wood-accent);
+    padding: 0.35rem 0.95rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+}
+
+.resenas-main-title {
+    font-size: 2.45rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin: 0 0 0.5rem 0;
+}
+
+.resenas-main-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Botón Píldora para Escribir Reseña */
+.btn-pill-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.85rem 1.65rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+}
+
+.btn-pill-cta:hover {
+    background-color: #f2f2f2;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+}
+
+.btn-pill-cta.guest {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid var(--border-card);
+}
+
+.btn-pill-cta.guest:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-pill-cta.locked {
+    background-color: #1a1a1a;
+    color: #a8a8a8;
+    border: 1px solid #333333;
+    box-shadow: none;
+}
+
+.btn-pill-cta.locked:hover {
+    background-color: #242424;
+    color: #ffffff;
+    border-color: rgba(196, 136, 73, 0.45);
+    transform: translateY(-2px);
+}
+
+.modal-lock-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background-color: rgba(196, 136, 73, 0.12);
+    border: 1px solid rgba(196, 136, 73, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem;
+}
+
+/* ==========================================================================
+   BARRA DE RESUMEN / MÉTRICAS DE SATISFACCIÓN
+   ========================================================================== */
+
+.resenas-stats-bar {
+    background-color: #171717;
+    border: 1px solid var(--border-card);
+    border-radius: 18px;
+    padding: 1.25rem 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-score-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(229, 165, 52, 0.2), rgba(196, 136, 73, 0.1));
+    border: 1px solid rgba(229, 165, 52, 0.35);
+    color: var(--gold-star);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.stat-text-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.stat-desc {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.stat-stars-gold {
+    color: var(--gold-star);
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 38px;
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* ==========================================================================
+   GRID DE RESEÑAS (3 COLUMNAS RESPONSIVAS)
+   ========================================================================== */
+
+.resenas-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.65rem;
+}
+
+.resena-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 2.1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: var(--transition-smooth);
+    position: relative;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.resena-card:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-card-hover);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(196, 136, 73, 0.1);
+}
+
+/* Cabecera de la tarjeta: Estrellas + Proyecto */
+.resena-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.resena-stars-group {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    color: var(--gold-star);
+}
+
+.resena-stars-group svg {
+    width: 17px;
+    height: 17px;
+    fill: var(--gold-star);
+    stroke: none;
+}
+
+.resena-project-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-pill);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--wood-accent);
+    max-width: 170px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Testimonio / Cita */
+.resena-quote-wrapper {
+    flex: 1;
+    margin-bottom: 1.75rem;
+}
+
+.resena-quote-text {
+    font-size: 0.94rem;
+    line-height: 1.68;
+    color: #e5e5e5;
+    margin: 0;
+    font-style: normal;
+}
+
+.resena-quote-text::before {
+    content: "“";
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+    line-height: 0;
+    color: var(--wood-accent);
+    margin-right: 3px;
+    vertical-align: -4px;
+}
+
+.resena-quote-text::after {
+    content: "”";
+    font-family: Georgia, serif;
+    font-size: 1.5rem;
+    line-height: 0;
+    color: var(--wood-accent);
+    margin-left: 3px;
+    vertical-align: -4px;
+}
+
+/* Pie de la tarjeta: Autor, Avatar y Fecha */
+.resena-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    padding-top: 1.2rem;
+    margin-top: auto;
+}
+
+.resena-author-box {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+}
+
+.resena-avatar-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.resena-author-details {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.resena-author-name {
+    font-size: 0.94rem;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.15rem;
+}
+
+.resena-date-text {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.resena-verified-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+    color: #86efac;
+    background-color: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    padding: 0.2rem 0.55rem;
+    border-radius: var(--radius-pill);
+    flex-shrink: 0;
+}
+
+/* ==========================================================================
+   MODAL PARA DEJAR RESEÑA (DARK MODE FIEL A TALLERTECH)
+   ========================================================================== */
+
+.modal-content.dark-theme-modal {
+    background-color: #181818;
+    border: 1px solid #2e2e2e;
+    border-radius: var(--radius-modal);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.modal-header.dark-theme-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.5rem 1.85rem;
+    background-color: #1a1a1a;
+}
+
+.modal-title.dark-theme-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+}
+
+.modal-body.dark-theme-body {
+    padding: 1.85rem;
+}
+
+.modal-footer.dark-theme-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.15rem 1.85rem;
+    background-color: #161616;
+}
+
+/* Selector Interactivo de Estrellas */
+.star-rating-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 1.25rem 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stars-interactive-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.star-btn {
+    background: transparent;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    outline: none;
+}
+
+.star-btn:hover {
+    transform: scale(1.22);
+}
+
+.star-btn svg {
+    width: 32px;
+    height: 32px;
+    fill: #3a3a3a;
+    transition: fill 0.2s ease;
+}
+
+.star-btn.is-active svg,
+.star-btn.is-hover svg {
+    fill: var(--gold-star);
+}
+
+.star-rating-hint {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--wood-accent);
+}
+
+/* Campos de Formulario en Modal */
+.form-group-modal {
+    margin-bottom: 1.35rem;
+}
+
+.form-label-modal {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.45rem;
+}
+
+.form-label-modal small {
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.form-input-modal,
+.form-select-modal,
+.form-textarea-modal {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-input);
+    border-radius: 14px;
+    padding: 0.85rem 1.15rem;
+    font-size: 0.92rem;
+    color: #ffffff;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.form-input-modal:focus,
+.form-select-modal:focus,
+.form-textarea-modal:focus {
+    border-color: var(--border-focus);
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 3px rgba(196, 136, 73, 0.2);
+}
+
+.form-select-modal option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Alertas de Notificación */
+.resenas-alert {
+    padding: 1.1rem 1.35rem;
+    border-radius: 14px;
+    margin-bottom: 2.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+}
+
+.resenas-alert.success {
+    background-color: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #86efac;
+}
+
+.resenas-alert.error {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+    .resenas-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .resenas-page-wrapper {
+        padding: 2.5rem 0 4rem;
+    }
+
+    .resenas-header-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+    }
+
+    .resenas-main-title {
+        font-size: 2rem;
+    }
+
+    .resenas-stats-bar {
+        padding: 1.25rem 1.5rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.2rem;
+    }
+
+    .stat-divider {
+        display: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .resenas-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .resena-card {
+        padding: 1.65rem;
+        border-radius: 18px;
+    }
+
+    .btn-pill-cta {
+        width: 100%;
+        justify-content: center;
+    }
+}
+

@@ -1,0 +1,654 @@
+/**
+ * TallerTech - Módulo de Seguimiento de Pedidos CSS (Dark Mode Elegante)
+ * Tarjetas de pedidos, línea de tiempo (Stepper), filtros interactivos y modales
+ */
+
+:root {
+    --bg-page: #121212;
+    --bg-card: #1a1a1a;
+    --bg-card-hover: #202020;
+    --bg-surface: #141414;
+    --border-card: #2a2a2a;
+    --border-card-hover: rgba(196, 136, 73, 0.4);
+    --border-subtle: #242424;
+    
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-muted: #737373;
+    
+    --wood-accent: #c48849;
+    --wood-accent-hover: #dc9b57;
+    --amber-quote: #d97706;
+    --blue-progress: #0284c7;
+    --green-delivered: #16a34a;
+    
+    --radius-card: 20px;
+    --radius-pill: 9999px;
+    --radius-modal: 24px;
+    --transition-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   ESTRUCTURA PRINCIPAL Y ENCABEZADO
+   ========================================================================== */
+
+.pedidos-page-wrapper {
+    background-color: var(--bg-page);
+    min-height: calc(100vh - 160px);
+    padding: 3.5rem 0 5.5rem;
+}
+
+.pedidos-header-section {
+    margin-bottom: 2.25rem;
+}
+
+.pedidos-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background-color: rgba(196, 136, 73, 0.12);
+    border: 1px solid rgba(196, 136, 73, 0.3);
+    color: var(--wood-accent);
+    padding: 0.35rem 0.95rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.85rem;
+}
+
+.pedidos-main-title {
+    font-size: 2.45rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    margin: 0 0 0.5rem 0;
+}
+
+.pedidos-main-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 650px;
+}
+
+/* Barra de Filtros Rápidos (Botones Píldora) */
+.filters-pill-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+}
+
+.btn-filter-pill {
+    background-color: #1a1a1a;
+    border: 1px solid var(--border-card);
+    color: var(--text-secondary);
+    border-radius: var(--radius-pill);
+    padding: 0.55rem 1.35rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-filter-pill:hover {
+    background-color: #262626;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-filter-pill.active {
+    background-color: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    font-weight: 700;
+    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+}
+
+.filter-count-badge {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.72rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: currentColor;
+}
+
+.btn-filter-pill.active .filter-count-badge {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   TARJETAS DE PEDIDO (ORDER CARDS)
+   ========================================================================== */
+
+.pedidos-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.order-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 2.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    transition: var(--transition-smooth);
+    position: relative;
+    overflow: hidden;
+}
+
+.order-card:hover {
+    border-color: var(--border-card-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(196, 136, 73, 0.08);
+}
+
+/* Encabezado de la Tarjeta */
+.order-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.35rem;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 1.75rem;
+}
+
+.order-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.order-code-badge {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+}
+
+.order-date-text {
+    font-size: 0.84rem;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Badges de Estado */
+.status-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.4rem 1.05rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+/* 1. En proceso de cotización */
+.status-pill-badge.cotizacion {
+    background-color: rgba(217, 119, 6, 0.15);
+    border: 1px solid rgba(217, 119, 6, 0.35);
+    color: #fbbf24;
+}
+
+/* 2. En proceso de trabajo / Fabricación */
+.status-pill-badge.fabricacion {
+    background-color: rgba(2, 132, 199, 0.15);
+    border: 1px solid rgba(2, 132, 199, 0.35);
+    color: #38bdf8;
+}
+
+/* 3. Entregado */
+.status-pill-badge.entregado {
+    background-color: rgba(22, 163, 74, 0.15);
+    border: 1px solid rgba(22, 163, 74, 0.35);
+    color: #86efac;
+}
+
+/* Cuerpo de la Tarjeta */
+.order-card-body {
+    display: flex;
+    align-items: stretch;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.order-thumb-wrapper {
+    width: 170px;
+    height: 150px;
+    border-radius: 14px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: #0d0d0d;
+}
+
+.order-thumb-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.order-card:hover .order-thumb-img {
+    transform: scale(1.05);
+}
+
+.order-details-center {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.order-project-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.4rem 0;
+}
+
+.order-specs-text {
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+/* Desglose Financiero (Anticipo 60% / Saldo 40%) */
+.order-finance-grid {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 0.75rem 1.15rem;
+}
+
+.finance-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.finance-label {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.15rem;
+}
+
+.finance-val {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.finance-val.accent {
+    color: var(--wood-accent);
+}
+
+/* ==========================================================================
+   LÍNEA DE TIEMPO / STEPPER VISUAL (3 ETAPAS)
+   ========================================================================== */
+
+.order-stepper-box {
+    background-color: #151515;
+    border: 1px solid var(--border-card);
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.75rem;
+}
+
+.stepper-timeline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.stepper-step {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    position: relative;
+    z-index: 2;
+}
+
+.stepper-node {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #121212;
+    border: 2px solid #333333;
+    color: #666666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.88rem;
+    transition: var(--transition-smooth);
+    flex-shrink: 0;
+}
+
+.stepper-step.completed .stepper-node {
+    background-color: #16a34a;
+    border-color: #16a34a;
+    color: #ffffff;
+}
+
+.stepper-step.active .stepper-node {
+    background-color: #1c1c1c;
+    border-color: #ffffff;
+    color: #ffffff;
+    box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
+}
+
+.stepper-step.active.status-cotizacion .stepper-node {
+    border-color: #fbbf24;
+    color: #fbbf24;
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+}
+
+.stepper-step.active.status-fabricacion .stepper-node {
+    border-color: #38bdf8;
+    color: #38bdf8;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+}
+
+.stepper-step.active.status-entregado .stepper-node {
+    border-color: #86efac;
+    color: #86efac;
+    box-shadow: 0 0 16px rgba(134, 239, 172, 0.3);
+}
+
+.stepper-label-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.stepper-step-num {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.stepper-step-name {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.stepper-step.active .stepper-step-name,
+.stepper-step.completed .stepper-step-name {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* Conectores / Líneas del Stepper */
+.stepper-line {
+    flex: 1;
+    height: 3px;
+    background-color: #282828;
+    margin: 0 1rem;
+    transition: var(--transition-smooth);
+}
+
+.stepper-line.completed {
+    background-color: #16a34a;
+}
+
+.stepper-line.active {
+    background: linear-gradient(90deg, #16a34a, #38bdf8);
+}
+
+/* Acciones de la Tarjeta */
+.order-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.85rem;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 1.25rem;
+}
+
+.btn-order-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.btn-order-action.secondary {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+}
+
+.btn-order-action.secondary:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.btn-order-action.primary-pill {
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.btn-order-action.primary-pill:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.18);
+}
+
+/* ==========================================================================
+   ESTADO VACÍO (EMPTY STATE)
+   ========================================================================== */
+
+.pedidos-empty-state {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 4.5rem 2rem;
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+}
+
+.empty-state-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background-color: rgba(196, 136, 73, 0.12);
+    border: 1px solid rgba(196, 136, 73, 0.3);
+    color: var(--wood-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state-title {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state-desc {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Tarjeta de Inicio de Sesión Requerido */
+.auth-required-box {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 4.5rem 2rem;
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   MODAL DE DETALLES Y CROQUIS
+   ========================================================================== */
+
+.modal-content.dark-theme-modal {
+    background-color: #181818;
+    border: 1px solid #2e2e2e;
+    border-radius: var(--radius-modal);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.modal-header.dark-theme-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.5rem 1.85rem;
+    background-color: #1a1a1a;
+}
+
+.modal-body.dark-theme-body {
+    padding: 1.85rem;
+}
+
+.modal-footer.dark-theme-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.15rem 1.85rem;
+    background-color: #161616;
+}
+
+.details-spec-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    font-size: 0.92rem;
+}
+
+.details-spec-item:last-child {
+    border-bottom: none;
+}
+
+.details-spec-label {
+    color: var(--text-secondary);
+}
+
+.details-spec-value {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .order-card-body {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .order-thumb-wrapper {
+        width: 100%;
+        height: 220px;
+    }
+
+    .stepper-timeline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .stepper-line {
+        width: 3px;
+        height: 30px;
+        flex: none;
+        margin: -0.5rem 0 -0.5rem 1.15rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .pedidos-page-wrapper {
+        padding: 2.5rem 0 4rem;
+    }
+
+    .order-card {
+        padding: 1.5rem;
+        border-radius: 18px;
+    }
+
+    .order-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .order-finance-grid {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+
+    .order-card-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .btn-order-action {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .filters-pill-bar {
+        width: 100%;
+    }
+
+    .btn-filter-pill {
+        flex: 1 1 auto;
+        justify-content: center;
+    }
+}
+
