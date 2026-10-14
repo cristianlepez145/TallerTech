@@ -80,7 +80,32 @@
     line-height: 1.6;
 }
 
-/* Grid de las 3 Reglas de Negocio */
+/* Micro-encabezado de aviso previo a cotizar */
+.rules-notice-header {
+    text-align: center;
+    margin-bottom: 1.75rem;
+}
+
+.rules-notice-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: rgba(229, 165, 52, 0.12);
+    border: 1px solid rgba(229, 165, 52, 0.35);
+    color: #fbbf24;
+    padding: 0.45rem 1.25rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.rules-notice-pill svg {
+    color: #f59e0b;
+}
+
+/* Grid de las 3 Reglas de Negocio / Condiciones */
 .business-rules-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -103,6 +128,16 @@
     transform: translateY(-4px);
     border-color: rgba(196, 136, 73, 0.4);
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 24px var(--wood-accent-glow);
+}
+
+.business-rule-card.highlight-advance-card {
+    border-color: rgba(196, 136, 73, 0.35);
+    background: linear-gradient(180deg, rgba(28, 28, 28, 0.95) 0%, rgba(22, 22, 22, 0.95) 100%);
+}
+
+.business-rule-card.highlight-advance-card:hover {
+    border-color: rgba(251, 191, 36, 0.6);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 28px rgba(196, 136, 73, 0.25);
 }
 
 .business-rule-icon {
@@ -131,6 +166,18 @@
     color: var(--text-secondary);
     line-height: 1.6;
     margin-bottom: 0;
+}
+
+/* Resaltados de advertencia y anticipo */
+.highlight-gold {
+    color: #fbbf24;
+    font-weight: 800;
+    text-shadow: 0 0 10px rgba(251, 191, 36, 0.25);
+}
+
+.highlight-warning {
+    color: #fbbf24;
+    font-weight: 700;
 }
 
 /* ==========================================================================

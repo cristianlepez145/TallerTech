@@ -98,20 +98,33 @@ require_once 'includes/header.php';
 
         <!-- Encabezado de la Sección -->
         <header class="cotizaciones-header-main">
-            <span class="cotizaciones-tag">Reglas de Negocio &amp; Estimaciones</span>
-            <h1 class="cotizaciones-hero-title">Módulo de Cotizaciones y Reglas de Negocio</h1>
+            <span class="cotizaciones-tag">Presupuestos &amp; Carpintería a Medida</span>
+            <h1 class="cotizaciones-hero-title">Cotizador en Línea &amp; Condiciones del Servicio</h1>
             <p class="cotizaciones-hero-subtitle">
-                Conoce los lineamientos técnicos paramétricos y los esquemas de pago establecidos para la elaboración de mobiliario artesanal en TallerTech.
+                Calcula al instante el costo estimado de tu próximo mueble artesanal y conoce nuestras condiciones de fabricación antes de solicitar tu cotización formal.
             </p>
         </header>
 
         <!-- ==========================================================================
-             SECCIÓN 1: REGLAS DE NEGOCIO (3 TARJETAS SUPERIORES)
+             SECCIÓN 1: CONDICIONES PREVIAS (3 TARJETAS SUPERIORES)
              ========================================================================== -->
-        <section class="business-rules-section" aria-label="Reglas de negocio del taller">
+        <section class="business-rules-section" aria-label="Condiciones previas y reglas de cotización">
+            
+            <!-- Micro-encabezado de aviso previo al cliente -->
+            <div class="rules-notice-header">
+                <span class="rules-notice-pill">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                        <line x1="12" y1="9" x2="12" y2="13"/>
+                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                    </svg>
+                    Lee antes de cotizar &bull; Condiciones del Servicio
+                </span>
+            </div>
+
             <div class="business-rules-grid">
 
-                <!-- Tarjeta 1: Cálculo Paramétrico -->
+                <!-- Tarjeta 1: Cálculo de tu Presupuesto -->
                 <article class="business-rule-card">
                     <div class="business-rule-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -127,30 +140,30 @@ require_once 'includes/header.php';
                             <path d="M8 18h.01"/>
                         </svg>
                     </div>
-                    <h3 class="business-rule-title">Cálculo Paramétrico</h3>
+                    <h3 class="business-rule-title">Cálculo de tu Presupuesto</h3>
                     <p class="business-rule-desc">
-                        El precio se calcula con base en dimensiones (hojas/tablones), insumos (sellador, barniz, tinta), tiempo de elaboración e instalación, y distancia de entrega.
+                        Ten en cuenta que el costo estimado se calcula de forma automática considerando las medidas de tu espacio, la cantidad de madera requerida, insumos de alta calidad (sellador, barnices y tintas), el tiempo estimado de fabricación en taller y la distancia para la entrega o instalación.
                     </p>
                 </article>
 
-                <!-- Tarjeta 2: Emisión de Estimados -->
+                <!-- Tarjeta 2: Aviso de Precio Estimado -->
                 <article class="business-rule-card">
                     <div class="business-rule-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/>
+                            <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/>
                             <path d="M14 8H8"/>
                             <path d="M16 12H8"/>
                             <path d="M13 16H8"/>
                         </svg>
                     </div>
-                    <h3 class="business-rule-title">Emisión de Estimados</h3>
+                    <h3 class="business-rule-title">Aviso de Precio Estimado</h3>
                     <p class="business-rule-desc">
-                        El sistema genera una cotización estimada al instante para el cliente, estableciendo claramente mediante un aviso que el precio final está sujeto a revisión.
+                        <strong class="highlight-warning">⚠️ Importante:</strong> El monto generado en esta plataforma es un estimado preliminar y no representa un precio final cerrado. Todo presupuesto está sujeto a revisión y confirmación técnica por parte del taller tras corroborar medidas exactas y disponibilidad de materiales.
                     </p>
                 </article>
 
-                <!-- Tarjeta 3: Esquema de Cobro -->
-                <article class="business-rule-card">
+                <!-- Tarjeta 3: Anticipo Obligatorio (60%) -->
+                <article class="business-rule-card highlight-advance-card">
                     <div class="business-rule-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="m11 17 2 2a1 1 0 0 0 1.42 0l4.58-4.59a1 1 0 0 0 0-1.41l-2.59-2.6a1 1 0 0 0-1.41 0L13.59 12"/>
@@ -160,9 +173,9 @@ require_once 'includes/header.php';
                             <path d="m6 18 3 3"/>
                         </svg>
                     </div>
-                    <h3 class="business-rule-title">Esquema de Cobro</h3>
+                    <h3 class="business-rule-title">Anticipo Obligatorio (<span class="highlight-gold">60%</span>)</h3>
                     <p class="business-rule-desc">
-                        Para autorizar e iniciar formalmente cualquier proyecto aprobado en el sistema, se requiere registrar un anticipo obligatorio del 60% del costo total.
+                        Para autorizar formalmente tu proyecto e iniciar los cortes y compras de material en taller, es indispensable cubrir un anticipo obligatorio del <strong class="highlight-gold">60%</strong> del costo total aprobado. El <span class="text-white fw-semibold">40% restante</span> se liquida contra entrega e instalación de tus muebles.
                     </p>
                 </article>
 
