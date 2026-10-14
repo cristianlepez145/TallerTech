@@ -1,0 +1,350 @@
+/**
+ * TallerTech - Login CSS (Dark Mode Split Layout)
+ * Layout de pantalla completa con mosaico visual y formulario centrado
+ */
+
+:root {
+    --bg-page: #101010;
+    --card-bg: #181818;
+    --mosaic-bg: #141414;
+    --border-card: rgba(255, 255, 255, 0.08);
+    --border-input: #2f2f2f;
+    --border-focus: #e5e5e5;
+
+    --text-primary: #ffffff;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
+    --wood-accent: #c48849;
+
+    --error-bg: rgba(239, 68, 68, 0.12);
+    --error-border: rgba(239, 68, 68, 0.3);
+    --error-text: #fca5a5;
+
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --transition-fast: all 0.2s ease-in-out;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Contenedor de pantalla completa centrado */
+.login-page-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1.5rem;
+    background: radial-gradient(circle at 50% 30%, #1a1a1a 0%, #101010 100%);
+}
+
+/* Tarjeta principal dividida en dos columnas */
+.login-card {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    width: 100%;
+    max-width: 1060px;
+    min-height: 620px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-card);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+/* ==========================================================================
+   COLUMNA IZQUIERDA: MOSAICO DE FOTOS (MASONRY MODERNO)
+   ========================================================================== */
+
+.login-mosaic-col {
+    background-color: var(--mosaic-bg);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid var(--border-card);
+}
+
+.mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.mosaic-item {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    background-color: #1a1a1a;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s ease;
+}
+
+.mosaic-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.mosaic-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.mosaic-item:hover img {
+    transform: scale(1.06);
+}
+
+/* Alturas escalonadas para el efecto masonry moderno */
+.mosaic-item--tall-1 {
+    height: 250px;
+}
+
+.mosaic-item--short-1 {
+    height: 170px;
+}
+
+.mosaic-item--short-2 {
+    height: 180px;
+}
+
+.mosaic-item--tall-2 {
+    height: 240px;
+}
+
+/* Overlay sutil para dar calidez y proteger el contraste */
+.mosaic-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 100%);
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   COLUMNA DERECHA: FORMULARIO CENTRADO
+   ========================================================================== */
+
+.login-form-col {
+    padding: 3.5rem 3.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--card-bg);
+}
+
+.login-form-inner {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+}
+
+/* Cabecera del formulario (Logo + Marca) */
+.login-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    margin-bottom: 2rem;
+}
+
+.login-brand svg {
+    color: var(--wood-accent);
+}
+
+.login-brand-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+.login-welcome {
+    margin-bottom: 2rem;
+}
+
+.login-welcome-title {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+}
+
+.login-welcome-subtitle {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+}
+
+/* Alerta de Error Discreta y Estilizada */
+.login-error-alert {
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-text);
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    animation: fadeInError 0.25s ease-out;
+}
+
+.login-error-alert svg {
+    flex-shrink: 0;
+}
+
+@keyframes fadeInError {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Campos del Formulario */
+.form-group {
+    margin-bottom: 1.35rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.form-input {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-input);
+    border-radius: 14px;
+    padding: 0.9rem 1.15rem;
+    font-size: 0.95rem;
+    color: #ffffff;
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.form-input::placeholder {
+    color: #555555;
+}
+
+.form-input:focus {
+    background-color: rgba(255, 255, 255, 0.07);
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+/* Botón Píldora LOG IN */
+.btn-login-pill {
+    width: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.95rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.12);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-login-pill:hover {
+    background-color: #eaeaea;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.22);
+}
+
+.btn-login-pill:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Fila inferior de enlaces */
+.login-links-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.75rem;
+    padding-top: 0.5rem;
+    font-size: 0.88rem;
+}
+
+.auth-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-fast);
+}
+
+.auth-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 960px) {
+    .login-card {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        min-height: auto;
+        border-radius: 24px;
+    }
+
+    .login-mosaic-col {
+        display: none; /* En móviles o pantallas medianas el formulario queda centrado */
+    }
+
+    .login-form-col {
+        padding: 3rem 2.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-page-container {
+        padding: 1rem;
+    }
+
+    .login-form-col {
+        padding: 2.25rem 1.5rem;
+    }
+
+    .login-welcome-title {
+        font-size: 1.45rem;
+    }
+}
+

@@ -2,3 +2,5 @@
 .env
 # Ignorar carpeta de dependencias de PHP (si usas Composer después)
 /vendor/
+.clineignore
+.clinerules

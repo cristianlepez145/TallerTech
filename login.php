@@ -1,99 +1,210 @@
 <?php
-// 1. Iniciamos la sesión para poder guardar los datos del usuario logueado
-session_start();
+/**
+ * TallerTech - Inicio de Sesión (Login Visual Split Screen)
+ * Pantalla completa en modo oscuro con mosaico fotográfico y autenticación PDO
+ */
 
-// Si el usuario ya está logueado, lo mandamos directo al inicio para que no vea el login
+// 1. Iniciar la sesión para verificar y registrar al usuario
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// 2. Si el usuario ya está autenticado, redirigir directo a la página principal
 if (isset($_SESSION['id_usuario'])) {
     header('Location: index.php');
     exit;
 }
 
+// 3. Conexión segura con PDO
 require_once 'includes/conexion.php';
-$mensaje = '';
+
+$mensaje_error = '';
 $correo = '';
 
+// 4. Procesamiento de formulario de inicio de sesión
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $correo = trim($_POST['correo'] ?? '');
+    $correo   = trim($_POST['correo'] ?? '');
     $password = $_POST['password'] ?? '';
 
     if (empty($correo) || empty($password)) {
-        $mensaje = "<div class='alert alert-warning'>Por favor, llena ambos campos.</div>";
+        $mensaje_error = 'Por favor, llena ambos campos para continuar.';
     } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-        $mensaje = "<div class='alert alert-warning'>Por favor, ingresa un correo electrónico válido.</div>";
+        $mensaje_error = 'Ingresa un formato de correo electrónico válido.';
     } else {
         try {
-            // Buscamos al usuario por su correo con sentencia preparada
+            // Sentencia preparada para prevenir inyección SQL
             $sql = "SELECT id_usuario, nombre, correo, password_hash, rol FROM usuarios WHERE correo = :correo LIMIT 1";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([':correo' => $correo]);
             
-            // fetch() nos trae una sola fila como array asociativo
             $usuario = $stmt->fetch();
 
-            // Si el usuario existe y la contraseña introducida coincide con el hash guardado...
+            // Verificación segura de contraseña con hash
             if ($usuario && password_verify($password, $usuario['password_hash'])) {
-                
-                // Regenerar el ID de sesión para prevenir fijación de sesión (Session Fixation)
+                // Prevenir ataques de fijación de sesión (Session Fixation)
                 session_regenerate_id(true);
 
-                // ¡Éxito! Guardamos sus datos en variables de sesión
+                // Guardar datos del usuario autenticado en sesión
                 $_SESSION['id_usuario'] = $usuario['id_usuario'];
-                $_SESSION['nombre'] = $usuario['nombre'];
-                $_SESSION['correo'] = $usuario['correo'];
-                $_SESSION['rol'] = $usuario['rol'];
+                $_SESSION['nombre']     = $usuario['nombre'];
+                $_SESSION['correo']     = $usuario['correo'];
+                $_SESSION['rol']        = $usuario['rol'];
 
-                // Lo redirigimos a la página principal
+                // Redirigir a la página principal
                 header('Location: index.php');
                 exit;
             } else {
-                // Mensaje genérico para no exponer si el correo existe o no
-                $mensaje = "<div class='alert alert-danger'>Correo o contraseña incorrectos.</div>";
+                // Mensaje discreto sin revelar detalles internos
+                $mensaje_error = 'Correo electrónico o contraseña incorrectos.';
             }
         } catch (PDOException $e) {
-            error_log("Error en inicio de sesión: " . $e->getMessage());
-            $mensaje = "<div class='alert alert-danger'>Ocurrió un error en el servidor. Por favor, intenta de nuevo más tarde.</div>";
+            error_log('Error en login PDO: ' . $e->getMessage());
+            $mensaje_error = 'Ocurrió un error en el servidor. Intenta de nuevo más tarde.';
         }
     }
 }
-
-if (file_exists(__DIR__ . '/includes/header.php')) {
-    require_once __DIR__ . '/includes/header.php';
-}
 ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | TallerTech</title>
+    
+    <!-- Estilos específicos de Login (Pantalla completa, Mosaico y Formulario) -->
+    <link rel="stylesheet" href="assets/css/login.css">
+</head>
+<body>
 
-<!-- Formulario de Login HTML -->
-<div class="row justify-content-center mt-5">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-sm">
-            <div class="card-body">
-                <h3 class="card-title text-center mb-4">Iniciar Sesión</h3>
+<div class="login-page-container">
+    <div class="login-card">
+        
+        <!-- Columna Izquierda: Mosaico de Fotos de Carpintería y Espacios (Masonry Moderno) -->
+        <div class="login-mosaic-col" aria-hidden="true">
+            <div class="mosaic-grid">
                 
-                <?= $mensaje ?>
-
-                <form method="POST" action="login.php">
-                    <div class="mb-3">
-                        <label for="correo" class="form-label">Correo electrónico</label>
-                        <input type="email" class="form-control" id="correo" name="correo" value="<?= htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') ?>" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-success">Entrar</button>
-                    </div>
-                </form>
-                
-                <div class="text-center mt-3">
-                    <a href="Registro.php" class="text-decoration-none">¿No tienes cuenta? Regístrate aquí</a>
+                <!-- Foto 1: Cocina de madera elegante -->
+                <div class="mosaic-item mosaic-item--tall-1">
+                    <img 
+                        src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80" 
+                        alt="Cocina contemporánea en madera selecta"
+                        loading="eager"
+                    >
+                    <div class="mosaic-overlay"></div>
                 </div>
+
+                <!-- Foto 2: Mueble contemporáneo y repisa -->
+                <div class="mosaic-item mosaic-item--short-1">
+                    <img 
+                        src="https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=600&q=80" 
+                        alt="Mueble de diseño contemporáneo"
+                        loading="eager"
+                    >
+                    <div class="mosaic-overlay"></div>
+                </div>
+
+                <!-- Foto 3: Mobiliario artesanal y comedor -->
+                <div class="mosaic-item mosaic-item--short-2">
+                    <img 
+                        src="https://images.unsplash.com/photo-1592078615290-033ee584e267?auto=format&fit=crop&w=600&q=80" 
+                        alt="Mobiliario de diseño y carpintería fina"
+                        loading="lazy"
+                    >
+                    <div class="mosaic-overlay"></div>
+                </div>
+
+                <!-- Foto 4: Mueble de baño suspendido -->
+                <div class="mosaic-item mosaic-item--tall-2">
+                    <img 
+                        src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80" 
+                        alt="Vanity de baño en madera estufada"
+                        loading="lazy"
+                    >
+                    <div class="mosaic-overlay"></div>
+                </div>
+
             </div>
         </div>
+
+        <!-- Columna Derecha: Formulario Centrado -->
+        <div class="login-form-col">
+            <div class="login-form-inner">
+                
+                <!-- Logo del Árbol + Texto TallerTech -->
+                <a href="index.php" class="login-brand" title="TallerTech">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L6 8h3.5l-4 6h4l-3.5 5h12l-3.5-5h4l-4-6H18L12 2z" fill="rgba(196, 136, 73, 0.22)" stroke="#c48849" />
+                        <path d="M11 21v3h2v-3" stroke="#c48849" stroke-width="2.5" />
+                    </svg>
+                    <span class="login-brand-title">TallerTech</span>
+                </a>
+
+                <div class="login-welcome">
+                    <h1 class="login-welcome-title">Bienvenido</h1>
+                    <p class="login-welcome-subtitle">Ingresa a tu cuenta para gestionar tus cotizaciones y pedidos.</p>
+                </div>
+
+                <!-- Mensaje de error discreto y estilizado en rojo suave -->
+                <?php if (!empty($mensaje_error)): ?>
+                    <div class="login-error-alert" role="alert">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <span><?= htmlspecialchars($mensaje_error, ENT_QUOTES, 'UTF-8') ?></span>
+                    </div>
+                <?php endif; ?>
+
+                <!-- Formulario de Autenticación -->
+                <form method="POST" action="login.php" autocomplete="on">
+                    
+                    <!-- Campo Email -->
+                    <div class="form-group">
+                        <label for="correo" class="form-label">Email</label>
+                        <input 
+                            type="email" 
+                            id="correo" 
+                            name="correo" 
+                            class="form-input" 
+                            placeholder="nombre@ejemplo.com" 
+                            value="<?= htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') ?>" 
+                            required 
+                            autofocus
+                        >
+                    </div>
+
+                    <!-- Campo Password -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            class="form-input" 
+                            placeholder="••••••••" 
+                            required
+                        >
+                    </div>
+
+                    <!-- Botón Píldora LOG IN -->
+                    <button type="submit" class="btn-login-pill">
+                        LOG IN
+                    </button>
+
+                    <!-- Fila Inferior con Enlaces -->
+                    <div class="login-links-row">
+                        <a href="#" class="auth-link" title="Recuperar contraseña">Forgot Password</a>
+                        <a href="Registro.php" class="auth-link" title="Crear una nueva cuenta">Sign up</a>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
     </div>
 </div>
 
-<?php 
-if (file_exists(__DIR__ . '/includes/footer.php')) {
-    require_once __DIR__ . '/includes/footer.php';
-}
-?>
+</body>
+</html>

@@ -1,0 +1,365 @@
+/**
+ * TallerTech - Auth CSS (Dark Mode Split Screen)
+ * Estilos globales para autenticación: Login y Registro
+ */
+
+:root {
+    --bg-page: #101010;
+    --card-bg: #181818;
+    --mosaic-bg: #141414;
+    --border-card: rgba(255, 255, 255, 0.08);
+    --border-input: #2f2f2f;
+    --border-focus: #e5e5e5;
+
+    --text-primary: #ffffff;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
+    --wood-accent: #c48849;
+
+    --error-bg: rgba(239, 68, 68, 0.12);
+    --error-border: rgba(239, 68, 68, 0.3);
+    --error-text: #fca5a5;
+
+    --success-bg: rgba(34, 197, 94, 0.12);
+    --success-border: rgba(34, 197, 94, 0.3);
+    --success-text: #86efac;
+
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --transition-fast: all 0.2s ease-in-out;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    min-height: 100%;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Contenedor centrado a pantalla completa */
+.auth-page-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem 1.5rem;
+    background: radial-gradient(circle at 50% 30%, #1a1a1a 0%, #101010 100%);
+}
+
+/* Tarjeta principal dividida en dos columnas */
+.auth-card {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    width: 100%;
+    max-width: 1100px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-card);
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 25px 65px rgba(0, 0, 0, 0.7), 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+/* ==========================================================================
+   COLUMNA IZQUIERDA: MOSAICO DE FOTOS (MASONRY MODERNO)
+   ========================================================================== */
+
+.auth-mosaic-col {
+    background-color: var(--mosaic-bg);
+    padding: 2.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    border-right: 1px solid var(--border-card);
+}
+
+.mosaic-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.mosaic-item {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    background-color: #1a1a1a;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.3s ease;
+}
+
+.mosaic-item:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.22);
+}
+
+.mosaic-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.mosaic-item:hover img {
+    transform: scale(1.06);
+}
+
+/* Alturas escalonadas para el efecto masonry moderno */
+.mosaic-item--tall-1 {
+    height: 270px;
+}
+
+.mosaic-item--short-1 {
+    height: 180px;
+}
+
+.mosaic-item--short-2 {
+    height: 190px;
+}
+
+.mosaic-item--tall-2 {
+    height: 260px;
+}
+
+.mosaic-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.35) 100%);
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   COLUMNA DERECHA: FORMULARIO CENTRADO
+   ========================================================================== */
+
+.auth-form-col {
+    padding: 3rem 3.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--card-bg);
+}
+
+.auth-form-inner {
+    width: 100%;
+    max-width: 410px;
+    margin: 0 auto;
+}
+
+/* Logo de cabecera */
+.auth-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    margin-bottom: 1.5rem;
+}
+
+.auth-brand svg {
+    color: var(--wood-accent);
+}
+
+.auth-brand-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+}
+
+/* Títulos de sección */
+.auth-header {
+    margin-bottom: 1.5rem;
+}
+
+.auth-title {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.35rem;
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Alertas de Error y Éxito */
+.auth-alert {
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+    margin-bottom: 1.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    animation: fadeInAlert 0.25s ease-out;
+}
+
+.auth-alert-error {
+    background-color: var(--error-bg);
+    border: 1px solid var(--error-border);
+    color: var(--error-text);
+}
+
+.auth-alert-success {
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: var(--success-text);
+}
+
+.auth-alert svg {
+    flex-shrink: 0;
+}
+
+@keyframes fadeInAlert {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Campos de formulario */
+.form-group {
+    margin-bottom: 1.1rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.4rem;
+}
+
+.form-input {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-input);
+    border-radius: 14px;
+    padding: 0.78rem 1.05rem;
+    font-size: 0.92rem;
+    color: #ffffff;
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.form-input::placeholder {
+    color: #555555;
+}
+
+.form-input:focus {
+    background-color: rgba(255, 255, 255, 0.07);
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+/* Botón Píldora de envío */
+.btn-auth-pill {
+    width: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: 9999px;
+    padding: 0.9rem 1.5rem;
+    font-size: 0.92rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    margin-top: 0.75rem;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.12);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+.btn-auth-pill:hover {
+    background-color: #eaeaea;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.22);
+}
+
+.btn-auth-pill:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+}
+
+/* Fila inferior de enlaces */
+.auth-footer-row {
+    text-align: center;
+    margin-top: 1.5rem;
+    padding-top: 0.5rem;
+    font-size: 0.88rem;
+}
+
+.auth-footer-row span {
+    color: var(--text-muted);
+}
+
+.auth-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+.auth-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 960px) {
+    .auth-card {
+        grid-template-columns: 1fr;
+        max-width: 500px;
+        border-radius: 24px;
+    }
+
+    .auth-mosaic-col {
+        display: none; /* En móviles o tablets la columna de fotos se oculta */
+    }
+
+    .auth-form-col {
+        padding: 3rem 2.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-page-container {
+        padding: 1rem;
+    }
+
+    .auth-form-col {
+        padding: 2.25rem 1.5rem;
+    }
+
+    .auth-title {
+        font-size: 1.45rem;
+    }
+}
+

@@ -1,0 +1,559 @@
+/**
+ * TallerTech - Layout CSS (Dark Mode Global)
+ * Estilos globales para Header Sticky, Navegación en Píldora, Footer y Responsive
+ */
+
+:root {
+    --bg-body: #101010;
+    --bg-header: rgba(20, 20, 20, 0.82);
+    --bg-footer: #121212;
+    --bg-surface: #181818;
+    --bg-surface-elevated: #222222;
+
+    --border-subtle: #262626;
+    --border-pill: #333333;
+    --border-hover: #444444;
+
+    --text-primary: #f5f5f5;
+    --text-secondary: #a3a3a3;
+    --text-muted: #737373;
+
+    --wood-accent: #c48849;
+    --wood-accent-hover: #dc9b57;
+    --wood-accent-light: rgba(196, 136, 73, 0.15);
+
+    --pill-bg: rgba(28, 28, 28, 0.65);
+    --pill-active-bg: #e5e5e5;
+    --pill-active-text: #121212;
+
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --transition-smooth: all 0.22s ease-in-out;
+}
+
+/* Reset y base */
+html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: var(--bg-body);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Contenedor principal que empuja el footer al fondo */
+.page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1 0 auto;
+    width: 100%;
+}
+
+/* ==========================================================================
+   HEADER STICKY & NAVEGACIÓN
+   ========================================================================== */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: var(--bg-header);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border-subtle);
+    transition: var(--transition-smooth);
+}
+
+.header-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0.75rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+/* Logo de marca */
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: var(--text-primary);
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    transition: var(--transition-smooth);
+}
+
+.brand-logo:hover {
+    color: #ffffff;
+    opacity: 0.95;
+}
+
+.brand-logo svg {
+    color: var(--wood-accent);
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.brand-logo:hover svg {
+    transform: rotate(-4deg) scale(1.05);
+}
+
+/* Navegación central en píldora */
+.header-nav {
+    display: flex;
+    align-items: center;
+}
+
+.nav-pill {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--pill-bg);
+    border: 1px solid var(--border-pill);
+    border-radius: 9999px;
+    padding: 0.25rem 0.35rem;
+    gap: 0.2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link-pill {
+    display: inline-block;
+    padding: 0.45rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    white-space: nowrap;
+}
+
+.nav-link-pill:hover {
+    color: var(--text-primary);
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link-pill.active {
+    background-color: var(--pill-active-bg);
+    color: var(--pill-active-text);
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+/* Lado derecho: Carrito y Acciones de Usuario */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* Botón de Carrito */
+.cart-action {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.cart-action:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--border-pill);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9999px;
+    background-color: var(--wood-accent);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--bg-surface);
+}
+
+/* Botones de Auth / Sesión */
+.user-profile-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.user-profile-badge:hover {
+    border-color: var(--border-pill);
+    color: #ffffff;
+}
+
+.btn-auth-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #fca5a5;
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.btn-auth-logout:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #fee2e2;
+}
+
+.btn-auth-login {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 1.15rem;
+    border-radius: 9999px;
+    border: 1px solid var(--border-pill);
+    background-color: transparent;
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.btn-auth-login:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #555555;
+    color: #ffffff;
+}
+
+/* Botón Hamburguesa para Móvil */
+.mobile-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border-pill);
+    border-radius: 8px;
+    padding: 0.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-smooth);
+}
+
+.mobile-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Menú móvil desplegable */
+.mobile-nav-drawer {
+    display: none;
+    background-color: var(--bg-surface);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 1rem 1.5rem;
+    transition: max-height 0.3s ease-in-out;
+}
+
+.mobile-nav-drawer.is-open {
+    display: block;
+}
+
+.mobile-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mobile-nav-link {
+    display: block;
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-smooth);
+}
+
+.mobile-nav-link:hover,
+.mobile-nav-link.active {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+}
+
+.mobile-nav-actions {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ==========================================================================
+   FOOTER (TEMA OSCURO)
+   ========================================================================== */
+
+.site-footer {
+    background-color: var(--bg-footer);
+    border-top: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+    font-size: 0.92rem;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1.2fr 1.4fr;
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-title {
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.01em;
+}
+
+.footer-text {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem;
+}
+
+/* Enlaces del Footer */
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-links a:hover {
+    color: var(--text-primary);
+    transform: translateX(3px);
+}
+
+/* Información de Contacto */
+.footer-contact-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.footer-contact-item svg {
+    color: var(--wood-accent);
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+}
+
+/* Redes Sociales */
+.social-links {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.social-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-color: var(--border-pill);
+    transform: translateY(-2px);
+}
+
+/* Formulario de Suscripción / Cotización Rápida */
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.newsletter-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.newsletter-input {
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    color: var(--text-primary);
+    font-size: 0.88rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.newsletter-input:focus {
+    border-color: var(--wood-accent);
+    box-shadow: 0 0 0 2px var(--wood-accent-light);
+}
+
+.newsletter-btn {
+    background-color: var(--wood-accent);
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-weight: 600;
+    padding: 0.65rem 1.25rem;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.newsletter-btn:hover {
+    background-color: var(--wood-accent-hover);
+}
+
+/* Barra inferior de Copyright */
+.footer-bottom {
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.footer-legal-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.footer-legal-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.footer-legal-links a:hover {
+    color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .header-nav {
+        display: none;
+    }
+
+    .mobile-toggle {
+        display: inline-flex;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .header-container {
+        padding: 0.75rem 1.25rem;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .newsletter-input-group {
+        flex-direction: column;
+    }
+}
+

@@ -1,0 +1,710 @@
+/**
+ * TallerTech - Cotizaciones CSS (Dark Mode Elegante TallerTech)
+ * Paleta: Fondo #121212 / #181818, tarjetas #1e1e1e, bordes #2a2a2a, acento madera #c48849 / #e59834
+ */
+
+:root {
+    --bg-page: #121212;
+    --bg-card: #181818;
+    --bg-card-elevated: #1e1e1e;
+    --bg-input: rgba(255, 255, 255, 0.04);
+
+    --border-subtle: #262626;
+    --border-card: #2a2a2a;
+    --border-input: #333333;
+    --border-focus: #c48849;
+
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-muted: #888888;
+
+    --wood-accent: #c48849;
+    --wood-accent-hover: #dc9b57;
+    --wood-accent-glow: rgba(196, 136, 73, 0.22);
+    --wood-accent-subtle: rgba(196, 136, 73, 0.12);
+
+    --radius-hero: 24px;
+    --radius-img: 20px;
+    --radius-card: 18px;
+    --radius-pill: 9999px;
+
+    --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Contenedor general */
+.cotizaciones-page {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    padding: 3.5rem 0 5.5rem;
+    min-height: calc(100vh - 140px);
+}
+
+/* ==========================================================================
+   ENCABEZADO Y REGLAS DE NEGOCIO (3 TARJETAS SUPERIORES)
+   ========================================================================== */
+
+.cotizaciones-header-main {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.cotizaciones-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 1.15rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--wood-accent-subtle);
+    border: 1px solid rgba(196, 136, 73, 0.3);
+    color: var(--wood-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.15rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.cotizaciones-hero-title {
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.85rem;
+}
+
+.cotizaciones-hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Grid de las 3 Reglas de Negocio */
+.business-rules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+    margin-bottom: 5rem;
+}
+
+.business-rule-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 2.25rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+}
+
+.business-rule-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(196, 136, 73, 0.4);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 24px var(--wood-accent-glow);
+}
+
+.business-rule-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(196, 136, 73, 0.22) 0%, rgba(196, 136, 73, 0.06) 100%);
+    border: 1px solid rgba(196, 136, 73, 0.35);
+    color: var(--wood-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.35rem;
+}
+
+.business-rule-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.01em;
+}
+
+.business-rule-desc {
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   SHOWCASE HERO: COTIZACIÓN AUTOMÁTICA POR CATEGORÍA
+   ========================================================================== */
+
+.category-showcase-card {
+    background-color: var(--bg-card-elevated);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-hero);
+    padding: 3.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+    margin-bottom: 4.5rem;
+    overflow: hidden;
+}
+
+.category-showcase-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 3.5rem;
+    align-items: center;
+}
+
+/* Columna Izquierda: Contenido y Categorías */
+.showcase-content-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.showcase-heading {
+    font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.15rem;
+    line-height: 1.15;
+}
+
+.showcase-intro-text {
+    font-size: 1.02rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 1.75rem;
+}
+
+/* Lista / Grid de Categorías Estandarizadas Clicables */
+.categories-selector-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+}
+
+.category-select-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1.25rem;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-card);
+    border-radius: 14px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    user-select: none;
+}
+
+.category-select-item:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: #444444;
+    transform: translateX(4px);
+}
+
+.category-select-item.active {
+    background-color: var(--wood-accent-subtle);
+    border-color: var(--wood-accent);
+    color: #ffffff;
+    box-shadow: 0 4px 18px rgba(196, 136, 73, 0.22);
+}
+
+.category-item-info {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.category-item-bullet {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #555555;
+    transition: var(--transition-smooth);
+}
+
+.category-select-item.active .category-item-bullet {
+    background-color: var(--wood-accent);
+    box-shadow: 0 0 8px var(--wood-accent);
+}
+
+.category-item-title {
+    font-size: 0.98rem;
+    font-weight: 600;
+}
+
+.category-item-hint {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+}
+
+.category-select-item.active .category-item-hint {
+    color: var(--wood-accent);
+    font-weight: 500;
+}
+
+/* Nota al pie */
+.showcase-footnote {
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+/* Botón píldora blanco */
+.btn-pill-white {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    background-color: #ffffff;
+    color: #000000 !important;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.85rem 2rem;
+    border-radius: var(--radius-pill);
+    text-decoration: none;
+    border: none;
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
+    transition: var(--transition-smooth);
+    width: fit-content;
+}
+
+.btn-pill-white:hover {
+    background-color: #f0f0f0;
+    color: #000000 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.24);
+}
+
+.btn-pill-white svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-pill-white:hover svg {
+    transform: translateX(4px);
+}
+
+/* Columna Derecha: Imagen Destacada */
+.showcase-image-col {
+    position: relative;
+    border-radius: var(--radius-img);
+    overflow: hidden;
+    height: 480px;
+    border: 1px solid var(--border-card);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+    background-color: #141414;
+}
+
+.showcase-featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: opacity 0.35s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.showcase-image-col:hover .showcase-featured-img {
+    transform: scale(1.04);
+}
+
+.showcase-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.85) 100%);
+    pointer-events: none;
+}
+
+.showcase-image-badge {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    color: #ffffff;
+    z-index: 2;
+}
+
+.showcase-badge-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.2rem 0;
+}
+
+.showcase-badge-desc {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ==========================================================================
+   FORMULARIO Y PANEL PARAMÉTRICO DE RESULTADOS
+   ========================================================================== */
+
+.calculator-wrapper-box {
+    margin-top: 1rem;
+}
+
+.calc-section-header {
+    margin-bottom: 2.25rem;
+}
+
+.calc-section-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+}
+
+.calc-section-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+}
+
+.calc-layout-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+}
+
+/* Tarjeta del Formulario */
+.calc-form-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 2.5rem;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.form-group-item {
+    margin-bottom: 1.5rem;
+}
+
+.form-label-item {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-label-item small {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.form-input-element,
+.form-select-element {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-input);
+    border-radius: 12px;
+    padding: 0.82rem 1.1rem;
+    font-size: 0.93rem;
+    color: #ffffff;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.form-input-element:focus,
+.form-select-element:focus {
+    border-color: var(--border-focus);
+    background-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 3px var(--wood-accent-glow);
+}
+
+.form-select-element option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Grid de 3 dimensiones */
+.dimensions-three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+/* Servicios Adicionales */
+.additional-services-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 1.15rem;
+}
+
+.custom-service-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    margin: 0;
+}
+
+.custom-service-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--wood-accent);
+    cursor: pointer;
+}
+
+.custom-service-checkbox span {
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    user-select: none;
+}
+
+/* Tarjeta de Resumen Sticky */
+.calc-summary-card {
+    background-color: var(--bg-card-elevated);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 2.25rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    position: sticky;
+    top: 95px;
+}
+
+.summary-card-header {
+    border-bottom: 1px solid var(--border-card);
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.summary-card-badge {
+    font-size: 0.78rem;
+    color: var(--wood-accent);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.summary-card-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0.25rem 0 0 0;
+}
+
+/* Desglose de Precios */
+.summary-breakdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.summary-breakdown-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+}
+
+.summary-breakdown-row strong {
+    color: #ffffff;
+}
+
+.summary-breakdown-row.total-row {
+    border-top: 1px dashed var(--border-card);
+    padding-top: 1.15rem;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.summary-breakdown-row.total-row .total-amount {
+    font-size: 1.55rem;
+    color: var(--wood-accent);
+}
+
+/* Esquema de Cobro 60 / 40 */
+.payment-terms-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    background-color: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--border-card);
+    border-radius: 12px;
+    padding: 1.15rem;
+    margin-bottom: 1.5rem;
+}
+
+.payment-term-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-term-label {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.payment-term-val {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.payment-term-val.highlight {
+    color: var(--wood-accent);
+}
+
+/* Disclaimer Legal */
+.calc-disclaimer-box {
+    background-color: var(--wood-accent-subtle);
+    border: 1px solid rgba(196, 136, 73, 0.25);
+    border-radius: 12px;
+    padding: 0.9rem 1.1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.65rem;
+    align-items: flex-start;
+}
+
+.calc-disclaimer-box svg {
+    color: var(--wood-accent);
+    flex-shrink: 0;
+    margin-top: 0.15rem;
+}
+
+.calc-disclaimer-text {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Botón de envío */
+.btn-submit-quote {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 0.95rem 1.5rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    transition: var(--transition-smooth);
+}
+
+.btn-submit-quote:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+}
+
+.login-hint-text {
+    text-align: center;
+    margin-top: 0.85rem;
+    font-size: 0.84rem;
+    color: var(--text-muted);
+}
+
+.login-hint-text a {
+    color: var(--wood-accent);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-hint-text a:hover {
+    text-decoration: underline;
+}
+
+/* Alertas de Notificación */
+.notification-banner {
+    padding: 1rem 1.35rem;
+    border-radius: 14px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.notification-banner.success {
+    background-color: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #86efac;
+}
+
+.notification-banner.error {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .business-rules-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .category-showcase-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+
+    .showcase-image-col {
+        height: 380px;
+        order: -1; /* En tablets/móviles la imagen destacada se ubica arriba */
+    }
+
+    .calc-layout-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .calc-summary-card {
+        position: static;
+    }
+}
+
+@media (max-width: 680px) {
+    .category-showcase-card {
+        padding: 2rem 1.5rem;
+        border-radius: 18px;
+    }
+
+    .business-rules-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .dimensions-three-col {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .payment-terms-box {
+        grid-template-columns: 1fr;
+    }
+
+    .showcase-image-col {
+        height: 290px;
+    }
+}
