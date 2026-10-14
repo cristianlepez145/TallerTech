@@ -46,6 +46,7 @@
                     <ul class="footer-links">
                         <li><a href="catalogo.php">Catálogo de Muebles</a></li>
                         <li><a href="cotizaciones.php">Cotizador a Medida</a></li>
+                        <li><a href="citas.php">Agendar Cita de Medición</a></li>
                         <li><a href="pedidos.php">Seguimiento de Pedidos</a></li>
                         <li><a href="preguntas-frecuentes.php">Preguntas Frecuentes</a></li>
                         <li><a href="sobre-nosotros.php">Sobre Nosotros</a></li>

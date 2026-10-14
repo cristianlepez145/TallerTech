@@ -57,10 +57,10 @@ $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
                 <div class="nav-pill">
                     <a href="index.php" class="nav-link-pill <?= ($current_page === 'index.php') ? 'active' : '' ?>">Inicio</a>
                     <a href="catalogo.php" class="nav-link-pill <?= ($current_page === 'catalogo.php') ? 'active' : '' ?>">Catálogo</a>
-                    <a href="direcciones.php" class="nav-link-pill <?= ($current_page === 'direcciones.php') ? 'active' : '' ?>">Direcciones</a>
+                    <a href="citas.php" class="nav-link-pill <?= ($current_page === 'citas.php') ? 'active' : '' ?>">Citas</a>
+                    <a href="cotizaciones.php" class="nav-link-pill <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a>
                     <a href="pedidos.php" class="nav-link-pill <?= ($current_page === 'pedidos.php') ? 'active' : '' ?>">Pedidos</a>
                     <a href="resenas.php" class="nav-link-pill <?= ($current_page === 'resenas.php') ? 'active' : '' ?>">Reseñas</a>
-                    <a href="cotizaciones.php" class="nav-link-pill <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a>
                 </div>
             </nav>
 
@@ -114,10 +114,10 @@ $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
             <ul class="mobile-nav-list">
                 <li><a href="index.php" class="mobile-nav-link <?= ($current_page === 'index.php') ? 'active' : '' ?>">Inicio</a></li>
                 <li><a href="catalogo.php" class="mobile-nav-link <?= ($current_page === 'catalogo.php') ? 'active' : '' ?>">Catálogo</a></li>
-                <li><a href="direcciones.php" class="mobile-nav-link <?= ($current_page === 'direcciones.php') ? 'active' : '' ?>">Direcciones</a></li>
+                <li><a href="citas.php" class="mobile-nav-link <?= ($current_page === 'citas.php') ? 'active' : '' ?>">Citas &amp; Medidas</a></li>
+                <li><a href="cotizaciones.php" class="mobile-nav-link <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a></li>
                 <li><a href="pedidos.php" class="mobile-nav-link <?= ($current_page === 'pedidos.php') ? 'active' : '' ?>">Pedidos</a></li>
                 <li><a href="resenas.php" class="mobile-nav-link <?= ($current_page === 'resenas.php') ? 'active' : '' ?>">Reseñas</a></li>
-                <li><a href="cotizaciones.php" class="mobile-nav-link <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a></li>
             </ul>
             <div class="mobile-nav-actions">
                 <?php if (isset($_SESSION['id_usuario'])): ?>

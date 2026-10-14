@@ -4,3 +4,9 @@
 /vendor/
 .clineignore
 .clinerules
+
+# Archivos subidos dinámicamente por usuarios
+uploads/croquis/*
+!uploads/croquis/.gitkeep
+uploads/referencias/*
+!uploads/referencias/.gitkeep

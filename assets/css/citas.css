@@ -1,0 +1,791 @@
+/**
+ * TallerTech - Citas CSS (Dark Mode Elegante TallerTech)
+ * Paleta: Fondo #121212 / #181818, tarjetas #1c1c1c / #1e1e1e, border-radius: 20px - 24px
+ */
+
+:root {
+    --bg-page: #121212;
+    --bg-card: #181818;
+    --bg-card-info: #1c1c1c;
+    --bg-input: rgba(255, 255, 255, 0.04);
+
+    --border-card: #2a2a2a;
+    --border-subtle: #242424;
+    --border-input: #333333;
+    --border-dashed: #3a3a3a;
+    --border-focus: #c48849;
+
+    --text-primary: #ffffff;
+    --text-secondary: #a0a0a0;
+    --text-muted: #737373;
+
+    --wood-accent: #c48849;
+    --wood-accent-hover: #dc9b57;
+    --wood-accent-subtle: rgba(196, 136, 73, 0.12);
+    --wood-accent-glow: rgba(196, 136, 73, 0.22);
+
+    --radius-hero: 24px;
+    --radius-card: 20px;
+    --radius-dropzone: 16px;
+    --radius-pill: 9999px;
+
+    --transition-smooth: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.citas-page-wrapper {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    padding: 3.5rem 0 5.5rem;
+    min-height: calc(100vh - 140px);
+}
+
+/* ==========================================================================
+   ENCABEZADO
+   ========================================================================== */
+
+.citas-header-box {
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+.citas-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 1.15rem;
+    border-radius: var(--radius-pill);
+    background-color: var(--wood-accent-subtle);
+    border: 1px solid rgba(196, 136, 73, 0.3);
+    color: var(--wood-accent);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.citas-main-title {
+    font-size: clamp(2.2rem, 4.2vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 0.85rem;
+}
+
+.citas-main-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   LAYOUT A 2 COLUMNAS
+   ========================================================================== */
+
+.citas-layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 2.75rem;
+    align-items: start;
+}
+
+/* ==========================================================================
+   COLUMNA IZQUIERDA: REGLAS DE AGENDA
+   ========================================================================== */
+
+.rules-panel-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.rules-panel-header {
+    margin-bottom: 0.75rem;
+}
+
+.rules-panel-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.4rem;
+}
+
+.rules-panel-desc {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Tarjetas individuales de reglas */
+.rule-item-card {
+    background-color: var(--bg-card-info);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 1.65rem 1.75rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    display: flex;
+    gap: 1.25rem;
+    align-items: flex-start;
+    transition: var(--transition-smooth);
+}
+
+.rule-item-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(196, 136, 73, 0.35);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+}
+
+.rule-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(196, 136, 73, 0.2) 0%, rgba(196, 136, 73, 0.05) 100%);
+    border: 1px solid rgba(196, 136, 73, 0.3);
+    color: var(--wood-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.rule-item-content {
+    flex: 1;
+}
+
+.rule-item-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.35rem;
+}
+
+.rule-item-text {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+}
+
+/* ==========================================================================
+   COLUMNA DERECHA: FORMULARIO INTERACTIVO
+   ========================================================================== */
+
+.booking-form-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-hero);
+    padding: 2.75rem 2.5rem;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+}
+
+.booking-form-header {
+    border-bottom: 1px solid var(--border-subtle);
+    padding-bottom: 1.35rem;
+    margin-bottom: 2rem;
+}
+
+.booking-form-title {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 0.25rem 0;
+}
+
+.booking-form-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Grupos de Formulario */
+.form-field-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-field-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-field-label small {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+.form-field-input,
+.form-field-select,
+.form-field-textarea {
+    width: 100%;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-input);
+    border-radius: 14px;
+    padding: 0.85rem 1.15rem;
+    font-size: 0.93rem;
+    color: #ffffff;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.form-field-input:focus,
+.form-field-select:focus,
+.form-field-textarea:focus {
+    border-color: var(--border-focus);
+    background-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 3px var(--wood-accent-glow);
+}
+
+.form-field-select option {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* Selector de Tipo de Cita (Píldoras Radio) */
+.appointment-type-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.85rem;
+}
+
+.type-pill-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-input);
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    transition: var(--transition-smooth);
+    user-select: none;
+}
+
+.type-pill-label input[type="radio"] {
+    display: none;
+}
+
+.type-pill-label:hover {
+    background-color: rgba(255, 255, 255, 0.07);
+    border-color: #444444;
+    color: #ffffff;
+}
+
+.type-pill-label.active,
+.type-pill-label:has(input[type="radio"]:checked) {
+    background-color: var(--wood-accent-subtle);
+    border-color: var(--wood-accent);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(196, 136, 73, 0.2);
+}
+
+/* Grid de Fecha y Hora */
+.date-time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+}
+
+.schedule-helper-badge {
+    font-size: 0.76rem;
+    color: var(--wood-accent);
+    margin-top: 0.4rem;
+    display: block;
+}
+
+/* Zona de Carga de Archivos (Drag & Drop) */
+.dropzone-container {
+    border: 2px dashed var(--border-dashed);
+    border-radius: var(--radius-dropzone);
+    padding: 2.2rem 1.5rem;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.015);
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    position: relative;
+}
+
+.dropzone-container:hover,
+.dropzone-container.is-dragover {
+    border-color: var(--wood-accent);
+    background-color: rgba(196, 136, 73, 0.06);
+}
+
+.dropzone-file-input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.dropzone-content-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.65rem;
+    pointer-events: none;
+}
+
+.dropzone-icon {
+    color: var(--wood-accent);
+    margin-bottom: 0.25rem;
+}
+
+.dropzone-title {
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.dropzone-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    margin: 0;
+    max-width: 440px;
+    line-height: 1.45;
+}
+
+.dropzone-browse-btn {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.4rem 1.1rem;
+    border-radius: 9999px;
+    margin-top: 0.5rem;
+    transition: var(--transition-smooth);
+}
+
+.dropzone-container:hover .dropzone-browse-btn {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Galería de Previews de Múltiples Archivos (Imágenes y PDFs) */
+.files-preview-container {
+    display: none;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    background-color: rgba(20, 20, 20, 0.6);
+    border: 1px solid var(--border-card);
+    border-radius: 16px;
+    padding: 1.15rem;
+}
+
+.files-preview-container.is-active {
+    display: flex;
+}
+
+.files-preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.files-preview-count {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--wood-accent);
+}
+
+.btn-clear-all-files {
+    background: transparent;
+    border: none;
+    color: #fca5a5;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    transition: var(--transition-smooth);
+}
+
+.btn-clear-all-files:hover {
+    background-color: rgba(239, 68, 68, 0.15);
+    color: #fee2e2;
+}
+
+.files-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    max-height: 380px;
+    overflow-y: auto;
+    padding-right: 0.35rem;
+}
+
+/* Scrollbar personalizado para la lista */
+.files-preview-list::-webkit-scrollbar {
+    width: 6px;
+}
+.files-preview-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+.files-preview-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.file-preview-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background-color: #161616;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    transition: var(--transition-smooth);
+}
+
+.file-preview-card:hover {
+    border-color: rgba(196, 136, 73, 0.4);
+    background-color: #1a1a1a;
+}
+
+.file-preview-media {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0d0d0d;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.file-preview-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.file-preview-icon-pdf {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(185, 28, 28, 0.25));
+    color: #ef4444;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+}
+
+.file-preview-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-preview-name {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.2rem;
+}
+
+.file-preview-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.76rem;
+    color: var(--text-muted);
+}
+
+.file-badge-type {
+    display: inline-block;
+    padding: 0.15rem 0.45rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.file-badge-type.image {
+    background-color: rgba(196, 136, 73, 0.18);
+    color: var(--wood-accent);
+}
+
+.file-badge-type.pdf {
+    background-color: rgba(239, 68, 68, 0.18);
+    color: #fca5a5;
+}
+
+.file-preview-btn-delete {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #a0a0a0;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition-smooth);
+}
+
+.file-preview-btn-delete:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fee2e2;
+}
+
+/* Sección de Historial de Citas del Usuario */
+.user-appointments-section {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.user-appointments-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.appointments-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.25rem;
+}
+
+.appointment-history-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 18px;
+    padding: 1.5rem;
+    transition: var(--transition-smooth);
+}
+
+.appointment-history-card:hover {
+    border-color: rgba(196, 136, 73, 0.35);
+    transform: translateY(-2px);
+}
+
+.appointment-status-pill {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.appointment-status-pill.pendiente {
+    background-color: rgba(234, 179, 8, 0.15);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    color: #fde047;
+}
+
+.appointment-status-pill.confirmada {
+    background-color: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #86efac;
+}
+
+.appointment-status-pill.completada {
+    background-color: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+}
+
+.appointment-status-pill.cancelada {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+}
+
+.appointment-attachments-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.attachment-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.78rem;
+    color: #ffffff;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+}
+
+.attachment-chip:hover {
+    background-color: rgba(196, 136, 73, 0.2);
+    border-color: var(--wood-accent);
+    color: #ffffff;
+}
+
+.attachment-thumb-mini {
+    width: 22px;
+    height: 22px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+/* Botón Píldora de Reserva */
+.btn-submit-booking {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    background-color: #ffffff;
+    color: #000000;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 1rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    transition: var(--transition-smooth);
+    margin-top: 1rem;
+}
+
+.btn-submit-booking:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+}
+
+.btn-submit-booking svg {
+    transition: transform 0.2s ease;
+}
+
+.btn-submit-booking:hover svg {
+    transform: translateX(4px);
+}
+
+/* Tarjeta de Invitación a Iniciar Sesión */
+.auth-prompt-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-hero);
+    padding: 3.5rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.5);
+    max-width: 580px;
+    margin: 0 auto;
+}
+
+.auth-prompt-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--wood-accent-subtle);
+    border: 1px solid rgba(196, 136, 73, 0.35);
+    color: var(--wood-accent);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.auth-prompt-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+}
+
+.auth-prompt-text {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* Banners de Notificación */
+.citas-alert-banner {
+    padding: 1.1rem 1.35rem;
+    border-radius: 14px;
+    margin-bottom: 2.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.citas-alert-banner.success {
+    background-color: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.35);
+    color: #86efac;
+}
+
+.citas-alert-banner.error {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #fca5a5;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .citas-layout-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+    }
+}
+
+@media (max-width: 680px) {
+    .citas-page-wrapper {
+        padding: 2.5rem 0 4rem;
+    }
+
+    .booking-form-card {
+        padding: 2rem 1.5rem;
+        border-radius: 18px;
+    }
+
+    .appointment-type-selector,
+    .date-time-grid {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .rule-item-card {
+        padding: 1.35rem 1.25rem;
+    }
+}
+
