@@ -4,10 +4,8 @@
  * Barra de navegación sticky con estética píldora y estado de sesión.
  */
 
-// 1. Iniciar sesión automáticamente si aún no está activa
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// 1. Iniciar sesión y helpers de autenticación
+require_once __DIR__ . '/auth.php';
 
 // 2. Detección automática o personalizada de la página actual para la clase .active
 $current_page = $pagina_actual ?? basename($_SERVER['PHP_SELF']);
@@ -15,6 +13,8 @@ $page_title   = $titulo_pagina ?? 'TallerTech | Carpintería y Diseño a Medida'
 $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
     ? count($_SESSION['carrito'])
     : (int)($_SESSION['cart_count'] ?? 0);
+
+$esAdminCarpintero = es_carpintero();
 ?>
 <!DOCTYPE html>
 <html lang="es" data-bs-theme="dark">
@@ -61,6 +61,16 @@ $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
                     <a href="cotizaciones.php" class="nav-link-pill <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a>
                     <a href="pedidos.php" class="nav-link-pill <?= ($current_page === 'pedidos.php') ? 'active' : '' ?>">Pedidos</a>
                     <a href="resenas.php" class="nav-link-pill <?= ($current_page === 'resenas.php') ? 'active' : '' ?>">Reseñas</a>
+
+                    <?php if ($esAdminCarpintero): ?>
+                        <!-- Acceso Destacado al Panel de Carpintero / Administración -->
+                        <a href="admin_pedidos.php" class="nav-link-pill admin-nav-pill <?= (strpos($current_page, 'admin_') === 0) ? 'active' : '' ?>" title="Panel de Gestión del Carpintero">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                            </svg>
+                            <span>Panel Carpintero</span>
+                        </a>
+                    <?php endif; ?>
                 </div>
             </nav>
 
@@ -85,6 +95,9 @@ $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
                             <circle cx="12" cy="7" r="4"/>
                         </svg>
                         <span><?= htmlspecialchars($_SESSION['nombre'] ?? 'Usuario', ENT_QUOTES, 'UTF-8') ?></span>
+                        <?php if ($esAdminCarpintero): ?>
+                            <span class="badge-role-tag">Carpintero</span>
+                        <?php endif; ?>
                     </a>
                     <a href="logout.php" class="btn-auth-logout" title="Cerrar sesión">
                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -118,6 +131,14 @@ $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
                 <li><a href="cotizaciones.php" class="mobile-nav-link <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a></li>
                 <li><a href="pedidos.php" class="mobile-nav-link <?= ($current_page === 'pedidos.php') ? 'active' : '' ?>">Pedidos</a></li>
                 <li><a href="resenas.php" class="mobile-nav-link <?= ($current_page === 'resenas.php') ? 'active' : '' ?>">Reseñas</a></li>
+
+                <?php if ($esAdminCarpintero): ?>
+                    <li class="border-top border-secondary border-opacity-25 pt-2 mt-2">
+                        <a href="admin_pedidos.php" class="mobile-nav-link text-warning fw-bold <?= (strpos($current_page, 'admin_') === 0) ? 'active' : '' ?>">
+                            🛠️ Panel Carpintero (Administrador)
+                        </a>
+                    </li>
+                <?php endif; ?>
             </ul>
             <div class="mobile-nav-actions">
                 <?php if (isset($_SESSION['id_usuario'])): ?>
@@ -133,4 +154,3 @@ $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
 
     <!-- Contenedor Principal de la Vista -->
     <main class="main-content">
-

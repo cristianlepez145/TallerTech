@@ -3,8 +3,14 @@
  * TallerTech - Cierre de Sesión Seguro
  */
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+require_once 'includes/conexion.php';
+require_once 'includes/auth.php';
+
+// Registrar cierre de sesión en bitácora antes de destruir datos
+if (isset($_SESSION['id_usuario']) && isset($pdo)) {
+    $uid = (int)$_SESSION['id_usuario'];
+    $nombre = $_SESSION['nombre'] ?? 'Usuario';
+    registrar_log($pdo, 'LOGOUT', "Usuario '{$nombre}' cerró sesión exitosamente.", $uid);
 }
 
 // Vaciar todas las variables de sesión
@@ -30,4 +36,3 @@ session_destroy();
 // Redirigir al inicio de sesión
 header('Location: login.php');
 exit;
-

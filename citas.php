@@ -10,6 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'includes/conexion.php';
+require_once 'includes/auth.php';
 
 $mensaje_exito = '';
 $mensaje_error = '';
@@ -226,6 +227,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
                             ]);
 
                             $id_cita = (int)$pdo->lastInsertId();
+
+                            // Registrar evento en la bitácora de auditoría
+                            registrar_log(
+                                $pdo,
+                                'NUEVA_CITA',
+                                "Cita agendada #CITA-{$id_cita} ({$tipo_cita}) para el {$fecha} a las {$hora}.",
+                                $id_usuario
+                            );
 
                             // Insertar cada archivo de referencia en la tabla relacional archivos_cita
                             if (!empty($archivosSubidos)) {

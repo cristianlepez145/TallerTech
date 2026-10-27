@@ -5,17 +5,17 @@
  */
 
 // 1. Iniciar sesión y comprobar si el usuario ya está autenticado
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once 'includes/conexion.php';
+require_once 'includes/auth.php';
 
 if (isset($_SESSION['id_usuario'])) {
-    header('Location: index.php');
+    if (es_carpintero()) {
+        header('Location: admin_pedidos.php');
+    } else {
+        header('Location: index.php');
+    }
     exit;
 }
-
-// 2. Conexión segura con PDO
-require_once 'includes/conexion.php';
 
 $mensaje_error = '';
 $nombre   = '';
@@ -73,6 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
 
                 $nuevo_id = (int)$pdo->lastInsertId();
+
+                // Registrar en la bitácora de auditoría
+                registrar_log(
+                    $pdo, 
+                    'REGISTRO_USUARIO', 
+                    "Nuevo usuario registrado: '{$nombre}' ({$correo}) con rol [{$rol}].", 
+                    $nuevo_id
+                );
 
                 // Inicio de sesión automático y seguro tras el registro
                 session_regenerate_id(true);

@@ -557,3 +557,35 @@ html, body {
     }
 }
 
+
+
+/* ==========================================================================
+   BADGE Y ENLACE DE PANEL DE CARPINTERO EN HEADER
+   ========================================================================== */
+
+.nav-link-pill.admin-nav-pill {
+    background: rgba(196, 136, 73, 0.18);
+    color: var(--wood-accent);
+    border: 1px solid rgba(196, 136, 73, 0.4);
+    font-weight: 700;
+}
+
+.nav-link-pill.admin-nav-pill:hover,
+.nav-link-pill.admin-nav-pill.active {
+    background: var(--wood-accent);
+    color: #121212 !important;
+    border-color: var(--wood-accent);
+}
+
+.badge-role-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.2rem 0.55rem;
+    background: rgba(196, 136, 73, 0.2);
+    border: 1px solid rgba(196, 136, 73, 0.45);
+    color: var(--wood-accent);
+    border-radius: 9999px;
+    margin-left: 0.35rem;
+}

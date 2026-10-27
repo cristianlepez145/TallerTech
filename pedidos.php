@@ -10,6 +10,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'includes/conexion.php';
+require_once 'includes/auth.php';
 
 $mensaje_exito = '';
 $mensaje_error = '';
@@ -67,6 +68,14 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
                     ]);
 
                     $idNuevoPedido = $pdo->lastInsertId();
+
+                    // Registrar en la bitácora de auditoría
+                    registrar_log(
+                        $pdo,
+                        'ANTICIPO_REGISTRADO',
+                        "Cliente aprobó cotización #COT-{$id_cotizacion} y generó pedido #PED-{$idNuevoPedido} con anticipo de $" . number_format($anticipo60, 2) . " MXN.",
+                        $id_usuario
+                    );
                     $mensaje_exito = "¡Anticipo del 60% registrado con éxito ($" . number_format($anticipo60, 2) . " MXN)! Tu proyecto ha generado la orden de trabajo <strong>#PED-{$idNuevoPedido}</strong> y ha pasado a la etapa <strong>En Fabricación / Taller</strong>.";
                 }
             } catch (PDOException $e) {
@@ -358,6 +367,22 @@ require_once 'includes/header.php';
                     Demostración visual del seguimiento en vivo
                 </span>
                 <h3 class="text-white fw-bold mt-2">Así monitoreas tus proyectos en TallerTech</h3>
+            </div>
+        <?php endif; ?>
+
+        <?php if (es_carpintero()): ?>
+            <div class="d-flex align-items-center justify-content-between p-3 mb-4 rounded-4 bg-warning bg-opacity-10 border border-warning border-opacity-25">
+                <div class="d-flex align-items-center gap-2 text-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="16" x2="12" y2="12"></line>
+                        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                    </svg>
+                    <span class="small fw-semibold">Has iniciado sesión con permisos de <strong>Carpintero / Administrador</strong>. Estás viendo la perspectiva del cliente.</span>
+                </div>
+                <a href="admin_pedidos.php" class="btn btn-sm btn-warning rounded-pill px-3 py-1 fw-bold text-dark text-decoration-none">
+                    Ir al Panel de Taller →
+                </a>
             </div>
         <?php endif; ?>
 

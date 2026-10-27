@@ -4,24 +4,23 @@
  * Pantalla completa en modo oscuro con mosaico fotográfico y autenticación PDO
  */
 
-// 1. Iniciar la sesión para verificar y registrar al usuario
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once 'includes/conexion.php';
+require_once 'includes/auth.php';
 
-// 2. Si el usuario ya está autenticado, redirigir directo a la página principal
+// Si el usuario ya está autenticado, redirigir según su rol correspondiente
 if (isset($_SESSION['id_usuario'])) {
-    header('Location: index.php');
+    if (es_carpintero()) {
+        header('Location: admin_pedidos.php');
+    } else {
+        header('Location: index.php');
+    }
     exit;
 }
-
-// 3. Conexión segura con PDO
-require_once 'includes/conexion.php';
 
 $mensaje_error = '';
 $correo = '';
 
-// 4. Procesamiento de formulario de inicio de sesión
+// Procesamiento de formulario de inicio de sesión
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo   = trim($_POST['correo'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -45,16 +44,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 session_regenerate_id(true);
 
                 // Guardar datos del usuario autenticado en sesión
-                $_SESSION['id_usuario'] = $usuario['id_usuario'];
+                $_SESSION['id_usuario'] = (int)$usuario['id_usuario'];
                 $_SESSION['nombre']     = $usuario['nombre'];
                 $_SESSION['correo']     = $usuario['correo'];
-                $_SESSION['rol']        = $usuario['rol'];
+                $_SESSION['rol']        = $usuario['rol'] ?? 'cliente';
 
-                // Redirigir a la página principal
-                header('Location: index.php');
+                // Registrar evento en la bitácora de auditoría
+                registrar_log(
+                    $pdo, 
+                    'LOGIN_EXITOSO', 
+                    "Usuario '{$usuario['nombre']}' ({$usuario['correo']}) inició sesión con rol [{$_SESSION['rol']}].", 
+                    (int)$usuario['id_usuario']
+                );
+
+                // Redirigir según el rol del usuario
+                if (es_carpintero()) {
+                    header('Location: admin_pedidos.php');
+                } else {
+                    header('Location: index.php');
+                }
                 exit;
             } else {
-                // Mensaje discreto sin revelar detalles internos
+                // Registrar intento fallido en logs para auditoría de seguridad
+                registrar_log($pdo, 'LOGIN_FALLIDO', "Intento fallido con correo: {$correo}");
                 $mensaje_error = 'Correo electrónico o contraseña incorrectos.';
             }
         } catch (PDOException $e) {

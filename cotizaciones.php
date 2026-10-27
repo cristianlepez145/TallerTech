@@ -9,6 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'includes/conexion.php';
+require_once 'includes/auth.php';
 
 $mensaje_exito = '';
 $mensaje_error = '';
@@ -53,6 +54,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['solicitar_cotizacion'
                 ]);
 
                 $id_cotizacion = (int)$pdo->lastInsertId();
+
+                // Registrar evento en la bitácora de auditoría
+                registrar_log(
+                    $pdo,
+                    'NUEVA_COTIZACION',
+                    "Cliente registró cotización #COT-{$id_cotizacion} ({$categoria_txt}) por un total estimado de $" . number_format($costo_total, 2) . " MXN.",
+                    $id_usuario
+                );
                 $mensaje_exito = "¡Excelente! Tu cotización #{$id_cotizacion} ha sido registrada con estado <strong>estimada</strong>. El equipo del taller revisará los detalles técnicos para contactarte a la brevedad.";
 
             } catch (PDOException $e) {
