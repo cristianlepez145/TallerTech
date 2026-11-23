@@ -53,6 +53,7 @@ try {
     $sslCa = $env['DB_SSL_CA'] ?? getenv('DB_SSL_CA') ?: '';
     if (empty($sslCa)) {
         $candidatosCA = [
+            __DIR__ . '/cacert.pem',              // Paquete CA portátil incluido (compatible Windows, Mac, Linux, XAMPP, Laragon)
             '/etc/ssl/certs/ca-certificates.crt', // Debian / Ubuntu / Linux estándar
             '/etc/pki/tls/certs/ca-bundle.crt',   // RHEL / CentOS / Fedora
             '/etc/ssl/ca-bundle.pem',             // OpenSUSE
@@ -79,12 +80,22 @@ try {
         $pdo = null;
     } else {
         http_response_code(503);
+        $esLocalhost = in_array($_SERVER['REMOTE_ADDR'] ?? '', ['127.0.0.1', '::1']) || str_contains($_SERVER['HTTP_HOST'] ?? '', 'localhost') || str_contains($_SERVER['HTTP_HOST'] ?? '', '127.0.0.1');
+        $detalleDev = '';
+        if ($esLocalhost) {
+            $faltaEnv = !file_exists($envPath);
+            $msgDev = $faltaEnv 
+                ? "No se encontró el archivo .env en el proyecto. Debes crear tu archivo .env copiando las credenciales de TiDB Cloud (o renombrar .env.example a .env)." 
+                : "Error PDO: " . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8');
+            $detalleDev = "<div style='margin-top:1.5rem; padding:0.85rem 1.15rem; background:#1c1917; border:1px solid #c88a4b; border-radius:8px; font-family:monospace; font-size:0.8rem; color:#f2ede4; max-width:560px; word-break:break-word; text-align:left;'><strong>🪵 Diagnóstico técnico para desarrolladores:</strong><br><span style='color:#eab308;'>{$msgDev}</span></div>";
+        }
         die("
             <div style='background:#121212; color:#ffffff; font-family:system-ui,-apple-system,sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;'>
                 <div style='width:64px; height:64px; border-radius:50%; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); display:flex; align-items:center; justify-content:center; font-size:1.75rem; color:#f87171; margin-bottom:1.5rem;'>⚠️</div>
                 <h1 style='font-size:1.75rem; font-weight:700; margin-bottom:0.75rem;'>Servicio Temporalmente No Disponible</h1>
                 <p style='color:#a1a1aa; max-width:480px; line-height:1.6; margin-bottom:1.5rem;'>No fue posible establecer conexión con el servidor de datos de TallerTech. Por favor, verifica tu conexión o intenta de nuevo más tarde.</p>
                 <a href='index.php' style='color:#c48849; text-decoration:underline; font-weight:600;'>Reintentar cargar el sitio</a>
+                {$detalleDev}
             </div>
         ");
     }
