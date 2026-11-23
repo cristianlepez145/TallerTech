@@ -84,5 +84,20 @@ document.addEventListener('DOMContentLoaded', () => {
             if (labelProyectoAnticipo) labelProyectoAnticipo.textContent = titulo;
         });
     });
+
+    // 4. Preparación del Modal de Rechazo de Cotización
+    const btnRechazarList = document.querySelectorAll('.btn-trigger-rechazar');
+    const inputRechazarId = document.getElementById('rechazarCotizacionId');
+    const labelRechazarProyecto = document.getElementById('rechazarProyectoLabel');
+
+    btnRechazarList.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.getAttribute('data-id');
+            const titulo = btn.getAttribute('data-title');
+
+            if (inputRechazarId) inputRechazarId.value = id;
+            if (labelRechazarProyecto) labelRechazarProyecto.textContent = titulo;
+        });
+    });
 });
 

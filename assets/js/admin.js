@@ -112,21 +112,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. Modal de Edición de Cita
     const modalEditarCita = document.getElementById('modalEditarCita');
+    const updateModalCitaData = (source) => {
+        if (!source) return;
+        const idCita  = source.getAttribute('data-id');
+        let estado    = source.getAttribute('data-estado') || 'pendiente';
+        const cliente = source.getAttribute('data-cliente') || '';
+        const fecha   = source.getAttribute('data-fecha') || '';
+        const notas   = source.getAttribute('data-notas') || '';
+
+        const idInput = document.getElementById('edit_cita_id');
+        const titleEl = document.getElementById('edit_cita_title');
+        const clientEl = document.getElementById('edit_cita_cliente');
+        const estadoSelect = document.getElementById('edit_cita_estado');
+        const notasEl = document.getElementById('edit_cita_notas');
+
+        if (idInput) idInput.value = idCita;
+        if (titleEl) titleEl.textContent = `Cita #${idCita} (${fecha})`;
+        if (clientEl) clientEl.textContent = cliente;
+        if (estadoSelect) {
+            if (estado === 'realizada') {
+                estado = 'completada';
+            }
+            estadoSelect.value = estado;
+        }
+        if (notasEl) {
+            notasEl.value = notas;
+        }
+    };
+
     if (modalEditarCita) {
         modalEditarCita.addEventListener('show.bs.modal', (event) => {
-            const button = event.relatedTarget;
-            if (!button) return;
-
-            const idCita  = button.getAttribute('data-id');
-            const estado  = button.getAttribute('data-estado');
-            const cliente = button.getAttribute('data-cliente');
-            const fecha   = button.getAttribute('data-fecha');
-
-            document.getElementById('edit_cita_id').value         = idCita;
-            document.getElementById('edit_cita_title').textContent = `Cita #${idCita} (${fecha})`;
-            document.getElementById('edit_cita_cliente').textContent = cliente;
-            document.getElementById('edit_cita_estado').value     = estado;
+            if (event.relatedTarget) {
+                updateModalCitaData(event.relatedTarget);
+            }
         });
     }
+
+    // Soporte redundante para garantizar apertura y llenado en cualquier navegador
+    document.querySelectorAll('[data-bs-target="#modalEditarCita"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            updateModalCitaData(btn);
+        });
+    });
 
 });

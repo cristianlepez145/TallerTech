@@ -68,9 +68,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 2. Actualizar / Validar Cotización de Cliente
     elseif ($accion === 'actualizar_cotizacion') {
         $id_cotizacion = (int)($_POST['id_cotizacion'] ?? 0);
-        $nuevo_estado  = trim($_POST['estado'] ?? 'estimada');
+        $accion_tipo   = trim($_POST['accion_tipo'] ?? 'guardar');
         $nuevo_total   = (float)($_POST['costo_total'] ?? 0);
         $notas         = trim($_POST['notas'] ?? '');
+
+        if ($accion_tipo === 'enviar_cliente') {
+            $nuevo_estado = 'pendiente_cliente';
+        } else {
+            $nuevo_estado = trim($_POST['estado'] ?? 'pendiente_revision');
+        }
 
         if ($id_cotizacion <= 0) {
             $mensaje_error = 'ID de cotización no válido.';
@@ -87,13 +93,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':id'     => $id_cotizacion
                 ]);
 
-                registrar_log(
-                    $pdo,
-                    'ACTUALIZAR_COTIZACION',
-                    "Carpintero actualizó cotización #COT-{$id_cotizacion}: Estado [{$nuevo_estado}], Monto formal \${$nuevo_total} MXN."
-                );
+                $logAccion = ($accion_tipo === 'enviar_cliente') ? 'COTIZACION_ENVIADA_CLIENTE' : 'ACTUALIZAR_COTIZACION';
+                $logDetalle = ($accion_tipo === 'enviar_cliente')
+                    ? "Carpintero validó y envió cotización #COT-{$id_cotizacion} al cliente con monto de $" . number_format($nuevo_total, 2) . " MXN (Estado: pendiente_cliente)."
+                    : "Carpintero actualizó cotización #COT-{$id_cotizacion}: Estado [{$nuevo_estado}], Monto \${$nuevo_total} MXN.";
 
-                $mensaje_exito = "Cotización <strong>#COT-{$id_cotizacion}</strong> validada y actualizada.";
+                registrar_log($pdo, $logAccion, $logDetalle);
+
+                $mensaje_exito = ($accion_tipo === 'enviar_cliente')
+                    ? "Cotización <strong>#COT-{$id_cotizacion}</strong> enviada exitosamente al cliente para su aprobación (estado: <strong>pendiente_cliente</strong>)."
+                    : "Cotización <strong>#COT-{$id_cotizacion}</strong> actualizada correctamente con estado [<strong>{$nuevo_estado}</strong>].";
             } catch (PDOException $e) {
                 error_log("Error al actualizar cotización: " . $e->getMessage());
                 $mensaje_error = 'No fue posible guardar los cambios de la cotización.';
@@ -105,14 +114,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     elseif ($accion === 'actualizar_cita') {
         $id_cita      = (int)($_POST['id_cita'] ?? 0);
         $nuevo_estado = trim($_POST['estado'] ?? 'pendiente');
+        $notas        = trim($_POST['notas'] ?? '');
+
+        // Normalizar alias 'realizada' a 'completada' para consistencia en UI y DB
+        if ($nuevo_estado === 'realizada') {
+            $nuevo_estado = 'completada';
+        }
 
         if ($id_cita <= 0) {
             $mensaje_error = 'Identificador de cita no válido.';
         } else {
             try {
-                $sql = "UPDATE citas SET estado = :estado WHERE id_cita = :id";
+                // Actualizar estado y notas si se enviaron
+                $sql = "UPDATE citas SET estado = :estado, notas = :notas WHERE id_cita = :id";
                 $stmt = $pdo->prepare($sql);
-                $stmt->execute([':estado' => $nuevo_estado, ':id' => $id_cita]);
+                $stmt->execute([
+                    ':estado' => $nuevo_estado,
+                    ':notas'  => $notas,
+                    ':id'     => $id_cita
+                ]);
 
                 registrar_log(
                     $pdo,
@@ -120,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "Carpintero actualizó cita #CITA-{$id_cita} al estado [{$nuevo_estado}]."
                 );
 
-                $mensaje_exito = "Cita #{$id_cita} actualizada exitosamente.";
+                $mensaje_exito = "Cita <strong>#CITA-{$id_cita}</strong> actualizada exitosamente con estado [<strong>{$nuevo_estado}</strong>].";
             } catch (PDOException $e) {
                 error_log("Error al actualizar cita: " . $e->getMessage());
                 $mensaje_error = 'Error al actualizar el estado de la cita.';
@@ -315,7 +335,7 @@ if ($mostrarDemo) {
 $totalPedidos        = count($pedidos_db);
 $pedidosEnProduccion = count(array_filter($pedidos_db, fn($p) => ($p['estado'] ?? '') === 'en_produccion'));
 $pedidosPendientes   = count(array_filter($pedidos_db, fn($p) => ($p['estado'] ?? '') === 'pendiente_anticipo'));
-$cotizacionesPend    = count(array_filter($cotizaciones_db, fn($c) => ($c['estado'] ?? '') === 'estimada' || ($c['estado'] ?? '') === 'en_progreso'));
+$cotizacionesPend    = count(array_filter($cotizaciones_db, fn($c) => in_array($c['estado'] ?? '', ['pendiente_revision', 'pendiente_cliente', 'estimada', 'en_progreso'])));
 $citasActivas        = count(array_filter($citas_db, fn($ci) => ($ci['estado'] ?? '') === 'pendiente' || ($ci['estado'] ?? '') === 'confirmada'));
 
 $totalRecaudado = array_sum(array_map(fn($p) => (float)($p['anticipo'] ?? 0), $pedidos_db));
@@ -690,8 +710,22 @@ require_once 'includes/header.php';
                                             <strong class="text-warning">$<?= number_format($monto, 2) ?> MXN</strong>
                                         </td>
                                         <td>
-                                            <span class="badge-status status-pendiente">
-                                                <?= htmlspecialchars(ucfirst($estadoCot)) ?>
+                                            <?php
+                                                $badgeClass = 'status-pendiente';
+                                                $badgeLabel = 'En Revisión (Taller)';
+                                                if ($estadoCot === 'pendiente_cliente') {
+                                                    $badgeClass = 'status-produccion';
+                                                    $badgeLabel = 'Esperando al Cliente';
+                                                } elseif ($estadoCot === 'aceptada' || $estadoCot === 'aprobada') {
+                                                    $badgeClass = 'status-completado';
+                                                    $badgeLabel = 'Aceptada';
+                                                } elseif ($estadoCot === 'rechazada' || $estadoCot === 'cancelada') {
+                                                    $badgeClass = 'status-cancelado';
+                                                    $badgeLabel = 'Rechazada';
+                                                }
+                                            ?>
+                                            <span class="badge-status <?= $badgeClass ?>">
+                                                <?= $badgeLabel ?>
                                             </span>
                                         </td>
                                         <td class="text-end">
@@ -707,7 +741,7 @@ require_once 'includes/header.php';
                                                 data-estado="<?= $estadoCot ?>"
                                                 data-notas="<?= htmlspecialchars($c['notas'] ?? '', ENT_QUOTES) ?>"
                                             >
-                                                Validar Precio
+                                                <?= ($estadoCot === 'pendiente_revision' || $estadoCot === 'estimada') ? 'Revisar / Enviar' : 'Editar Cotización' ?>
                                             </button>
                                         </td>
                                     </tr>
@@ -797,8 +831,22 @@ require_once 'includes/header.php';
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <span class="badge-status status-pendiente">
-                                                <?= htmlspecialchars(ucfirst($estadoCita)) ?>
+                                            <?php
+                                                $badgeCitaClass = match ($estadoCita) {
+                                                    'confirmada'              => 'status-produccion',
+                                                    'completada', 'realizada' => 'status-completado',
+                                                    'cancelada'               => 'status-cancelado',
+                                                    default                   => 'status-pendiente'
+                                                };
+                                                $textoCita = match ($estadoCita) {
+                                                    'confirmada'              => 'Confirmada',
+                                                    'completada', 'realizada' => 'Realizada',
+                                                    'cancelada'               => 'Cancelada',
+                                                    default                   => 'Pendiente'
+                                                };
+                                            ?>
+                                            <span class="badge-status <?= $badgeCitaClass ?>">
+                                                <?= htmlspecialchars($textoCita) ?>
                                             </span>
                                         </td>
                                         <td class="text-end">
@@ -811,7 +859,12 @@ require_once 'includes/header.php';
                                                 data-cliente="<?= htmlspecialchars($ci['cliente_nombre'] ?? '', ENT_QUOTES) ?>"
                                                 data-fecha="<?= htmlspecialchars($ci['fecha_cita_fmt'] ?? '', ENT_QUOTES) ?>"
                                                 data-estado="<?= $estadoCita ?>"
+                                                data-notas="<?= htmlspecialchars($ci['notas'] ?? '', ENT_QUOTES) ?>"
                                             >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                                </svg>
                                                 Estado
                                             </button>
                                         </td>
@@ -916,7 +969,7 @@ require_once 'includes/header.php';
 <div class="modal fade" id="modalEditarPedido" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content admin-modal-dark">
-            <form method="POST" action="admin_pedidos.php">
+            <form method="POST" action="admin_pedidos.php#pedidos">
                 <input type="hidden" name="action" value="actualizar_pedido">
                 <input type="hidden" name="id_pedido" id="edit_pedido_id" value="">
 
@@ -969,13 +1022,13 @@ require_once 'includes/header.php';
 <div class="modal fade" id="modalEditarCotizacion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content admin-modal-dark">
-            <form method="POST" action="admin_pedidos.php">
+            <form method="POST" action="admin_pedidos.php#cotizaciones">
                 <input type="hidden" name="action" value="actualizar_cotizacion">
                 <input type="hidden" name="id_cotizacion" id="edit_cot_id" value="">
 
                 <div class="modal-header admin-modal-header">
                     <div>
-                        <h5 class="modal-title fw-bold text-white mb-0" id="edit_cot_title">Validar Cotización</h5>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="edit_cot_title">Revisar y Validar Cotización</h5>
                         <span class="small text-warning" id="edit_cot_cliente"></span>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
@@ -983,29 +1036,34 @@ require_once 'includes/header.php';
 
                 <div class="modal-body p-4">
                     <div class="mb-3">
-                        <label for="edit_cot_estado" class="admin-form-label">Estado de Cotización</label>
+                        <label for="edit_cot_estado" class="admin-form-label">Estado de la Cotización</label>
                         <select name="estado" id="edit_cot_estado" class="admin-form-select" required>
-                            <option value="estimada">Estimada (Pendiente de revisión)</option>
-                            <option value="en_progreso">En Progreso / Presupuestando</option>
-                            <option value="aprobada">Aprobada por el Taller</option>
+                            <option value="pendiente_revision">Pendiente de Revisión (Taller)</option>
+                            <option value="pendiente_cliente">Pendiente de Aprobación por el Cliente</option>
+                            <option value="aceptada">Aceptada / Autorizada</option>
                             <option value="rechazada">Rechazada</option>
+                            <option value="estimada">Estimada (Legado)</option>
+                            <option value="aprobada">Aprobada (Legado)</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label for="edit_cot_total" class="admin-form-label">Presupuesto Formal Validado ($ MXN)</label>
-                        <input type="number" step="0.01" name="costo_total" id="edit_cot_total" class="admin-form-input" required>
+                        <input type="number" step="0.01" min="0" name="costo_total" id="edit_cot_total" class="admin-form-input" required>
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit_cot_notas" class="admin-form-label">Detalles y Especificaciones Técnicas</label>
-                        <textarea name="notas" id="edit_cot_notas" rows="3" class="admin-form-textarea"></textarea>
+                        <label for="edit_cot_notas" class="admin-form-label">Detalles, Medidas y Especificaciones Técnicas</label>
+                        <textarea name="notas" id="edit_cot_notas" rows="4" class="admin-form-textarea" placeholder="Ej. Medidas: 2.20m x 0.80m | Madera: Roble Blanco | Sellado poliuretano..."></textarea>
                     </div>
                 </div>
 
-                <div class="modal-footer admin-modal-footer">
-                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold">Actualizar Cotización</button>
+                <div class="modal-footer admin-modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="d-flex gap-2">
+                        <button type="submit" name="accion_tipo" value="guardar" class="btn btn-outline-warning rounded-pill px-3">Guardar Borrador</button>
+                        <button type="submit" name="accion_tipo" value="enviar_cliente" class="btn btn-warning rounded-pill px-4 fw-bold">Guardar y Enviar al Cliente</button>
+                    </div>
                 </div>
             </form>
         </div>
@@ -1016,7 +1074,7 @@ require_once 'includes/header.php';
 <div class="modal fade" id="modalEditarCita" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content admin-modal-dark">
-            <form method="POST" action="admin_pedidos.php">
+            <form method="POST" action="admin_pedidos.php#citas">
                 <input type="hidden" name="action" value="actualizar_cita">
                 <input type="hidden" name="id_cita" id="edit_cita_id" value="">
 
@@ -1034,9 +1092,14 @@ require_once 'includes/header.php';
                         <select name="estado" id="edit_cita_estado" class="admin-form-select" required>
                             <option value="pendiente">Pendiente de Confirmar</option>
                             <option value="confirmada">Confirmada con Cliente</option>
-                            <option value="realizada">Medición Realizada con Éxito</option>
+                            <option value="completada">Medición Realizada con Éxito</option>
                             <option value="cancelada">Cancelada</option>
                         </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_cita_notas" class="admin-form-label">Notas u Observaciones del Taller</label>
+                        <textarea name="notas" id="edit_cita_notas" rows="3" class="admin-form-textarea" placeholder="Ej. Medidas tomadas en obra, cliente solicita cotizar roble..."></textarea>
                     </div>
                 </div>
 

@@ -250,11 +250,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
                                 }
                             }
 
+                            // Generar cotización asociada en estado inicial 'pendiente_revision'
+                            $notasCotizacionCita = "Proyecto agendado desde Cita #CITA-{$id_cita} ({$tipo_cita}) para {$fecha} {$hora}.";
+                            if (!empty($direccion)) {
+                                $notasCotizacionCita .= " | Dirección: {$direccion}";
+                            }
+                            if (!empty($notas)) {
+                                $notasCotizacionCita .= " | Notas técnicas: " . $notas;
+                            }
+
+                            $stmtCotCita = $pdo->prepare("
+                                INSERT INTO cotizaciones (id_usuario, id_mueble, estado, costo_total, anticipo_pagado, notas)
+                                VALUES (:id_usuario, 4, 'pendiente_revision', 0.00, 0.00, :notas)
+                            ");
+                            $stmtCotCita->execute([
+                                ':id_usuario' => $id_usuario,
+                                ':notas'      => $notasCotizacionCita
+                            ]);
+                            $idCotCita = (int)$pdo->lastInsertId();
+
+                            // Asociar los archivos subidos a la cotización relacionalmente
+                            if (!empty($archivosSubidos)) {
+                                $stmtArchCot = $pdo->prepare("INSERT INTO archivos_cotizacion (id_cotizacion, ruta_archivo) VALUES (:id_cot, :ruta)");
+                                foreach ($archivosSubidos as $arc) {
+                                    $stmtArchCot->execute([
+                                        ':id_cot' => $idCotCita,
+                                        ':ruta'   => $arc['ruta']
+                                    ]);
+                                }
+                            }
+
                             $fechaFormateada = date('d/m/Y', strtotime($fecha));
                             $totalSubidos    = count($archivosSubidos);
                             $textoAdjuntos   = ($totalSubidos > 0) ? " Se vincularon {$totalSubidos} archivo(s) de referencia/diseño." : "";
                             
-                            $mensaje_exito = "¡Cita reservada con éxito! Folio #{$id_cita} para el {$fechaFormateada} a las {$hora} hrs.{$textoAdjuntos} Tu solicitud quedó registrada y nos comunicaremos contigo para confirmar.";
+                            $mensaje_exito = "¡Cita reservada con éxito! Folio #CITA-{$id_cita} para el {$fechaFormateada} a las {$hora} hrs.{$textoAdjuntos} Se ha generado tu cotización <strong>#COT-{$idCotCita}</strong> en estado <strong>pendiente de revisión</strong> por el carpintero.";
 
                         } catch (PDOException $e) {
                             error_log("Error al agendar cita: " . $e->getMessage());

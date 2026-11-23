@@ -27,22 +27,27 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
             $mensaje_error = 'Identificador de cotización no válido.';
         } else {
             try {
-                // Verificar que la cotización pertenezca al usuario
-                $stmtCheck = $pdo->prepare("SELECT id_cotizacion, id_mueble, costo_total, notas FROM cotizaciones WHERE id_cotizacion = :id AND id_usuario = :uid LIMIT 1");
+                // Validación estricta: ÚNICAMENTE se puede aprobar si estado = 'pendiente_cliente'
+                $stmtCheck = $pdo->prepare("
+                    SELECT id_cotizacion, id_mueble, costo_total, notas, estado 
+                    FROM cotizaciones 
+                    WHERE id_cotizacion = :id AND id_usuario = :uid AND estado = 'pendiente_cliente' 
+                    LIMIT 1
+                ");
                 $stmtCheck->execute([':id' => $id_cotizacion, ':uid' => $id_usuario]);
                 $cot = $stmtCheck->fetch(PDO::FETCH_ASSOC);
 
                 if (!$cot) {
-                    $mensaje_error = 'No se encontró la cotización solicitada.';
+                    $mensaje_error = 'Esta cotización no puede ser aprobada porque aún se encuentra en revisión por el carpintero o ya fue procesada.';
                 } else {
                     $costoTotal = (float)$cot['costo_total'];
                     $anticipo60 = round($costoTotal * 0.60, 2);
 
-                    // A) Actualizar cotización a 'aprobada' con el anticipo registrado
+                    // A) Actualizar cotización a 'aceptada' con el anticipo registrado
                     $stmtUpd = $pdo->prepare("
                         UPDATE cotizaciones 
-                        SET estado = 'aprobada', anticipo_pagado = :anticipo, fecha_estimada_termino = DATE_ADD(CURRENT_DATE, INTERVAL 21 DAY)
-                        WHERE id_cotizacion = :id
+                        SET estado = 'aceptada', anticipo_pagado = :anticipo, fecha_estimada_termino = DATE_ADD(CURRENT_DATE, INTERVAL 21 DAY)
+                        WHERE id_cotizacion = :id AND estado = 'pendiente_cliente'
                     ");
                     $stmtUpd->execute([
                         ':anticipo' => $anticipo60,
@@ -72,8 +77,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
                     // Registrar en la bitácora de auditoría
                     registrar_log(
                         $pdo,
-                        'ANTICIPO_REGISTRADO',
-                        "Cliente aprobó cotización #COT-{$id_cotizacion} y generó pedido #PED-{$idNuevoPedido} con anticipo de $" . number_format($anticipo60, 2) . " MXN.",
+                        'COTIZACION_ACEPTADA',
+                        "Cliente aceptó cotización #COT-{$id_cotizacion} y generó orden de trabajo #PED-{$idNuevoPedido} con anticipo de $" . number_format($anticipo60, 2) . " MXN.",
                         $id_usuario
                     );
                     $mensaje_exito = "¡Anticipo del 60% registrado con éxito ($" . number_format($anticipo60, 2) . " MXN)! Tu proyecto ha generado la orden de trabajo <strong>#PED-{$idNuevoPedido}</strong> y ha pasado a la etapa <strong>En Fabricación / Taller</strong>.";
@@ -86,25 +91,81 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
     }
 }
 
-// 2. Función auxiliar para asignar imágenes de alta calidad según el mueble
-function obtenerFotoMueble($nombreMueble) {
-    $nombreLower = mb_strtolower($nombreMueble, 'UTF-8');
-    if (strpos($nombreLower, 'cocina') !== false) {
-        return 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80';
-    } elseif (strpos($nombreLower, 'baño') !== false || strpos($nombreLower, 'vanity') !== false) {
-        return 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80';
-    } elseif (strpos($nombreLower, 'puerta') !== false) {
-        return 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80';
-    } elseif (strpos($nombreLower, 'mesa') !== false || strpos($nombreLower, 'comedor') !== false) {
-        return 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?auto=format&fit=crop&w=600&q=80';
-    } elseif (strpos($nombreLower, 'cama') !== false || strpos($nombreLower, 'recámara') !== false) {
-        return 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80';
-    } elseif (strpos($nombreLower, 'escritorio') !== false) {
-        return 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80';
-    } elseif (strpos($nombreLower, 'cajonera') !== false || strpos($nombreLower, 'closet') !== false || strpos($nombreLower, 'clóset') !== false) {
-        return 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80';
+// 2. Procesamiento de Rechazo de Cotización por parte del cliente
+if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['rechazar_cotizacion'])) {
+    if (!isset($_SESSION['id_usuario'])) {
+        $mensaje_error = 'Debes iniciar sesión para gestionar cotizaciones.';
+    } else {
+        $id_cotizacion  = (int)($_POST['id_cotizacion'] ?? 0);
+        $motivo_rechazo = trim($_POST['motivo_rechazo'] ?? '');
+        $id_usuario     = (int)$_SESSION['id_usuario'];
+
+        if ($id_cotizacion <= 0) {
+            $mensaje_error = 'Identificador de cotización no válido.';
+        } else {
+            try {
+                // Validación estricta: ÚNICAMENTE se puede rechazar si estado = 'pendiente_cliente'
+                $stmtCheck = $pdo->prepare("
+                    SELECT id_cotizacion, costo_total, notas 
+                    FROM cotizaciones 
+                    WHERE id_cotizacion = :id AND id_usuario = :uid AND estado = 'pendiente_cliente' 
+                    LIMIT 1
+                ");
+                $stmtCheck->execute([':id' => $id_cotizacion, ':uid' => $id_usuario]);
+                $cot = $stmtCheck->fetch(PDO::FETCH_ASSOC);
+
+                if (!$cot) {
+                    $mensaje_error = 'No es posible rechazar esta cotización porque aún no ha sido liberada por el taller o ya fue procesada.';
+                } else {
+                    $notaExtra = !empty($motivo_rechazo) ? " | Motivo rechazo del cliente: " . $motivo_rechazo : "";
+                    $stmtUpd = $pdo->prepare("
+                        UPDATE cotizaciones 
+                        SET estado = 'rechazada', notas = CONCAT(COALESCE(notas, ''), :extra)
+                        WHERE id_cotizacion = :id AND estado = 'pendiente_cliente'
+                    ");
+                    $stmtUpd->execute([
+                        ':extra' => $notaExtra,
+                        ':id'    => $id_cotizacion
+                    ]);
+
+                    registrar_log(
+                        $pdo,
+                        'COTIZACION_RECHAZADA',
+                        "Cliente rechazó cotización #COT-{$id_cotizacion}." . (!empty($motivo_rechazo) ? " Motivo: {$motivo_rechazo}" : ""),
+                        $id_usuario
+                    );
+
+                    $mensaje_exito = "La cotización <strong>#COT-{$id_cotizacion}</strong> ha sido rechazada.";
+                }
+            } catch (PDOException $e) {
+                error_log("Error al rechazar cotización: " . $e->getMessage());
+                $mensaje_error = 'Ocurrió un error al procesar el rechazo en el servidor.';
+            }
+        }
     }
-    return 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';
+}
+
+// 2. Función auxiliar para asignar imágenes de alta calidad según el mueble
+if (!function_exists('obtenerFotoMueble')) {
+    function obtenerFotoMueble($nombreMueble) {
+        $nombreLower = mb_strtolower($nombreMueble, 'UTF-8');
+        if (strpos($nombreLower, 'cocina') !== false) {
+            return 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80';
+        } elseif (strpos($nombreLower, 'baño') !== false || strpos($nombreLower, 'vanity') !== false) {
+            return 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=600&q=80';
+        } elseif (strpos($nombreLower, 'puerta') !== false) {
+            return 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80';
+        } elseif (strpos($nombreLower, 'mesa') !== false || strpos($nombreLower, 'comedor') !== false) {
+            return 'https://images.unsplash.com/photo-1577140917170-285929fb55b7?auto=format&fit=crop&w=600&q=80';
+        } elseif (strpos($nombreLower, 'cama') !== false || strpos($nombreLower, 'recámara') !== false) {
+            return 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80';
+        } elseif (strpos($nombreLower, 'escritorio') !== false) {
+            return 'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=600&q=80';
+        } elseif (strpos($nombreLower, 'cajonera') !== false || strpos($nombreLower, 'closet') !== false || strpos($nombreLower, 'clóset') !== false) {
+            return 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=600&q=80';
+        }
+        return 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80';
+    }
 }
 
 // 3. Consulta de pedidos y cotizaciones del usuario en sesión
@@ -188,18 +249,29 @@ if ($estaAutenticado) {
             }
             if ($yaEnPedidos) continue;
 
-            $estadoUi = 'cotizacion';
+            $estadoReal = $c['estado'] ?? 'pendiente_revision';
             $step = 1;
-            $estadoTexto = 'En proceso de cotización';
 
             if ($c['pedido_completado'] == 1) {
                 $estadoUi = 'entregado';
                 $step = 3;
                 $estadoTexto = 'Entregado';
-            } elseif ($c['estado'] === 'aprobada' || $c['estado'] === 'en_progreso') {
+            } elseif ($estadoReal === 'aceptada' || $estadoReal === 'aprobada' || $estadoReal === 'en_progreso') {
                 $estadoUi = 'fabricacion';
                 $step = 2;
-                $estadoTexto = 'En proceso de trabajo';
+                $estadoTexto = 'En proceso de trabajo (Fabricación)';
+            } elseif ($estadoReal === 'rechazada') {
+                $estadoUi = 'rechazada';
+                $step = 1;
+                $estadoTexto = 'Cotización Rechazada';
+            } elseif ($estadoReal === 'pendiente_cliente') {
+                $estadoUi = 'pendiente_cliente';
+                $step = 1;
+                $estadoTexto = 'Propuesta Formal Lista';
+            } else { // 'pendiente_revision' o 'estimada'
+                $estadoUi = 'pendiente_revision';
+                $step = 1;
+                $estadoTexto = 'En revisión por el carpintero';
             }
 
             $costoTotal = (float)$c['costo_total'];
@@ -226,6 +298,7 @@ if ($estaAutenticado) {
                 'costo_total'      => $costoTotal,
                 'anticipo'         => $anticipoPagado,
                 'saldo'            => $saldo,
+                'estado_real'      => $estadoReal,
                 'estado_ui'        => $estadoUi,
                 'estado_texto'     => $estadoTexto,
                 'step_activo'      => $step,
@@ -297,7 +370,7 @@ $pedidos_a_mostrar = $mostrarDemo ? $pedidos_demo : $pedidos_usuario;
 
 // Contadores de filtros
 $countTotal       = count($pedidos_a_mostrar);
-$countCotizacion  = count(array_filter($pedidos_a_mostrar, fn($p) => $p['estado_ui'] === 'cotizacion'));
+$countCotizacion  = count(array_filter($pedidos_a_mostrar, fn($p) => in_array($p['estado_ui'], ['cotizacion', 'pendiente_revision', 'pendiente_cliente', 'rechazada'])));
 $countFabricacion = count(array_filter($pedidos_a_mostrar, fn($p) => $p['estado_ui'] === 'fabricacion'));
 $countEntregados  = count(array_filter($pedidos_a_mostrar, fn($p) => $p['estado_ui'] === 'entregado'));
 
@@ -470,7 +543,7 @@ require_once 'includes/header.php';
                     $fecha        = htmlspecialchars($p['fecha'], ENT_QUOTES, 'UTF-8');
                     $notas        = htmlspecialchars($p['notas'], ENT_QUOTES, 'UTF-8');
                 ?>
-                <article class="order-card" data-status="<?= $estadoUi ?>">
+                <article class="order-card" data-status="<?= in_array($estadoUi, ['pendiente_revision', 'pendiente_cliente', 'rechazada', 'cotizacion']) ? 'cotizacion' : $estadoUi ?>">
                     
                     <!-- 1. Encabezado de la Tarjeta -->
                     <div class="order-card-header">
@@ -617,8 +690,8 @@ require_once 'includes/header.php';
                             <span>Ver Detalles / Croquis</span>
                         </button>
 
-                        <?php if ($estadoUi === 'cotizacion'): ?>
-                            <!-- Botón Píldora Blanco: Aprobar y Registrar Anticipo (60%) -->
+                        <?php if ($estadoUi === 'pendiente_cliente'): ?>
+                            <!-- Botón Píldora Blanco: Aceptar y Registrar Anticipo (60%) -->
                             <button 
                                 type="button" 
                                 class="btn-order-action primary-pill btn-trigger-anticipo"
@@ -631,8 +704,42 @@ require_once 'includes/header.php';
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="20 6 9 17 4 12"></polyline>
                                 </svg>
-                                <span>Aprobar y Registrar Anticipo (60%)</span>
+                                <span>Aceptar y Registrar Anticipo (60%)</span>
                             </button>
+
+                            <!-- Botón Rechazar Cotización -->
+                            <button 
+                                type="button" 
+                                class="btn-order-action danger-subtle btn-trigger-rechazar"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#modalRechazarCotizacion"
+                                data-id="<?= $p['id_real'] ?>"
+                                data-title="<?= $nombreMueble ?>"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                                <span>Rechazar</span>
+                            </button>
+                        <?php elseif ($estadoUi === 'pendiente_revision' || $estadoUi === 'cotizacion'): ?>
+                            <!-- Mensaje claro: En revisión por el taller (sin botones de aceptar/rechazar) -->
+                            <div class="quote-review-notice">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span>En revisión técnica por el carpintero. Recibirás tu propuesta formal validada en cuanto se verifiquen medidas y materiales.</span>
+                            </div>
+                        <?php elseif ($estadoUi === 'rechazada'): ?>
+                            <div class="rejected-quote-notice">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                                </svg>
+                                <span>Cotización rechazada.</span>
+                            </div>
                         <?php elseif ($estadoUi === 'entregado'): ?>
                             <!-- Enlace a Dejar Reseña -->
                             <a href="resenas.php" class="btn-order-action primary-pill">
@@ -767,6 +874,56 @@ require_once 'includes/header.php';
                             <line x1="5" y1="12" x2="19" y2="12"></line>
                             <polyline points="12 5 19 12 12 19"></polyline>
                         </svg>
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================================
+     MODAL 3: RECHAZAR COTIZACIÓN
+     ========================================================================== -->
+<div class="modal fade" id="modalRechazarCotizacion" tabindex="-1" aria-labelledby="modalRechazarCotizacionLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content dark-theme-modal">
+            
+            <div class="modal-header dark-theme-header">
+                <div>
+                    <h5 class="modal-title text-white fw-bold" id="modalRechazarCotizacionLabel">Rechazar Cotización</h5>
+                    <small class="text-secondary">Confirma si deseas declinar la propuesta del taller</small>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+
+            <form method="POST" action="pedidos.php" id="formRechazarCotizacion">
+                <input type="hidden" name="rechazar_cotizacion" value="1">
+                <input type="hidden" name="id_cotizacion" id="rechazarCotizacionId" value="">
+
+                <div class="modal-body dark-theme-body">
+                    <div class="p-3 rounded-3 border border-secondary border-opacity-25 bg-black mb-3">
+                        <span class="small text-secondary d-block">Proyecto a declinar:</span>
+                        <strong class="text-white d-block fs-6" id="rechazarProyectoLabel">Proyecto</strong>
+                    </div>
+
+                    <p class="small text-secondary line-height-base mb-3">
+                        Al declinar la propuesta, la cotización quedará archivada como rechazada. Si requieres ajustes en medidas, presupuesto o maderas, te invitamos a contactar al taller antes de declinar.
+                    </p>
+
+                    <div class="mb-2">
+                        <label for="motivo_rechazo" class="form-label text-secondary small fw-semibold">Motivo del rechazo (Opcional):</label>
+                        <textarea name="motivo_rechazo" id="motivo_rechazo" rows="3" class="form-control bg-dark text-white border-secondary border-opacity-50 rounded-3 small" placeholder="Ej. El presupuesto supera mi estimado, deseo cambiar las dimensiones..."></textarea>
+                    </div>
+                </div>
+
+                <div class="modal-footer dark-theme-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-3 py-2 text-white" data-bs-dismiss="modal">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 py-2 fw-bold">
+                        Confirmar Rechazo
                     </button>
                 </div>
 

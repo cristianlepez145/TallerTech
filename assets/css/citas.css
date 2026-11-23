@@ -615,7 +615,8 @@
     color: #86efac;
 }
 
-.appointment-status-pill.completada {
+.appointment-status-pill.completada,
+.appointment-status-pill.realizada {
     background-color: rgba(59, 130, 246, 0.15);
     border: 1px solid rgba(59, 130, 246, 0.3);
     color: #93c5fd;

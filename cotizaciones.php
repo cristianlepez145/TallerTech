@@ -41,9 +41,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['solicitar_cotizacion'
                     $detallesTecnicos .= " | Notas adicionales: " . $notas_cliente;
                 }
 
-                // Inserción preparada con PDO
+                // Inserción preparada con PDO: Toda cotización nace en estado 'pendiente_revision'
                 $sql = "INSERT INTO cotizaciones (id_usuario, id_mueble, estado, costo_total, anticipo_pagado, notas) 
-                        VALUES (:id_usuario, :id_mueble, 'estimada', :costo_total, 0.00, :notas)";
+                        VALUES (:id_usuario, :id_mueble, 'pendiente_revision', :costo_total, 0.00, :notas)";
                 
                 $stmt = $pdo->prepare($sql);
                 $stmt->execute([
@@ -59,10 +59,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['solicitar_cotizacion'
                 registrar_log(
                     $pdo,
                     'NUEVA_COTIZACION',
-                    "Cliente registró cotización #COT-{$id_cotizacion} ({$categoria_txt}) por un total estimado de $" . number_format($costo_total, 2) . " MXN.",
+                    "Cliente registró cotización #COT-{$id_cotizacion} ({$categoria_txt}) por un total estimado de $" . number_format($costo_total, 2) . " MXN (Pendiente de revisión).",
                     $id_usuario
                 );
-                $mensaje_exito = "¡Excelente! Tu cotización #{$id_cotizacion} ha sido registrada con estado <strong>estimada</strong>. El equipo del taller revisará los detalles técnicos para contactarte a la brevedad.";
+                $mensaje_exito = "¡Excelente! Tu cotización #{$id_cotizacion} ha sido registrada y está en <strong>revisión técnica</strong> por el carpintero. En breve se validarán medidas y materiales para enviarte la propuesta formal.";
 
             } catch (PDOException $e) {
                 error_log("Error al registrar cotización: " . $e->getMessage());

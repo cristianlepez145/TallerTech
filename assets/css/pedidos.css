@@ -199,11 +199,26 @@
     letter-spacing: 0.02em;
 }
 
-/* 1. En proceso de cotización */
-.status-pill-badge.cotizacion {
+/* 1. En proceso de cotización / Pendiente de revisión */
+.status-pill-badge.cotizacion,
+.status-pill-badge.pendiente_revision {
     background-color: rgba(217, 119, 6, 0.15);
     border: 1px solid rgba(217, 119, 6, 0.35);
     color: #fbbf24;
+}
+
+/* 1b. Propuesta formal enviada al cliente */
+.status-pill-badge.pendiente_cliente {
+    background-color: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34d399;
+}
+
+/* 1c. Cotización rechazada */
+.status-pill-badge.rechazada {
+    background-color: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #f87171;
 }
 
 /* 2. En proceso de trabajo / Fabricación */
@@ -365,10 +380,23 @@
     box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
 }
 
-.stepper-step.active.status-cotizacion .stepper-node {
+.stepper-step.active.status-cotizacion .stepper-node,
+.stepper-step.active.status-pendiente_revision .stepper-node {
     border-color: #fbbf24;
     color: #fbbf24;
     box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+}
+
+.stepper-step.active.status-pendiente_cliente .stepper-node {
+    border-color: #34d399;
+    color: #34d399;
+    box-shadow: 0 0 16px rgba(52, 211, 153, 0.3);
+}
+
+.stepper-step.active.status-rechazada .stepper-node {
+    border-color: #f87171;
+    color: #f87171;
+    box-shadow: 0 0 16px rgba(248, 113, 113, 0.3);
 }
 
 .stepper-step.active.status-fabricacion .stepper-node {
@@ -473,6 +501,46 @@
     color: #000000;
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(255, 255, 255, 0.18);
+}
+
+.btn-order-action.danger-subtle {
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    color: #fca5a5;
+}
+
+.btn-order-action.danger-subtle:hover {
+    background-color: rgba(239, 68, 68, 0.22);
+    border-color: rgba(239, 68, 68, 0.5);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Indicadores de Revisión Técnica y Rechazo */
+.quote-review-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 1.25rem;
+    background-color: rgba(217, 119, 6, 0.08);
+    border: 1px solid rgba(217, 119, 6, 0.25);
+    border-radius: var(--radius-pill);
+    color: #fbbf24;
+    font-size: 0.84rem;
+    font-weight: 500;
+}
+
+.rejected-quote-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.65rem 1.25rem;
+    background-color: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: var(--radius-pill);
+    color: #f87171;
+    font-size: 0.84rem;
+    font-weight: 500;
 }
 
 /* ==========================================================================
