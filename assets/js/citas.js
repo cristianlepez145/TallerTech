@@ -78,14 +78,52 @@ document.addEventListener('DOMContentLoaded', () => {
         placeholderOpt.textContent = 'Selecciona un bloque de hora (1 hora máx.)';
         selectHora.appendChild(placeholderOpt);
 
+        const ahora = new Date();
+        const yyyy = ahora.getFullYear();
+        const mm = String(ahora.getMonth() + 1).padStart(2, '0');
+        const dd = String(ahora.getDate()).padStart(2, '0');
+        const hoyStr = `${yyyy}-${mm}-${dd}`;
+        const esHoy = (fechaSeleccionadaStr === hoyStr);
+        const minutosActuales = ahora.getHours() * 60 + ahora.getMinutes();
+
+        const ocupadosArray = Array.isArray(window.HORARIOS_OCUPADOS) ? window.HORARIOS_OCUPADOS : [];
+        let disponiblesCount = 0;
+
         listaHorarios.forEach(h => {
             const opt = document.createElement('option');
             opt.value = h.val;
-            opt.textContent = h.label;
+
+            const slotKey = `${fechaSeleccionadaStr} ${h.val}`;
+            const [slotHora, slotMin] = h.val.split(':').map(Number);
+            const slotMinutosTotal = slotHora * 60 + slotMin;
+
+            const estaOcupado = ocupadosArray.includes(slotKey);
+            const esPasado = esHoy && (slotMinutosTotal <= minutosActuales);
+
+            if (estaOcupado) {
+                opt.disabled = true;
+                opt.textContent = `${h.label} 🚫 (Ya reservado)`;
+                opt.style.color = '#ef4444';
+            } else if (esPasado) {
+                opt.disabled = true;
+                opt.textContent = `${h.label} ⏳ (Horario pasado)`;
+                opt.style.color = '#71717a';
+            } else {
+                opt.disabled = false;
+                opt.textContent = `${h.label} ✓ Disponible`;
+                disponiblesCount++;
+            }
+
             selectHora.appendChild(opt);
         });
 
-        if (scheduleHint) scheduleHint.textContent = mensaje;
+        if (disponiblesCount === 0) {
+            if (scheduleHint) {
+                scheduleHint.innerHTML = '<span style="color: #f87171; font-weight: 600;">⚠️ Todos los bloques para esta fecha están ocupados o transcurrieron. Selecciona otro día.</span>';
+            }
+        } else {
+            if (scheduleHint) scheduleHint.textContent = `${mensaje} (${disponiblesCount} bloque(s) disponible(s))`;
+        }
     }
 
     if (inputFecha) {

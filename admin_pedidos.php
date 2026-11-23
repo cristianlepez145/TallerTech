@@ -30,6 +30,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($id_pedido <= 0 || empty($nuevo_estado)) {
             $mensaje_error = 'Datos del pedido incompletos o inválidos.';
+        } elseif ($nuevo_total < 0 || $nuevo_anticipo < 0) {
+            $mensaje_error = 'El costo total y el anticipo no pueden ser montos negativos.';
         } else {
             try {
                 $sqlExtra = ($nuevo_estado === 'completado') ? ", completado_en = NOW()" : "";
@@ -887,7 +889,7 @@ require_once 'includes/header.php';
                 <div class="admin-toolbar-row">
                     <div>
                         <h2 class="h5 fw-bold text-white mb-1">Bitácora de Logs &amp; Auditoría del Sistema</h2>
-                        <p class="small text-secondary mb-0">Registro histórico inmutable de toda la actividad en la base de datos Aiven.</p>
+                        <p class="small text-secondary mb-0">Registro histórico inmutable de toda la actividad en la base de datos (TiDB Cloud Serverless).</p>
                     </div>
                     <input 
                         type="search" 
@@ -1000,11 +1002,11 @@ require_once 'includes/header.php';
                     <div class="row g-3">
                         <div class="col-6">
                             <label for="edit_pedido_anticipo" class="admin-form-label">Anticipo Pagado ($)</label>
-                            <input type="number" step="0.01" name="anticipo" id="edit_pedido_anticipo" class="admin-form-input" required>
+                            <input type="number" step="0.01" min="0" name="anticipo" id="edit_pedido_anticipo" class="admin-form-input" required>
                         </div>
                         <div class="col-6">
                             <label for="edit_pedido_total" class="admin-form-label">Costo Total ($)</label>
-                            <input type="number" step="0.01" name="total" id="edit_pedido_total" class="admin-form-input" required>
+                            <input type="number" step="0.01" min="0" name="total" id="edit_pedido_total" class="admin-form-input" required>
                         </div>
                     </div>
                 </div>

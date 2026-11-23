@@ -31,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['solicitar_cotizacion'
         $envio          = isset($_POST['envio']) ? 'Sí' : 'No';
         $notas_cliente  = trim($_POST['notas'] ?? '');
 
-        if ($costo_total <= 0) {
-            $mensaje_error = 'El costo total estimado no es válido. Por favor, verifica las dimensiones.';
+        if ($costo_total <= 0 || $alto <= 0 || $ancho <= 0 || $profundidad <= 0) {
+            $mensaje_error = 'Las dimensiones ingresadas o el costo total estimado no son válidos. Por favor, verifica que las medidas sean mayores a cero.';
         } else {
             try {
                 // Notas técnicas estructuradas

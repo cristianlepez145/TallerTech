@@ -32,5 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Prevención global de doble envío en formularios interactivos
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            if (this.dataset.submitting === 'true') {
+                e.preventDefault();
+                return false;
+            }
+            this.dataset.submitting = 'true';
+            const submitBtn = this.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                setTimeout(() => {
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('disabled');
+                    submitBtn.style.opacity = '0.7';
+                }, 20);
+            }
+        });
+    });
 });
 

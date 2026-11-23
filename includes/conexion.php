@@ -59,10 +59,19 @@ try {
 
     $pdo = new PDO($dsn, $username, $password, $opciones);
 } catch (PDOException $e) {
+    error_log("Error de conexión PDO: " . $e->getMessage());
     // Si la conexión falla (ej. entorno local sin BD levantada), permitir continuar en modo demo si aplica
     if (php_sapi_name() === 'cli' && defined('IGNORAR_ERROR_CONEXION_CLI')) {
         $pdo = null;
     } else {
-        die("Error de conexión: " . $e->getMessage());
+        http_response_code(503);
+        die("
+            <div style='background:#121212; color:#ffffff; font-family:system-ui,-apple-system,sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; text-align:center;'>
+                <div style='width:64px; height:64px; border-radius:50%; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); display:flex; align-items:center; justify-content:center; font-size:1.75rem; color:#f87171; margin-bottom:1.5rem;'>⚠️</div>
+                <h1 style='font-size:1.75rem; font-weight:700; margin-bottom:0.75rem;'>Servicio Temporalmente No Disponible</h1>
+                <p style='color:#a1a1aa; max-width:480px; line-height:1.6; margin-bottom:1.5rem;'>No fue posible establecer conexión con el servidor de datos de TallerTech. Por favor, verifica tu conexión o intenta de nuevo más tarde.</p>
+                <a href='index.php' style='color:#c48849; text-decoration:underline; font-weight:600;'>Reintentar cargar el sitio</a>
+            </div>
+        ");
     }
 }

@@ -8,5 +8,9 @@
 # Archivos subidos dinámicamente por usuarios
 uploads/croquis/*
 !uploads/croquis/.gitkeep
+!uploads/croquis/index.html
 uploads/referencias/*
 !uploads/referencias/.gitkeep
+!uploads/referencias/index.html
+!uploads/index.html
+!uploads/.htaccess

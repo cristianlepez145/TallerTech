@@ -12,6 +12,24 @@ if (session_status() === PHP_SESSION_NONE) {
 require_once 'includes/conexion.php';
 require_once 'includes/auth.php';
 
+// Endpoint AJAX rápido para consultar horarios ocupados de una fecha específica
+if (isset($_GET['check_slots']) && !empty($_GET['fecha'])) {
+    header('Content-Type: application/json');
+    $fechaCheck = trim($_GET['fecha']);
+    try {
+        $stmtSlot = $pdo->prepare("
+            SELECT DATE_FORMAT(fecha_hora, '%H:%i') as hora 
+            FROM citas 
+            WHERE DATE(fecha_hora) = :f AND estado != 'cancelada'
+        ");
+        $stmtSlot->execute([':f' => $fechaCheck]);
+        echo json_encode(['status' => 'success', 'horas_ocupadas' => $stmtSlot->fetchAll(PDO::FETCH_COLUMN)]);
+    } catch (Exception $e) {
+        echo json_encode(['status' => 'error', 'horas_ocupadas' => []]);
+    }
+    exit;
+}
+
 $mensaje_exito = '';
 $mensaje_error = '';
 
@@ -68,9 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
         } else {
             $fechaTimestamp = strtotime($fecha);
             $hoyTimestamp   = strtotime(date('Y-m-d'));
+            $fechaHoraTs    = strtotime($fecha . ' ' . $hora . ':00');
 
-            if ($fechaTimestamp < $hoyTimestamp) {
-                $mensaje_error = 'No es posible agendar citas en fechas pasadas.';
+            if ($fechaTimestamp < $hoyTimestamp || ($fechaHoraTs && $fechaHoraTs < time())) {
+                $mensaje_error = 'No es posible agendar citas en fechas u horarios que ya han transcurrido.';
             } else {
                 $diaSemana = (int)date('N', $fechaTimestamp); // 1 = Lunes, 7 = Domingo
                 $horaNum   = (int)substr($hora, 0, 2);
@@ -81,8 +100,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
                 } elseif ($esFinDeSemana && ($horaNum < 9 || $horaNum > 17)) {
                     $mensaje_error = 'En fin de semana (Sábado y Domingo), las citas se agendan entre las 9:00 AM y las 6:00 PM.';
                 } else {
-                    // 3. Manejo seguro de archivos adjuntos (imágenes o PDF de referencias y diseños)
-                    $archivosSubidos = [];
+                    // 2.1 Verificar si el horario ya está ocupado con alguien más
+                    $fecha_hora_check = $fecha . ' ' . $hora . ':00';
+                    $stmtCheckOcupado = $pdo->prepare("
+                        SELECT COUNT(*) 
+                        FROM citas 
+                        WHERE fecha_hora = :fecha_hora AND estado != 'cancelada'
+                    ");
+                    $stmtCheckOcupado->execute([':fecha_hora' => $fecha_hora_check]);
+                    if ((int)$stmtCheckOcupado->fetchColumn() > 0) {
+                        $mensaje_error = 'El horario seleccionado (' . date('d/m/Y', strtotime($fecha)) . ' a las ' . $hora . ' hrs) ya ha sido reservado por otro cliente. Por favor, selecciona otro horario disponible.';
+                    } else {
+                        // 3. Manejo seguro de archivos adjuntos (imágenes o PDF de referencias y diseños)
+                        $archivosSubidos = [];
 
                     $inputFiles = null;
                     if (isset($_FILES['referencias']) && is_array($_FILES['referencias']['name'])) {
@@ -178,12 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
                                 $userExist = $stmtFind->fetch();
 
                                 if ($userExist) {
-                                    $id_usuario = (int)$userExist['id_usuario'];
-                                    session_regenerate_id(true);
-                                    $_SESSION['id_usuario'] = $id_usuario;
-                                    $_SESSION['nombre']     = $userExist['nombre'];
-                                    $_SESSION['correo']     = $correo;
-                                    $_SESSION['rol']        = 'cliente_prospecto';
+                                    $mensaje_error = 'Ya existe una cuenta registrada con el correo <strong>' . htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') . '</strong>. Por favor, <a href="login.php" class="text-white text-decoration-underline fw-bold">inicia sesión aquí</a> con tu contraseña para agendar y vincular tu cita a tu cuenta.';
                                 } else {
                                     $tempPassword = bin2hex(random_bytes(8));
                                     $tempHash     = password_hash($tempPassword, PASSWORD_DEFAULT);
@@ -207,84 +232,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
                                 }
                             }
 
-                            // Insertar cita en MySQL
-                            $fecha_hora     = $fecha . ' ' . $hora . ':00';
-                            $duracion_max   = 60;
-                            $ruta_principal = !empty($archivosSubidos) ? $archivosSubidos[0]['ruta'] : null;
+                            if (empty($mensaje_error)) {
+                                // Insertar cita en MySQL
+                                $fecha_hora     = $fecha . ' ' . $hora . ':00';
+                                $duracion_max   = 60;
+                                $ruta_principal = !empty($archivosSubidos) ? $archivosSubidos[0]['ruta'] : null;
 
-                            $sql = "INSERT INTO citas (id_usuario, fecha_hora, duracion_max, tipo_cita, direccion, ruta_croquis, notas, estado) 
-                                    VALUES (:id_usuario, :fecha_hora, :duracion_max, :tipo_cita, :direccion, :ruta_croquis, :notas, 'pendiente')";
-                            
-                            $stmtCita = $pdo->prepare($sql);
-                            $stmtCita->execute([
-                                ':id_usuario'   => $id_usuario,
-                                ':fecha_hora'   => $fecha_hora,
-                                ':duracion_max' => $duracion_max,
-                                ':tipo_cita'    => $tipo_cita,
-                                ':direccion'    => $direccion,
-                                ':ruta_croquis' => $ruta_principal,
-                                ':notas'        => $notas
-                            ]);
+                                $sql = "INSERT INTO citas (id_usuario, fecha_hora, duracion_max, tipo_cita, direccion, ruta_croquis, notas, estado) 
+                                        VALUES (:id_usuario, :fecha_hora, :duracion_max, :tipo_cita, :direccion, :ruta_croquis, :notas, 'pendiente')";
+                                
+                                $stmtCita = $pdo->prepare($sql);
+                                $stmtCita->execute([
+                                    ':id_usuario'   => $id_usuario,
+                                    ':fecha_hora'   => $fecha_hora,
+                                    ':duracion_max' => $duracion_max,
+                                    ':tipo_cita'    => $tipo_cita,
+                                    ':direccion'    => $direccion,
+                                    ':ruta_croquis' => $ruta_principal,
+                                    ':notas'        => $notas
+                                ]);
 
-                            $id_cita = (int)$pdo->lastInsertId();
+                                $id_cita = (int)$pdo->lastInsertId();
 
-                            // Registrar evento en la bitácora de auditoría
-                            registrar_log(
-                                $pdo,
-                                'NUEVA_CITA',
-                                "Cita agendada #CITA-{$id_cita} ({$tipo_cita}) para el {$fecha} a las {$hora}.",
-                                $id_usuario
-                            );
+                                // Registrar evento en la bitácora de auditoría
+                                registrar_log(
+                                    $pdo,
+                                    'NUEVA_CITA',
+                                    "Cita agendada #CITA-{$id_cita} ({$tipo_cita}) para el {$fecha} a las {$hora}.",
+                                    $id_usuario
+                                );
 
-                            // Insertar cada archivo de referencia en la tabla relacional archivos_cita
-                            if (!empty($archivosSubidos)) {
-                                $stmtArch = $pdo->prepare("INSERT INTO archivos_cita (id_cita, ruta_archivo, nombre_original, tipo_archivo) 
-                                                           VALUES (:id_cita, :ruta, :nombre_orig, :tipo)");
-                                foreach ($archivosSubidos as $arc) {
-                                    $stmtArch->execute([
-                                        ':id_cita'     => $id_cita,
-                                        ':ruta'        => $arc['ruta'],
-                                        ':nombre_orig' => $arc['nombre_original'],
-                                        ':tipo'        => $arc['tipo']
-                                    ]);
+                                // Insertar cada archivo de referencia en la tabla relacional archivos_cita
+                                if (!empty($archivosSubidos)) {
+                                    $stmtArch = $pdo->prepare("INSERT INTO archivos_cita (id_cita, ruta_archivo, nombre_original, tipo_archivo) 
+                                                               VALUES (:id_cita, :ruta, :nombre_orig, :tipo)");
+                                    foreach ($archivosSubidos as $arc) {
+                                        $stmtArch->execute([
+                                            ':id_cita'     => $id_cita,
+                                            ':ruta'        => $arc['ruta'],
+                                            ':nombre_orig' => $arc['nombre_original'],
+                                            ':tipo'        => $arc['tipo']
+                                        ]);
+                                    }
                                 }
-                            }
 
-                            // Generar cotización asociada en estado inicial 'pendiente_revision'
-                            $notasCotizacionCita = "Proyecto agendado desde Cita #CITA-{$id_cita} ({$tipo_cita}) para {$fecha} {$hora}.";
-                            if (!empty($direccion)) {
-                                $notasCotizacionCita .= " | Dirección: {$direccion}";
-                            }
-                            if (!empty($notas)) {
-                                $notasCotizacionCita .= " | Notas técnicas: " . $notas;
-                            }
-
-                            $stmtCotCita = $pdo->prepare("
-                                INSERT INTO cotizaciones (id_usuario, id_mueble, estado, costo_total, anticipo_pagado, notas)
-                                VALUES (:id_usuario, 4, 'pendiente_revision', 0.00, 0.00, :notas)
-                            ");
-                            $stmtCotCita->execute([
-                                ':id_usuario' => $id_usuario,
-                                ':notas'      => $notasCotizacionCita
-                            ]);
-                            $idCotCita = (int)$pdo->lastInsertId();
-
-                            // Asociar los archivos subidos a la cotización relacionalmente
-                            if (!empty($archivosSubidos)) {
-                                $stmtArchCot = $pdo->prepare("INSERT INTO archivos_cotizacion (id_cotizacion, ruta_archivo) VALUES (:id_cot, :ruta)");
-                                foreach ($archivosSubidos as $arc) {
-                                    $stmtArchCot->execute([
-                                        ':id_cot' => $idCotCita,
-                                        ':ruta'   => $arc['ruta']
-                                    ]);
+                                // Generar cotización asociada en estado inicial 'pendiente_revision'
+                                $notasCotizacionCita = "Proyecto agendado desde Cita #CITA-{$id_cita} ({$tipo_cita}) para {$fecha} {$hora}.";
+                                if (!empty($direccion)) {
+                                    $notasCotizacionCita .= " | Dirección: {$direccion}";
                                 }
-                            }
+                                if (!empty($notas)) {
+                                    $notasCotizacionCita .= " | Notas técnicas: " . $notas;
+                                }
 
-                            $fechaFormateada = date('d/m/Y', strtotime($fecha));
-                            $totalSubidos    = count($archivosSubidos);
-                            $textoAdjuntos   = ($totalSubidos > 0) ? " Se vincularon {$totalSubidos} archivo(s) de referencia/diseño." : "";
-                            
-                            $mensaje_exito = "¡Cita reservada con éxito! Folio #CITA-{$id_cita} para el {$fechaFormateada} a las {$hora} hrs.{$textoAdjuntos} Se ha generado tu cotización <strong>#COT-{$idCotCita}</strong> en estado <strong>pendiente de revisión</strong> por el carpintero.";
+                                $stmtCotCita = $pdo->prepare("
+                                    INSERT INTO cotizaciones (id_usuario, id_mueble, estado, costo_total, anticipo_pagado, notas)
+                                    VALUES (:id_usuario, 4, 'pendiente_revision', 0.00, 0.00, :notas)
+                                ");
+                                $stmtCotCita->execute([
+                                    ':id_usuario' => $id_usuario,
+                                    ':notas'      => $notasCotizacionCita
+                                ]);
+                                $idCotCita = (int)$pdo->lastInsertId();
+
+                                // Asociar los archivos subidos a la cotización relacionalmente
+                                if (!empty($archivosSubidos)) {
+                                    $stmtArchCot = $pdo->prepare("INSERT INTO archivos_cotizacion (id_cotizacion, ruta_archivo) VALUES (:id_cot, :ruta)");
+                                    foreach ($archivosSubidos as $arc) {
+                                        $stmtArchCot->execute([
+                                            ':id_cot' => $idCotCita,
+                                            ':ruta'   => $arc['ruta']
+                                        ]);
+                                    }
+                                }
+
+                                $fechaFormateada = date('d/m/Y', strtotime($fecha));
+                                $totalSubidos    = count($archivosSubidos);
+                                $textoAdjuntos   = ($totalSubidos > 0) ? " Se vincularon {$totalSubidos} archivo(s) de referencia/diseño." : "";
+                                
+                                $mensaje_exito = "¡Cita reservada con éxito! Folio #CITA-{$id_cita} para el {$fechaFormateada} a las {$hora} hrs.{$textoAdjuntos} Se ha generado tu cotización <strong>#COT-{$idCotCita}</strong> en estado <strong>pendiente de revisión</strong> por el carpintero.";
+                            }
 
                         } catch (PDOException $e) {
                             error_log("Error al agendar cita: " . $e->getMessage());
@@ -295,6 +322,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
             }
         }
     }
+}
+}
+
+// Consultar horarios ocupados activos para inhabilitarlos en el selector
+$citasOcupadas = [];
+try {
+    $stmtOcupadas = $pdo->query("
+        SELECT DATE_FORMAT(fecha_hora, '%Y-%m-%d %H:%i') AS slot
+        FROM citas
+        WHERE estado != 'cancelada' AND fecha_hora >= CURRENT_DATE()
+    ");
+    $citasOcupadas = $stmtOcupadas->fetchAll(PDO::FETCH_COLUMN);
+} catch (Exception $e) {
+    $citasOcupadas = [];
 }
 
 // Consultar citas previas del usuario si tiene sesión activa
@@ -726,7 +767,10 @@ require_once 'includes/header.php';
     </div>
 </div>
 
-<!-- Script interactivo de reglas de citas y multi-file drag & drop -->
+<!-- Configuración de Horarios Ocupados y Script interactivo de reglas de citas -->
+<script>
+    window.HORARIOS_OCUPADOS = <?= json_encode($citasOcupadas) ?>;
+</script>
 <script src="assets/js/citas.js"></script>
 
 <?php 

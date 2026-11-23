@@ -228,6 +228,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Inicializar con la primera categoría estandarizada (Cajoneras)
-    seleccionarCategoria('cajoneras');
+    // Inicializar según parámetro de URL si existe, o por defecto 'cajoneras'
+    const urlParams = new URLSearchParams(window.location.search);
+    const catUrl = urlParams.get('categoria');
+    const catInicial = (catUrl && CATEGORIAS_CONFIG[catUrl]) ? catUrl : 'cajoneras';
+    seleccionarCategoria(catInicial);
 });

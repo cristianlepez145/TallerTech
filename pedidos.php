@@ -43,6 +43,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
                     $costoTotal = (float)$cot['costo_total'];
                     $anticipo60 = round($costoTotal * 0.60, 2);
 
+                    $pdo->beginTransaction();
+
                     // A) Actualizar cotización a 'aceptada' con el anticipo registrado
                     $stmtUpd = $pdo->prepare("
                         UPDATE cotizaciones 
@@ -74,6 +76,8 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
 
                     $idNuevoPedido = $pdo->lastInsertId();
 
+                    $pdo->commit();
+
                     // Registrar en la bitácora de auditoría
                     registrar_log(
                         $pdo,
@@ -84,6 +88,9 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
                     $mensaje_exito = "¡Anticipo del 60% registrado con éxito ($" . number_format($anticipo60, 2) . " MXN)! Tu proyecto ha generado la orden de trabajo <strong>#PED-{$idNuevoPedido}</strong> y ha pasado a la etapa <strong>En Fabricación / Taller</strong>.";
                 }
             } catch (PDOException $e) {
+                if ($pdo->inTransaction()) {
+                    $pdo->rollBack();
+                }
                 error_log("Error al aprobar anticipo: " . $e->getMessage());
                 $mensaje_error = 'Ocurrió un error al procesar el anticipo en el servidor.';
             }
@@ -238,16 +245,14 @@ if ($estaAutenticado) {
         $stmtC->execute([':id' => $id_usuario]);
         $rowsC = $stmtC->fetchAll(PDO::FETCH_ASSOC);
 
+        // Extraer los IDs de cotizaciones que ya cuentan con una orden formal en pedidos
+        $idsCotizacionesEnPedidos = array_filter(array_column($rowsP, 'id_cotizacion'));
+
         foreach ($rowsC as $c) {
             // Si ya existe un pedido asociado a esta cotización, la omitimos para no duplicar la tarjeta
-            $yaEnPedidos = false;
-            foreach ($pedidos_usuario as $pu) {
-                if ($pu['tipo'] === 'pedido' && isset($r['id_cotizacion']) && $r['id_cotizacion'] == $c['id_cotizacion']) {
-                    $yaEnPedidos = true;
-                    break;
-                }
+            if (in_array((int)$c['id_cotizacion'], array_map('intval', $idsCotizacionesEnPedidos), true)) {
+                continue;
             }
-            if ($yaEnPedidos) continue;
 
             $estadoReal = $c['estado'] ?? 'pendiente_revision';
             $step = 1;
@@ -523,6 +528,16 @@ require_once 'includes/header.php';
                 <div class="small text-secondary">
                     <strong class="text-white">Modo Demostración Activo:</strong> Mostrando ejemplos visuales de las 3 etapas del flujo para referencia técnica.
                 </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($estaAutenticado && $mostrarDemo): ?>
+            <div class="p-4 rounded-4 mb-4 text-center" style="background: rgba(196, 136, 73, 0.08); border: 1px dashed rgba(196, 136, 73, 0.35);">
+                <h3 class="h5 fw-bold text-white mb-2">¡Aún no tienes cotizaciones ni pedidos en fabricación!</h3>
+                <p class="text-secondary small mb-3">A continuación te mostramos ejemplos de cómo verás el seguimiento en tiempo real una vez que inicies tu proyecto. ¡Calcula tu presupuesto hoy mismo!</p>
+                <a href="cotizaciones.php" class="btn btn-warning rounded-pill px-4 py-2 fw-bold btn-sm">
+                    Diseñar y Cotizar mi Primer Mueble ↗
+                </a>
             </div>
         <?php endif; ?>
 

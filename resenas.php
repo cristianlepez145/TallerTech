@@ -11,6 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'includes/conexion.php';
+require_once 'includes/auth.php';
 
 $mensaje_exito = '';
 $mensaje_error = '';
@@ -94,6 +95,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['publicar_resena'])) {
                     ':mueble'        => !empty($mueble_proyecto) ? $mueble_proyecto : null,
                     ':comentario'    => $comentario
                 ]);
+
+                $idResena = (int)$pdo->lastInsertId();
+                registrar_log(
+                    $pdo,
+                    'NUEVA_RESENA',
+                    "Cliente '{$nombre_autor}' publicó reseña #{$idResena} con calificación de {$calificacion}/5 estrellas.",
+                    $id_usuario
+                );
 
                 $mensaje_exito = '¡Muchas gracias por tu reseña! Tu experiencia ha sido compartida con la comunidad como cliente verificado.';
             } catch (PDOException $e) {

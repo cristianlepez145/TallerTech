@@ -37,6 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Activar filtro inicial si viene especificado en los parámetros URL
+    const catUrl = new URLSearchParams(window.location.search).get('categoria');
+    if (catUrl) {
+        const matchBtn = Array.from(filterButtons).find(b => 
+            b.dataset.filter === catUrl || 
+            b.dataset.filter.includes(catUrl) ||
+            (catUrl === 'cocinas' && b.dataset.filter === 'cocinas_closets') ||
+            (catUrl === 'banos' && b.dataset.filter === 'carpinteria_gral') ||
+            (catUrl === 'camas' && b.dataset.filter === 'camas_escritorios')
+        );
+        if (matchBtn) {
+            matchBtn.click();
+        }
+    }
+
     // 2. Modal de Vista Rápida (Quick View)
     const modalBackdrop = document.getElementById('catalogoModal');
     const modalCloseBtn = document.getElementById('modalCloseBtn');
