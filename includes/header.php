@@ -9,7 +9,7 @@ require_once __DIR__ . '/auth.php';
 
 // 2. Detección automática o personalizada de la página actual para la clase .active
 $current_page = $pagina_actual ?? basename($_SERVER['PHP_SELF']);
-$page_title   = $titulo_pagina ?? 'TallerTech | Carpintería y Diseño a Medida';
+$page_title   = $titulo_pagina ?? 'TallerTech | Carpintería Artesanal y Muebles a Medida';
 $cart_count   = isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])
     ? count($_SESSION['carrito'])
     : (int)($_SESSION['cart_count'] ?? 0);
@@ -46,8 +46,8 @@ $esAdminCarpintero = es_carpintero();
             <a href="index.php" class="brand-logo" aria-label="TallerTech - Inicio">
                 <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <!-- Silueta geométrica de pino / árbol de carpintería -->
-                    <path d="M12 2L6 8h3.5l-4 6h4l-3.5 5h12l-3.5-5h4l-4-6H18L12 2z" fill="rgba(196, 136, 73, 0.22)" stroke="#c48849" />
-                    <path d="M11 21v3h2v-3" stroke="#c48849" stroke-width="2.5" />
+                    <path d="M12 2L6 8h3.5l-4 6h4l-3.5 5h12l-3.5-5h4l-4-6H18L12 2z" fill="rgba(200, 138, 75, 0.18)" stroke="#c88a4b" />
+                    <path d="M11 21v3h2v-3" stroke="#c88a4b" stroke-width="2.5" />
                 </svg>
                 <span>TallerTech</span>
             </a>
@@ -56,7 +56,7 @@ $esAdminCarpintero = es_carpintero();
             <nav class="header-nav" aria-label="Navegación principal">
                 <div class="nav-pill">
                     <a href="index.php" class="nav-link-pill <?= ($current_page === 'index.php') ? 'active' : '' ?>">Inicio</a>
-                    <a href="catalogo.php" class="nav-link-pill <?= ($current_page === 'catalogo.php') ? 'active' : '' ?>">Catálogo</a>
+                    <a href="galeria.php" class="nav-link-pill <?= ($current_page === 'galeria.php') ? 'active' : '' ?>">Trabajos</a>
                     <a href="citas.php" class="nav-link-pill <?= ($current_page === 'citas.php') ? 'active' : '' ?>">Citas</a>
                     <a href="cotizaciones.php" class="nav-link-pill <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a>
                     <a href="pedidos.php" class="nav-link-pill <?= ($current_page === 'pedidos.php') ? 'active' : '' ?>">Pedidos</a>
@@ -126,7 +126,7 @@ $esAdminCarpintero = es_carpintero();
         <div class="mobile-nav-drawer" id="mobileNavDrawer">
             <ul class="mobile-nav-list">
                 <li><a href="index.php" class="mobile-nav-link <?= ($current_page === 'index.php') ? 'active' : '' ?>">Inicio</a></li>
-                <li><a href="catalogo.php" class="mobile-nav-link <?= ($current_page === 'catalogo.php') ? 'active' : '' ?>">Catálogo</a></li>
+                <li><a href="galeria.php" class="mobile-nav-link <?= ($current_page === 'galeria.php') ? 'active' : '' ?>">Trabajos Hechos</a></li>
                 <li><a href="citas.php" class="mobile-nav-link <?= ($current_page === 'citas.php') ? 'active' : '' ?>">Citas &amp; Medidas</a></li>
                 <li><a href="cotizaciones.php" class="mobile-nav-link <?= ($current_page === 'cotizaciones.php') ? 'active' : '' ?>">Cotizaciones</a></li>
                 <li><a href="pedidos.php" class="mobile-nav-link <?= ($current_page === 'pedidos.php') ? 'active' : '' ?>">Pedidos</a></li>

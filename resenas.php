@@ -186,7 +186,7 @@ function formatearFechaEspanol($fechaStr) {
 }
 
 // Configuración para el Header Global de TallerTech
-$titulo_pagina = 'Reseñas de la Comunidad | TallerTech';
+$titulo_pagina = 'Opiniones y Reseñas | TallerTech';
 $pagina_actual = 'resenas.php';
 $css_adicional = 'assets/css/resenas.css';
 
@@ -225,11 +225,11 @@ require_once 'includes/header.php';
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
                     </svg>
-                    Experiencia &amp; Clientes Verificados
+                    Opiniones del Taller
                 </span>
-                <h1 class="resenas-main-title">Reseñas de la Comunidad</h1>
+                <h1 class="resenas-main-title">Lo que dicen de nuestro trabajo</h1>
                 <p class="resenas-main-subtitle">
-                    Lo que dicen nuestros clientes sobre sus productos terminados. Conoce testimonios auténticos de pedidos completados en TallerTech.
+                    Opiniones sinceras de familias y clientes que han confiado en nuestro taller para fabricar sus muebles.
                 </p>
             </div>
 
@@ -485,7 +485,7 @@ require_once 'includes/header.php';
                         Para garantizar una comunidad 100% transparente y fidedigna, en TallerTech únicamente los clientes con al menos <strong>un pedido fabricado y entregado</strong> pueden calificar la experiencia.
                     </p>
                     <div class="d-flex flex-column gap-2 max-w-sm mx-auto" style="max-width: 320px;">
-                        <a href="catalogo.php" class="btn btn-light rounded-pill fw-semibold py-2">Explorar Catálogo de Muebles</a>
+                        <a href="galeria.php" class="btn btn-light rounded-pill fw-semibold py-2">Ver Trabajos del Taller</a>
                         <a href="cotizaciones.php" class="btn btn-outline-secondary rounded-pill text-white py-2">Cotizar un Proyecto a Medida</a>
                     </div>
                 </div>

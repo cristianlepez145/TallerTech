@@ -1,6 +1,6 @@
 <?php
 /**
- * TallerTech - Vista delegada para catálogo
+ * TallerTech - Redirección a Trabajos Hechos (Galería)
  */
-require_once __DIR__ . '/../catalogo.php';
-
+header("Location: ../galeria.php", true, 301);
+exit;

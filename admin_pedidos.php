@@ -7,12 +7,26 @@
 
 require_once 'includes/conexion.php';
 require_once 'includes/auth.php';
+require_once 'includes/Notificaciones.php';
 
 // Control de Acceso Estricto: Únicamente accesible por 'carpintero' o 'admin'
 verificar_rol(['carpintero', 'admin']);
 
+// Pseudo-cron ligero: comprueba recordatorios de citas en las próximas 24h (máx 1 vez cada 10 min)
+if (isset($pdo) && $pdo !== null) {
+    \TallerTech\Notificaciones::verificarRecordatoriosPendientes($pdo);
+}
+
 $mensaje_exito = '';
 $mensaje_error = '';
+
+// Cargar catálogo de fotos de trabajos desde uploads/trabajos/trabajos.json (Almacenamiento local en disco)
+$ruta_json_trabajos = __DIR__ . '/uploads/trabajos/trabajos.json';
+$trabajos_galeria = [];
+if (file_exists($ruta_json_trabajos)) {
+    $raw_json = @file_get_contents($ruta_json_trabajos);
+    $trabajos_galeria = json_decode($raw_json, true) ?: [];
+}
 
 // =============================================================================
 // PROCESAMIENTO DE ACCIONES ADMINISTRATIVAS DEL CARPINTERO (POST)
@@ -34,6 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $mensaje_error = 'El costo total y el anticipo no pueden ser montos negativos.';
         } else {
             try {
+                // Consultar estado previo para detectar si es un nuevo anticipo registrado por el carpintero
+                $stmtPrev = $pdo->prepare("SELECT anticipo, id_cotizacion, mueble_nombre FROM pedidos WHERE id_pedido = :id LIMIT 1");
+                $stmtPrev->execute([':id' => $id_pedido]);
+                $prevPedido = $stmtPrev->fetch(PDO::FETCH_ASSOC);
+                $anticipoAnterior = (float)($prevPedido['anticipo'] ?? 0);
+
                 $sqlExtra = ($nuevo_estado === 'completado') ? ", completado_en = NOW()" : "";
                 $sql = "UPDATE pedidos 
                         SET estado = :estado, 
@@ -58,6 +78,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'CAMBIO_ESTADO_PEDIDO',
                     "Carpintero actualizó pedido #PED-{$id_pedido}: Estado [{$nuevo_estado}], Fecha entrega [{$nueva_fecha}], Anticipo \${$nuevo_anticipo} MXN, Total \${$nuevo_total} MXN."
                 );
+
+                // Si se registró un anticipo por primera vez, disparar notificación por correo
+                if ($prevPedido && $anticipoAnterior <= 0 && $nuevo_anticipo > 0 && !empty($prevPedido['id_cotizacion'])) {
+                    \TallerTech\Notificaciones::notificarAnticipo(
+                        $pdo,
+                        (int)$prevPedido['id_cotizacion'],
+                        $nuevo_anticipo,
+                        $nuevo_total,
+                        $prevPedido['mueble_nombre'],
+                        $id_pedido
+                    );
+                    \TallerTech\Notificaciones::notificarClienteAnticipoRecibido(
+                        $pdo,
+                        (int)$prevPedido['id_cotizacion'],
+                        $nuevo_anticipo,
+                        $nuevo_total,
+                        $prevPedido['mueble_nombre'],
+                        $id_pedido
+                    );
+                }
+
+                // Si el carpintero cambió el estado de la orden, notificar avance al cliente
+                if ($prevPedido && ($prevPedido['estado'] ?? '') !== $nuevo_estado) {
+                    \TallerTech\Notificaciones::notificarClienteCambioEstadoPedido(
+                        $pdo,
+                        $id_pedido,
+                        $nuevo_estado,
+                        $nueva_fecha
+                    );
+                }
 
                 $mensaje_exito = "Pedido <strong>#PED-{$id_pedido}</strong> actualizado correctamente.";
             } catch (PDOException $e) {
@@ -102,6 +152,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 registrar_log($pdo, $logAccion, $logDetalle);
 
+                // Si la cotización fue revisada y enviada para validación del cliente (Disparador 1 de cliente)
+                if ($accion_tipo === 'enviar_cliente' || $nuevo_estado === 'pendiente_cliente') {
+                    \TallerTech\Notificaciones::notificarClienteCotizacionLista($pdo, $id_cotizacion);
+                }
+
                 $mensaje_exito = ($accion_tipo === 'enviar_cliente')
                     ? "Cotización <strong>#COT-{$id_cotizacion}</strong> enviada exitosamente al cliente para su aprobación (estado: <strong>pendiente_cliente</strong>)."
                     : "Cotización <strong>#COT-{$id_cotizacion}</strong> actualizada correctamente con estado [<strong>{$nuevo_estado}</strong>].";
@@ -142,11 +197,136 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     "Carpintero actualizó cita #CITA-{$id_cita} al estado [{$nuevo_estado}]."
                 );
 
+                // Notificar cambio de estado de cita al cliente
+                \TallerTech\Notificaciones::notificarClienteCambioEstadoCita($pdo, $id_cita, $nuevo_estado, $notas);
+
                 $mensaje_exito = "Cita <strong>#CITA-{$id_cita}</strong> actualizada exitosamente con estado [<strong>{$nuevo_estado}</strong>].";
             } catch (PDOException $e) {
                 error_log("Error al actualizar cita: " . $e->getMessage());
                 $mensaje_error = 'Error al actualizar el estado de la cita.';
             }
+        }
+    }
+
+    // 4. Subir nueva foto de trabajo terminado (Almacenamiento local en uploads/trabajos/, 0 uso de BD)
+    elseif ($accion === 'subir_trabajo') {
+        $titulo      = trim($_POST['titulo'] ?? '');
+        $categoria   = trim($_POST['categoria'] ?? 'especiales');
+        $madera      = trim($_POST['madera'] ?? '');
+        $descripcion = trim($_POST['descripcion'] ?? '');
+
+        $categorias_map = [
+            'mesas'       => 'Mesas & Comedores',
+            'cocinas'     => 'Cocinas & Alacenas',
+            'closets'     => 'Clósets & Cajoneras',
+            'puertas'     => 'Puertas & Portones',
+            'camas'       => 'Camas & Cabeceras',
+            'escritorios' => 'Escritorios & Estudios',
+            'especiales'  => 'Proyectos Especiales'
+        ];
+        $cat_label = $categorias_map[$categoria] ?? 'Muebles de Taller';
+
+        if (empty($titulo)) {
+            $mensaje_error = 'Por favor ingresa un título para la foto del trabajo.';
+        } elseif (!isset($_FILES['foto_trabajo']) || $_FILES['foto_trabajo']['error'] !== UPLOAD_ERR_OK) {
+            $mensaje_error = 'Debes seleccionar una imagen válida desde tu equipo.';
+        } else {
+            $file = $_FILES['foto_trabajo'];
+            $maxBytes = 15 * 1024 * 1024; // 15MB
+
+            if ($file['size'] > $maxBytes) {
+                $mensaje_error = 'La imagen excede el límite de 15MB.';
+            } else {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $mimeType = finfo_file($finfo, $file['tmp_name']);
+                finfo_close($finfo);
+
+                $allowedMimes = [
+                    'image/jpeg' => 'jpg',
+                    'image/png'  => 'png',
+                    'image/webp' => 'webp',
+                    'image/gif'  => 'gif'
+                ];
+
+                if (!array_key_exists($mimeType, $allowedMimes)) {
+                    $mensaje_error = 'Formato de imagen no permitido. Usa archivos JPG, PNG, WEBP o GIF.';
+                } else {
+                    $dir_destino = __DIR__ . '/uploads/trabajos/';
+                    if (!is_dir($dir_destino)) {
+                        @mkdir($dir_destino, 0777, true);
+                    }
+
+                    $extension = $allowedMimes[$mimeType];
+                    $nombre_archivo = 'trabajo_' . time() . '_' . substr(bin2hex(random_bytes(4)), 0, 8) . '.' . $extension;
+                    $ruta_completa = $dir_destino . $nombre_archivo;
+
+                    if (move_uploaded_file($file['tmp_name'], $ruta_completa)) {
+                        // Guardar en JSON sin alterar cuota de base de datos
+                        $nuevo_trabajo = [
+                            'id'              => 'trabajo_' . time() . '_' . substr(bin2hex(random_bytes(2)), 0, 4),
+                            'titulo'          => $titulo,
+                            'categoria'       => $categoria,
+                            'categoria_label' => $cat_label,
+                            'descripcion'     => $descripcion,
+                            'madera'          => !empty($madera) ? $madera : 'Madera sólida',
+                            'foto'            => 'uploads/trabajos/' . $nombre_archivo,
+                            'es_local'        => true,
+                            'fecha'           => date('Y-m-d')
+                        ];
+
+                        array_unshift($trabajos_galeria, $nuevo_trabajo);
+                        @file_put_contents($ruta_json_trabajos, json_encode($trabajos_galeria, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                        registrar_log(
+                            $pdo,
+                            'SUBIR_FOTO_TRABAJO',
+                            "Carpintero subió foto de trabajo: '{$titulo}' ({$cat_label}) guardado en disco en uploads/trabajos/{$nombre_archivo}."
+                        );
+
+                        $mensaje_exito = "Foto de <strong>" . htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8') . "</strong> subida correctamente a la carpeta del taller.";
+                    } else {
+                        $mensaje_error = 'No se pudo guardar la imagen en la carpeta uploads/trabajos/. Verifica los permisos del servidor.';
+                    }
+                }
+            }
+        }
+    }
+
+    // 5. Eliminar foto de trabajo hecho (y borrar archivo del disco si es local)
+    elseif ($accion === 'eliminar_trabajo') {
+        $id_trabajo = trim($_POST['id_trabajo'] ?? '');
+        $encontrado = false;
+        $titulo_eliminado = '';
+
+        $nuevos_trabajos = [];
+        foreach ($trabajos_galeria as $item) {
+            if ($item['id'] === $id_trabajo) {
+                $encontrado = true;
+                $titulo_eliminado = $item['titulo'];
+                if (!empty($item['es_local']) || (isset($item['foto']) && strpos($item['foto'], 'uploads/trabajos/') === 0)) {
+                    $ruta_disco = __DIR__ . '/' . $item['foto'];
+                    if (file_exists($ruta_disco) && is_file($ruta_disco)) {
+                        @unlink($ruta_disco);
+                    }
+                }
+            } else {
+                $nuevos_trabajos[] = $item;
+            }
+        }
+
+        if ($encontrado) {
+            $trabajos_galeria = $nuevos_trabajos;
+            @file_put_contents($ruta_json_trabajos, json_encode($trabajos_galeria, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+            registrar_log(
+                $pdo,
+                'ELIMINAR_FOTO_TRABAJO',
+                "Carpintero eliminó trabajo de galería: '{$titulo_eliminado}'."
+            );
+
+            $mensaje_exito = "Trabajo <strong>" . htmlspecialchars($titulo_eliminado, ENT_QUOTES, 'UTF-8') . "</strong> eliminado correctamente.";
+        } else {
+            $mensaje_error = 'El trabajo seleccionado no fue encontrado.';
         }
     }
 }
@@ -363,15 +543,12 @@ require_once 'includes/header.php';
                     </svg>
                     Taller &amp; Fabricación
                 </span>
-                <h1 class="admin-header-title">Panel de Control del Carpintero</h1>
+                <h1 class="admin-header-title">Panel de Trabajo del Carpintero</h1>
                 <p class="admin-header-subtitle">
-                    Monitoreo general de proyectos, control de órdenes de trabajo, aprobación de presupuestos y bitácora técnica.
+                    Órdenes de fabricación activas, cotizaciones por revisar y citas de medición.
                 </p>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <a href="pedidos.php" class="btn btn-outline-secondary rounded-pill px-3 py-2 text-decoration-none small fw-semibold" target="_blank" title="Ver cómo lo ve el cliente">
-                    <span>Vista del Cliente ↗</span>
-                </a>
                 <a href="cotizaciones.php" class="btn btn-outline-warning rounded-pill px-3 py-2 text-decoration-none small fw-semibold">
                     <span>+ Nueva Cotización</span>
                 </a>
@@ -494,6 +671,15 @@ require_once 'includes/header.php';
                 </svg>
                 <span>Citas &amp; Medidas</span>
                 <span class="tab-badge-counter"><?= count($citas_db) ?></span>
+            </button>
+            <button type="button" class="admin-tab-btn" data-tab="galeria">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+                <span>Fotos de Trabajos</span>
+                <span class="tab-badge-counter"><?= count($trabajos_galeria) ?></span>
             </button>
             <button type="button" class="admin-tab-btn" data-tab="logs">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -881,7 +1067,137 @@ require_once 'includes/header.php';
         </section>
 
         <!-- ======================================================================
-             PESTAÑA 4: BITÁCORA DE AUDITORÍA (LOGS DEL SISTEMA)
+             PESTAÑA 4: FOTOS DE TRABAJOS HECHOS (GALERÍA LOCAL EN DISCO)
+             ====================================================================== -->
+        <section class="admin-tab-pane d-none" id="pane-galeria">
+            <div class="row g-4 mb-4">
+                
+                <!-- Columna Izquierda: Formulario de Subida Local -->
+                <div class="col-lg-5">
+                    <div class="admin-surface-card h-100">
+                        <h2 class="h5 fw-bold text-white mb-2">Subir Foto de Trabajo Hecho</h2>
+
+
+                        <form method="POST" action="admin_pedidos.php#galeria" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="subir_trabajo">
+
+                            <div class="mb-3">
+                                <label for="trabajo_titulo" class="admin-form-label">Título del Mueble / Proyecto *</label>
+                                <input type="text" name="titulo" id="trabajo_titulo" class="admin-form-input" placeholder="Ej. Comedor de Parota 8 Personas" required>
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-sm-6">
+                                    <label for="trabajo_categoria" class="admin-form-label">Categoría *</label>
+                                    <select name="categoria" id="trabajo_categoria" class="admin-form-select" required>
+                                        <option value="mesas">Mesas &amp; Comedores</option>
+                                        <option value="cocinas">Cocinas &amp; Alacenas</option>
+                                        <option value="closets">Clósets &amp; Cajoneras</option>
+                                        <option value="puertas">Puertas &amp; Portones</option>
+                                        <option value="camas">Camas &amp; Cabeceras</option>
+                                        <option value="escritorios">Escritorios &amp; Estudios</option>
+                                        <option value="especiales" selected>Proyectos Especiales</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="trabajo_madera" class="admin-form-label">Madera / Acabado</label>
+                                    <input type="text" name="madera" id="trabajo_madera" class="admin-form-input" placeholder="Ej. Parota, Roble, Cedro...">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="trabajo_descripcion" class="admin-form-label">Descripción o Detalles de Fabricación</label>
+                                <textarea name="descripcion" id="trabajo_descripcion" rows="3" class="admin-form-textarea" placeholder="Ej. Ensamble a media madera, sellador poliuretano mate base agua y estructura de herrería..."></textarea>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="foto_trabajo" class="admin-form-label">Seleccionar Foto del Trabajo *</label>
+                                <input type="file" name="foto_trabajo" id="foto_trabajo" class="admin-form-input" accept="image/jpeg,image/png,image/webp,image/gif" required>
+                                <div class="small text-secondary mt-1">Formatos admitidos: JPG, PNG, WEBP o GIF (Máx. 15MB).</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold w-100 d-flex align-items-center justify-content-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                <span>Subir Foto a la Galería</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Columna Derecha: Listado y Gestión de Fotos Publicadas -->
+                <div class="col-lg-7">
+                    <div class="admin-surface-card h-100">
+                        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                            <div>
+                                <h2 class="h5 fw-bold text-white mb-1">Trabajos en Galería (<?= count($trabajos_galeria) ?>)</h2>
+                                <p class="small text-secondary mb-0">Visibles para todos los clientes en la sección pública de Galería.</p>
+                            </div>
+                            <a href="galeria.php" target="_blank" class="btn btn-outline-warning btn-sm rounded-pill px-3">
+                                Abrir Galería Pública ↗
+                            </a>
+                        </div>
+
+                        <?php if (empty($trabajos_galeria)): ?>
+                            <div class="text-center py-5 text-secondary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="mb-3 opacity-50">
+                                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect>
+                                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                    <polyline points="21 15 16 10 5 21"></polyline>
+                                </svg>
+                                <p class="mb-0">Aún no has subido fotos de trabajos. Usa el formulario de la izquierda para comenzar.</p>
+                            </div>
+                        <?php else: ?>
+                            <div class="admin-galeria-grid">
+                                <?php foreach ($trabajos_galeria as $trabajo): ?>
+                                    <article class="admin-galeria-card">
+                                        <div class="admin-galeria-img-wrap">
+                                            <img src="<?= htmlspecialchars($trabajo['foto'], ENT_QUOTES, 'UTF-8') ?>" 
+                                                 alt="<?= htmlspecialchars($trabajo['titulo'], ENT_QUOTES, 'UTF-8') ?>" 
+                                                 loading="lazy">
+                                            <span class="admin-galeria-badge">
+                                                <?= htmlspecialchars($trabajo['categoria_label'] ?? $trabajo['categoria'], ENT_QUOTES, 'UTF-8') ?>
+                                            </span>
+                                            <?php if (!empty($trabajo['es_local'])): ?>
+                                                <span class="admin-galeria-local-tag" title="Guardado en disco local">📁 Disco</span>
+                                            <?php endif; ?>
+                                        </div>
+                                        <div class="admin-galeria-body">
+                                            <h3 class="admin-galeria-title"><?= htmlspecialchars($trabajo['titulo'], ENT_QUOTES, 'UTF-8') ?></h3>
+                                            <?php if (!empty($trabajo['madera'])): ?>
+                                                <div class="admin-galeria-wood">
+                                                    <span>🪵 <?= htmlspecialchars($trabajo['madera'], ENT_QUOTES, 'UTF-8') ?></span>
+                                                </div>
+                                            <?php endif; ?>
+                                            <?php if (!empty($trabajo['descripcion'])): ?>
+                                                <p class="admin-galeria-desc"><?= htmlspecialchars($trabajo['descripcion'], ENT_QUOTES, 'UTF-8') ?></p>
+                                            <?php endif; ?>
+                                            <div class="admin-galeria-footer">
+                                                <span class="small text-secondary"><?= htmlspecialchars($trabajo['fecha'] ?? '') ?></span>
+                                                <form method="POST" action="admin_pedidos.php#galeria" onsubmit="return confirm('¿Seguro que deseas eliminar esta foto de la galería? Se borrará del disco.');" class="m-0">
+                                                    <input type="hidden" name="action" value="eliminar_trabajo">
+                                                    <input type="hidden" name="id_trabajo" value="<?= htmlspecialchars($trabajo['id'], ENT_QUOTES, 'UTF-8') ?>">
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-2 py-0" title="Eliminar foto del disco">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </article>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ======================================================================
+             PESTAÑA 5: BITÁCORA DE AUDITORÍA (LOGS DEL SISTEMA)
              ====================================================================== -->
         <section class="admin-tab-pane d-none" id="pane-logs">
             <div class="admin-surface-card">

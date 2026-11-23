@@ -5,23 +5,23 @@
  */
 
 :root {
-    --bg-page: #121212;
-    --bg-card: #1c1c1c;
-    --bg-card-hover: #212121;
-    --bg-input: #141414;
-    --border-card: #2e2e2e;
-    --border-card-hover: rgba(196, 136, 73, 0.45);
-    --border-input: #333333;
-    --border-focus: #c48849;
+    --bg-page: #141210;
+    --bg-card: #1c1917;
+    --bg-card-hover: #221f1c;
+    --bg-input: #171513;
+    --border-card: #38322b;
+    --border-card-hover: rgba(200, 138, 75, 0.45);
+    --border-input: #3d352e;
+    --border-focus: #c88a4b;
     
-    --text-primary: #ffffff;
-    --text-secondary: #a0a0a0;
-    --text-muted: #737373;
+    --text-primary: #f2ede4;
+    --text-secondary: #b5ada4;
+    --text-muted: #80776e;
     
-    --wood-accent: #c48849;
-    --wood-accent-hover: #dc9b57;
-    --gold-star: #e5a534;
-    --gold-star-bg: rgba(229, 165, 52, 0.12);
+    --wood-accent: #c88a4b;
+    --wood-accent-hover: #d99b5e;
+    --gold-star: #d99b5e;
+    --gold-star-bg: rgba(217, 155, 94, 0.14);
     
     --radius-card: 20px;
     --radius-modal: 24px;
@@ -89,8 +89,8 @@
     display: inline-flex;
     align-items: center;
     gap: 0.65rem;
-    background-color: #ffffff;
-    color: #000000;
+    background-color: var(--wood-accent);
+    color: #141210;
     border: none;
     border-radius: var(--radius-pill);
     padding: 0.85rem 1.65rem;
@@ -98,16 +98,16 @@
     font-weight: 700;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     transition: var(--transition-smooth);
     white-space: nowrap;
 }
 
 .btn-pill-cta:hover {
-    background-color: #f2f2f2;
-    color: #000000;
+    background-color: var(--wood-accent-hover);
+    color: #141210;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 20px rgba(200, 138, 75, 0.25);
 }
 
 .btn-pill-cta.guest {
@@ -245,7 +245,7 @@
     background-color: var(--bg-card-hover);
     border-color: var(--border-card-hover);
     transform: translateY(-5px);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(196, 136, 73, 0.1);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
 }
 
 /* Cabecera de la tarjeta: Estrellas + Proyecto */

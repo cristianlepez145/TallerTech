@@ -18,9 +18,9 @@
     min-height: 520px;
     display: flex;
     align-items: center;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
-    background-color: #141414;
+    border: 1px solid #38322b;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+    background-color: #181512;
 }
 
 /* Imagen de fondo del Hero */
@@ -40,17 +40,17 @@
     transform: scale(1.03);
 }
 
-/* Overlay oscuro a la izquierda para garantizar contraste y legibilidad */
+/* Overlay cálido oscuro a la izquierda para garantizar contraste y legibilidad */
 .hero-banner-overlay {
     position: absolute;
     inset: 0;
     z-index: 2;
     background: linear-gradient(
         90deg,
-        rgba(14, 14, 14, 0.94) 0%,
-        rgba(14, 14, 14, 0.82) 35%,
-        rgba(14, 14, 14, 0.45) 65%,
-        rgba(14, 14, 14, 0.12) 100%
+        rgba(20, 18, 16, 0.96) 0%,
+        rgba(20, 18, 16, 0.86) 38%,
+        rgba(20, 18, 16, 0.5) 68%,
+        rgba(20, 18, 16, 0.15) 100%
     );
 }
 
@@ -60,7 +60,7 @@
     z-index: 3;
     max-width: 620px;
     padding: 4rem 3.5rem;
-    color: #ffffff;
+    color: #f2ede4;
 }
 
 .hero-banner-title {
@@ -68,40 +68,40 @@
     font-weight: 800;
     line-height: 1.14;
     letter-spacing: -0.03em;
-    color: #ffffff;
+    color: #f2ede4;
     margin-bottom: 1.25rem;
 }
 
 .hero-banner-subtitle {
     font-size: clamp(1rem, 1.25vw, 1.15rem);
     line-height: 1.65;
-    color: #c7c7c7;
+    color: #b5ada4;
     margin-bottom: 2.25rem;
     font-weight: 400;
 }
 
-/* Botón píldora blanco */
+/* Botón píldora cálido artesanal */
 .btn-pill-white {
     display: inline-flex;
     align-items: center;
     gap: 0.65rem;
-    background-color: #ffffff;
-    color: #0a0a0a !important;
+    background-color: var(--wood-accent, #c88a4b);
+    color: #141210 !important;
     font-size: 0.98rem;
     font-weight: 700;
     padding: 0.85rem 2rem;
     border-radius: 9999px;
     text-decoration: none;
     border: none;
-    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-pill-white:hover {
-    background-color: #f0f0f0;
-    color: #000000 !important;
+    background-color: var(--wood-accent-hover, #d99b5e);
+    color: #141210 !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.22);
+    box-shadow: 0 8px 24px rgba(200, 138, 75, 0.25);
 }
 
 .btn-pill-white svg {
@@ -134,9 +134,9 @@
     height: 380px;
     display: block;
     text-decoration: none;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-    background-color: #161616;
+    border: 1px solid #38322b;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    background-color: #1c1917;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.35s ease,
                 box-shadow 0.35s ease;
@@ -144,8 +144,8 @@
 
 .category-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(255, 255, 255, 0.22);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+    border-color: rgba(200, 138, 75, 0.45);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
 }
 
 /* Imagen dentro de la tarjeta con zoom suave */
@@ -170,9 +170,9 @@
     z-index: 2;
     background: linear-gradient(
         180deg,
-        rgba(0, 0, 0, 0) 35%,
-        rgba(0, 0, 0, 0.45) 65%,
-        rgba(0, 0, 0, 0.9) 100%
+        rgba(20, 18, 16, 0) 35%,
+        rgba(20, 18, 16, 0.5) 65%,
+        rgba(20, 18, 16, 0.95) 100%
     );
     transition: background 0.3s ease;
 }
@@ -180,9 +180,9 @@
 .category-card:hover .category-card-overlay {
     background: linear-gradient(
         180deg,
-        rgba(0, 0, 0, 0.05) 25%,
-        rgba(0, 0, 0, 0.55) 60%,
-        rgba(0, 0, 0, 0.95) 100%
+        rgba(20, 18, 16, 0.05) 25%,
+        rgba(20, 18, 16, 0.6) 60%,
+        rgba(20, 18, 16, 0.98) 100%
     );
 }
 
@@ -202,9 +202,9 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #f2ede4;
     letter-spacing: -0.02em;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .category-card-arrow {
@@ -214,16 +214,16 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    color: #ffffff;
+    background-color: rgba(200, 138, 75, 0.14);
+    border: 1px solid rgba(200, 138, 75, 0.3);
+    color: var(--wood-accent, #c88a4b);
     backdrop-filter: blur(8px);
     transition: all 0.25s ease;
 }
 
 .category-card:hover .category-card-arrow {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: var(--wood-accent, #c88a4b);
+    color: #141210;
     transform: translateX(3px);
 }
 

@@ -1,12 +1,26 @@
 <?php
-// Leer las variables del archivo .env o tallertech.env de manera segura
+// Leer las variables del archivo .env o tallertech.env de manera segura y robusta
 $envPath = __DIR__ . '/../.env';
 if (!file_exists($envPath) && file_exists(__DIR__ . '/../tallertech.env')) {
     $envPath = __DIR__ . '/../tallertech.env';
 }
-$env = (file_exists($envPath) && is_readable($envPath)) ? @parse_ini_file($envPath) : [];
-if (!is_array($env)) {
-    $env = [];
+$env = [];
+if (file_exists($envPath) && is_readable($envPath)) {
+    $lines = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (is_array($lines)) {
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if ($line === '' || str_starts_with($line, '#') || str_starts_with($line, ';')) {
+                continue;
+            }
+            if (strpos($line, '=') !== false) {
+                [$key, $val] = explode('=', $line, 2);
+                $key = trim($key);
+                $val = trim($val, " \t\n\r\0\x0B\"'");
+                $env[$key] = $val;
+            }
+        }
+    }
 }
 
 $host     = $env['DB_HOST'] ?? getenv('DB_HOST') ?: 'localhost';

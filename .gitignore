@@ -12,5 +12,9 @@ uploads/croquis/*
 uploads/referencias/*
 !uploads/referencias/.gitkeep
 !uploads/referencias/index.html
+uploads/trabajos/*
+!uploads/trabajos/.gitkeep
+!uploads/trabajos/index.html
+!uploads/trabajos/trabajos.json
 !uploads/index.html
 !uploads/.htaccess

@@ -121,27 +121,27 @@ require_once 'includes/header.php';
             <?php endif; ?>
 
             <!-- Tarjeta Principal de Perfil -->
-            <div class="card bg-dark border border-secondary border-opacity-25 rounded-4 shadow-lg p-4 p-md-5 mb-4">
+            <div class="rounded-4 shadow-lg p-4 p-md-5 mb-4" style="background: #1c1917; border: 1px solid #38322b;">
                 
-                <div class="d-flex flex-column flex-sm-row align-items-center gap-4 mb-4 pb-4 border-bottom border-secondary border-opacity-25">
-                    <div style="width: 80px; height: 80px; border-radius: 50%; background: #262626; border: 2px solid #c48849; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #c48849; font-weight: bold;">
+                <div class="d-flex flex-column flex-sm-row align-items-center gap-4 mb-4 pb-4 border-bottom" style="border-color: #2e2823 !important;">
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: #26221e; border: 2px solid #c88a4b; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #c88a4b; font-weight: bold;">
                         <?= mb_strtoupper(mb_substr($usuario['nombre'] ?? 'U', 0, 1, 'UTF-8')) ?>
                     </div>
                     <div class="text-center text-sm-start flex-grow-1">
-                        <h1 class="h3 fw-bold text-white mb-1"><?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?></h1>
-                        <p class="text-secondary mb-2"><?= htmlspecialchars($usuario['correo'], ENT_QUOTES, 'UTF-8') ?></p>
+                        <h1 class="h3 fw-bold mb-1" style="color: #f2ede4;"><?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?></h1>
+                        <p class="mb-2" style="color: #b5ada4;"><?= htmlspecialchars($usuario['correo'], ENT_QUOTES, 'UTF-8') ?></p>
                         <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-sm-start">
-                            <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-1">
+                            <span class="badge rounded-pill px-3 py-1" style="background: rgba(200, 138, 75, 0.12); color: #c88a4b; border: 1px solid rgba(200, 138, 75, 0.3);">
                                 Rol: <?= htmlspecialchars(ucfirst($usuario['rol'] ?? 'Cliente'), ENT_QUOTES, 'UTF-8') ?>
                             </span>
-                            <span class="badge rounded-pill bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-3 py-1">
+                            <span class="badge rounded-pill px-3 py-1" style="background: rgba(255, 255, 255, 0.05); color: #80776e; border: 1px solid #38322b;">
                                 ID Usuario: #<?= (int)$usuario['id_usuario'] ?>
                             </span>
                         </div>
                     </div>
                     <?php if (es_carpintero()): ?>
                         <div>
-                            <a href="admin_pedidos.php" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">
+                            <a href="admin_pedidos.php" class="btn rounded-pill px-4 fw-bold shadow-sm" style="background-color: #c88a4b; color: #141210;">
                                 Panel Carpintero ↗
                             </a>
                         </div>
@@ -151,43 +151,43 @@ require_once 'includes/header.php';
                 <!-- Resumen de Actividad -->
                 <div class="row g-3 mb-4 text-center">
                     <div class="col-4">
-                        <div class="p-3 rounded-4" style="background: #1a1a1a; border: 1px solid #2d2d2d;">
-                            <div class="h4 fw-bold text-white mb-0"><?= $totalPedidos ?></div>
-                            <small class="text-secondary">Pedidos</small>
+                        <div class="p-3 rounded-4" style="background: #221f1c; border: 1px solid #38322b;">
+                            <div class="h4 fw-bold mb-0" style="color: #f2ede4;"><?= $totalPedidos ?></div>
+                            <small style="color: #b5ada4;">Pedidos</small>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="p-3 rounded-4" style="background: #1a1a1a; border: 1px solid #2d2d2d;">
-                            <div class="h4 fw-bold text-white mb-0"><?= $totalCotizaciones ?></div>
-                            <small class="text-secondary">Cotizaciones</small>
+                        <div class="p-3 rounded-4" style="background: #221f1c; border: 1px solid #38322b;">
+                            <div class="h4 fw-bold mb-0" style="color: #f2ede4;"><?= $totalCotizaciones ?></div>
+                            <small style="color: #b5ada4;">Cotizaciones</small>
                         </div>
                     </div>
                     <div class="col-4">
-                        <div class="p-3 rounded-4" style="background: #1a1a1a; border: 1px solid #2d2d2d;">
-                            <div class="h4 fw-bold text-white mb-0"><?= $totalCitas ?></div>
-                            <small class="text-secondary">Citas</small>
+                        <div class="p-3 rounded-4" style="background: #221f1c; border: 1px solid #38322b;">
+                            <div class="h4 fw-bold mb-0" style="color: #f2ede4;"><?= $totalCitas ?></div>
+                            <small style="color: #b5ada4;">Citas</small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Formulario de Edición de Contacto -->
-                <h2 class="h5 fw-bold text-white mb-3">Información de Contacto</h2>
+                <h2 class="h5 fw-bold mb-3" style="color: #f2ede4;">Información de Contacto</h2>
                 <form method="POST" action="perfil.php">
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <label for="nombre" class="form-label text-secondary small fw-semibold">Nombre Completo</label>
-                            <input type="text" id="nombre" name="nombre" class="form-control bg-black text-white border-secondary border-opacity-50 rounded-3 py-2" value="<?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?>" required>
+                            <label for="nombre" class="form-label small fw-semibold" style="color: #b5ada4;">Nombre Completo</label>
+                            <input type="text" id="nombre" name="nombre" class="form-control rounded-3 py-2" style="background: #141210; color: #f2ede4; border: 1px solid #3d352e;" value="<?= htmlspecialchars($usuario['nombre'], ENT_QUOTES, 'UTF-8') ?>" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="correo" class="form-label text-secondary small fw-semibold">Correo Electrónico (Inmutable)</label>
-                            <input type="email" id="correo" class="form-control bg-black text-secondary border-secondary border-opacity-25 rounded-3 py-2" value="<?= htmlspecialchars($usuario['correo'], ENT_QUOTES, 'UTF-8') ?>" disabled>
+                            <label for="correo" class="form-label small fw-semibold" style="color: #b5ada4;">Correo Electrónico (Inmutable)</label>
+                            <input type="email" id="correo" class="form-control rounded-3 py-2" style="background: #141210; color: #80776e; border: 1px solid #2e2823;" value="<?= htmlspecialchars($usuario['correo'], ENT_QUOTES, 'UTF-8') ?>" disabled>
                         </div>
                         <div class="col-md-6">
-                            <label for="telefono" class="form-label text-secondary small fw-semibold">Teléfono / WhatsApp</label>
-                            <input type="tel" id="telefono" name="telefono" class="form-control bg-black text-white border-secondary border-opacity-50 rounded-3 py-2" placeholder="+52 55 1234 5678" value="<?= htmlspecialchars($usuario['telefono'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                            <label for="telefono" class="form-label small fw-semibold" style="color: #b5ada4;">Teléfono / WhatsApp</label>
+                            <input type="tel" id="telefono" name="telefono" class="form-control rounded-3 py-2" style="background: #141210; color: #f2ede4; border: 1px solid #3d352e;" placeholder="+52 55 1234 5678" value="<?= htmlspecialchars($usuario['telefono'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                         </div>
                         <div class="col-md-6 d-flex align-items-end">
-                            <button type="submit" name="actualizar_contacto" class="btn btn-outline-light rounded-pill px-4 py-2 w-100 fw-semibold">
+                            <button type="submit" name="actualizar_contacto" class="btn rounded-pill px-4 py-2 w-100 fw-bold" style="background-color: #c88a4b; color: #141210; border: none;">
                                 Guardar Datos de Contacto
                             </button>
                         </div>
@@ -195,16 +195,16 @@ require_once 'includes/header.php';
                 </form>
 
                 <!-- Accesos Rápidos del Usuario -->
-                <div class="pt-3 border-top border-secondary border-opacity-25 d-flex flex-wrap gap-2 justify-content-between align-items-center">
+                <div class="pt-3 border-top d-flex flex-wrap gap-2 justify-content-between align-items-center" style="border-color: #2e2823 !important;">
                     <div class="d-flex gap-2">
-                        <a href="pedidos.php" class="btn btn-sm btn-outline-warning rounded-pill px-3 py-2">
-                            Ver mis Pedidos &amp; Stepper ↗
+                        <a href="pedidos.php" class="btn btn-sm rounded-pill px-3 py-2 text-decoration-none fw-semibold" style="border: 1px solid rgba(200, 138, 75, 0.4); color: #c88a4b;">
+                            Ver mis Pedidos ↗
                         </a>
-                        <a href="citas.php" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-2">
-                            Mis Citas Técnicas ↗
+                        <a href="citas.php" class="btn btn-sm rounded-pill px-3 py-2 text-decoration-none fw-semibold" style="border: 1px solid #3d352e; color: #b5ada4;">
+                            Mis Citas de Medición ↗
                         </a>
                     </div>
-                    <a href="logout.php" class="btn btn-sm btn-danger rounded-pill px-4 py-2 fw-semibold">
+                    <a href="logout.php" class="btn btn-sm rounded-pill px-4 py-2 fw-semibold text-decoration-none" style="background: rgba(179, 74, 59, 0.15); border: 1px solid rgba(179, 74, 59, 0.35); color: #e89a8f;">
                         Cerrar Sesión
                     </a>
                 </div>

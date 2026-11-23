@@ -11,6 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once 'includes/conexion.php';
 require_once 'includes/auth.php';
+require_once 'includes/Notificaciones.php';
 
 $mensaje_exito = '';
 $mensaje_error = '';
@@ -86,6 +87,26 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') === 'POST' && isset($_POST['aprobar_antic
                         $id_usuario
                     );
                     $mensaje_exito = "¡Anticipo del 60% registrado con éxito ($" . number_format($anticipo60, 2) . " MXN)! Tu proyecto ha generado la orden de trabajo <strong>#PED-{$idNuevoPedido}</strong> y ha pasado a la etapa <strong>En Fabricación / Taller</strong>.";
+
+                    // Notificación por correo vía SMTP Gmail (Disparador 2)
+                    \TallerTech\Notificaciones::notificarAnticipo(
+                        $pdo,
+                        $id_cotizacion,
+                        $anticipo60,
+                        $costoTotal,
+                        $muebleNombre,
+                        (int)$idNuevoPedido
+                    );
+
+                    // Comprobante de anticipo recibido al cliente
+                    \TallerTech\Notificaciones::notificarClienteAnticipoRecibido(
+                        $pdo,
+                        $id_cotizacion,
+                        $anticipo60,
+                        $costoTotal,
+                        $muebleNombre,
+                        (int)$idNuevoPedido
+                    );
                 }
             } catch (PDOException $e) {
                 if ($pdo->inTransaction()) {
@@ -472,11 +493,11 @@ require_once 'includes/header.php';
                     <path d="M3 6h18"/>
                     <path d="M16 10a4 4 0 0 1-8 0"/>
                 </svg>
-                Panel de Fabricación
+                Taller en Marcha
             </span>
-            <h1 class="pedidos-main-title">Mis Pedidos y Proyectos</h1>
+            <h1 class="pedidos-main-title">Tus Muebles en Fabricación</h1>
             <p class="pedidos-main-subtitle">
-                Consulta el estado en tiempo real de tus cotizaciones y muebles en fabricación. Monitorea avances, anticipos y fechas estimadas de entrega.
+                Sigue cada paso de tu proyecto: desde la cotización y revisión del carpintero hasta el corte, ensamble y entrega.
             </p>
         </header>
 
@@ -517,8 +538,8 @@ require_once 'includes/header.php';
                     <a href="cotizaciones.php" class="btn-order-action primary-pill">
                         <span>Solicitar una cotización →</span>
                     </a>
-                    <a href="catalogo.php" class="btn-order-action secondary">
-                        <span>Ver Catálogo de Muebles</span>
+                    <a href="galeria.php" class="btn-order-action secondary">
+                        <span>Ver Trabajos del Taller</span>
                     </a>
                 </div>
             </div>

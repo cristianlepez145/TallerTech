@@ -107,10 +107,10 @@ require_once 'includes/header.php';
 
         <!-- Encabezado de la Sección -->
         <header class="cotizaciones-header-main">
-            <span class="cotizaciones-tag">Presupuestos &amp; Carpintería a Medida</span>
-            <h1 class="cotizaciones-hero-title">Cotizador en Línea &amp; Condiciones del Servicio</h1>
+            <span class="cotizaciones-tag">Presupuestos del Taller</span>
+            <h1 class="cotizaciones-hero-title">Calcula tu Mueble a la Medida</h1>
             <p class="cotizaciones-hero-subtitle">
-                Calcula al instante el costo estimado de tu próximo mueble artesanal y conoce nuestras condiciones de fabricación antes de solicitar tu cotización formal.
+                Elige las medidas y el tipo de madera para calcular tu presupuesto estimado. El carpintero revisará los detalles técnicos antes de comenzar.
             </p>
         </header>
 
@@ -123,11 +123,11 @@ require_once 'includes/header.php';
             <div class="rules-notice-header">
                 <span class="rules-notice-pill">
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                        <line x1="12" y1="9" x2="12" y2="13"/>
-                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
                     </svg>
-                    Lee antes de cotizar &bull; Condiciones del Servicio
+                    Antes de cotizar &bull; Condiciones del Taller
                 </span>
             </div>
 
@@ -149,9 +149,9 @@ require_once 'includes/header.php';
                             <path d="M8 18h.01"/>
                         </svg>
                     </div>
-                    <h3 class="business-rule-title">Cálculo de tu Presupuesto</h3>
+                    <h3 class="business-rule-title">Cómo calculamos el costo</h3>
                     <p class="business-rule-desc">
-                        Ten en cuenta que el costo estimado se calcula de forma automática considerando las medidas de tu espacio, la cantidad de madera requerida, insumos de alta calidad (sellador, barnices y tintas), el tiempo estimado de fabricación en taller y la distancia para la entrega o instalación.
+                        Consideramos el volumen de madera requerido, herrajes de calidad, acabados protectores y horas de trabajo artesanal en banco.
                     </p>
                 </article>
 
@@ -165,9 +165,9 @@ require_once 'includes/header.php';
                             <path d="M13 16H8"/>
                         </svg>
                     </div>
-                    <h3 class="business-rule-title">Aviso de Precio Estimado</h3>
+                    <h3 class="business-rule-title">Presupuesto preliminar</h3>
                     <p class="business-rule-desc">
-                        <strong class="highlight-warning">⚠️ Importante:</strong> El monto generado en esta plataforma es un estimado preliminar y no representa un precio final cerrado. Todo presupuesto está sujeto a revisión y confirmación técnica por parte del taller tras corroborar medidas exactas y disponibilidad de materiales.
+                        <strong class="highlight-warning">Importante:</strong> Este cálculo es una referencia inicial. Confirmamos medidas exactas y maderas contigo antes de fijar el costo definitivo.
                     </p>
                 </article>
 
@@ -182,9 +182,9 @@ require_once 'includes/header.php';
                             <path d="m6 18 3 3"/>
                         </svg>
                     </div>
-                    <h3 class="business-rule-title">Anticipo Obligatorio (<span class="highlight-gold">60%</span>)</h3>
+                    <h3 class="business-rule-title">Anticipo del <span class="highlight-gold">60%</span></h3>
                     <p class="business-rule-desc">
-                        Para autorizar formalmente tu proyecto e iniciar los cortes y compras de material en taller, es indispensable cubrir un anticipo obligatorio del <strong class="highlight-gold">60%</strong> del costo total aprobado. El <span class="text-white fw-semibold">40% restante</span> se liquida contra entrega e instalación de tus muebles.
+                        El <strong class="highlight-gold">60%</strong> inicial se destina a adquirir la madera y herrajes de tu mueble. El <span class="text-white fw-semibold">40% restante</span> se cubre al entregar e instalar.
                     </p>
                 </article>
 
@@ -200,9 +200,9 @@ require_once 'includes/header.php';
 
                     <!-- Columna Izquierda: Explicación y Categorías Disponibles -->
                     <div class="showcase-content-col">
-                        <h2 class="showcase-heading">Cotización Automática por Categoría</h2>
+                        <h2 class="showcase-heading">Muebles Disponibles para Cotizar</h2>
                         <p class="showcase-intro-text">
-                            El módulo de cotizaciones automáticas no abarcará todo tipo de trabajos a medida, sino que estará habilitado específicamente para los siguientes tipos de muebles estandarizados:
+                            Puedes calcular al momento cajoneras, puertas, mesas, camas y escritorios. Para otros proyectos especiales, con gusto te atendemos en una cita.
                         </p>
 
                         <!-- Lista Interactiva de Categorías -->
@@ -214,7 +214,7 @@ require_once 'includes/header.php';
                                     <div class="category-item-bullet"></div>
                                     <span class="category-item-title">Cajoneras</span>
                                 </div>
-                                <span class="category-item-hint">3 a 5 cajones telescópicos</span>
+                                <span class="category-item-hint">3 a 5 cajones con correderas telescópicas</span>
                             </div>
 
                             <!-- 2. Puertas -->
@@ -250,19 +250,19 @@ require_once 'includes/header.php';
                                     <div class="category-item-bullet"></div>
                                     <span class="category-item-title">Escritorios</span>
                                 </div>
-                                <span class="category-item-hint">Diseño contemporáneo y ergonómico</span>
+                                <span class="category-item-hint">Diseño ergonómico y funcional</span>
                             </div>
 
                         </div>
 
                         <!-- Nota al pie atenuada -->
                         <p class="showcase-footnote">
-                            * Otros proyectos más complejos requerirán cotización manual por parte del administrador.
+                            * Para muebles con medidas o diseños especiales, te invitamos a agendar una cita.
                         </p>
 
-                        <!-- Botón Píldora Blanco -->
+                        <!-- Botón Píldora Cálido -->
                         <a href="#seccion-calculadora" id="btn-iniciar-cotizacion" class="btn-pill-white">
-                            <span>Iniciar Cotización</span>
+                            <span>Calcular Medidas</span>
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                 <polyline points="12 5 19 12 12 19"></polyline>
@@ -296,9 +296,9 @@ require_once 'includes/header.php';
         <section id="seccion-calculadora" class="calculator-wrapper-box" aria-label="Calculadora paramétrica">
             
             <div class="calc-section-header">
-                <h3 class="calc-section-title">Ajuste Paramétrico y Cotización en Vivo</h3>
+                <h3 class="calc-section-title">Configura tus Medidas</h3>
                 <p class="calc-section-subtitle">
-                    Modifica dimensiones, material y requerimientos para calibrar el presupuesto estimado en tiempo real.
+                    Ingresa las medidas estimadas en metros. El costo aproximado se calcula al instante.
                 </p>
             </div>
 

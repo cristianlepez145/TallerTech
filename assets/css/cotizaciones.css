@@ -4,24 +4,23 @@
  */
 
 :root {
-    --bg-page: #121212;
-    --bg-card: #181818;
-    --bg-card-elevated: #1e1e1e;
+    --bg-page: #141210;
+    --bg-card: #1c1917;
+    --bg-card-elevated: #26221e;
     --bg-input: rgba(255, 255, 255, 0.04);
 
-    --border-subtle: #262626;
-    --border-card: #2a2a2a;
-    --border-input: #333333;
-    --border-focus: #c48849;
+    --border-subtle: #2e2823;
+    --border-card: #38322b;
+    --border-input: #3d352e;
+    --border-focus: #c88a4b;
 
-    --text-primary: #ffffff;
-    --text-secondary: #a0a0a0;
-    --text-muted: #888888;
+    --text-primary: #f2ede4;
+    --text-secondary: #b5ada4;
+    --text-muted: #80776e;
 
-    --wood-accent: #c48849;
-    --wood-accent-hover: #dc9b57;
-    --wood-accent-glow: rgba(196, 136, 73, 0.22);
-    --wood-accent-subtle: rgba(196, 136, 73, 0.12);
+    --wood-accent: #c88a4b;
+    --wood-accent-hover: #d99b5e;
+    --wood-accent-subtle: rgba(200, 138, 75, 0.12);
 
     --radius-hero: 24px;
     --radius-img: 20px;
@@ -126,18 +125,18 @@
 
 .business-rule-card:hover {
     transform: translateY(-4px);
-    border-color: rgba(196, 136, 73, 0.4);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 24px var(--wood-accent-glow);
+    border-color: rgba(200, 138, 75, 0.45);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
 }
 
 .business-rule-card.highlight-advance-card {
-    border-color: rgba(196, 136, 73, 0.35);
-    background: linear-gradient(180deg, rgba(28, 28, 28, 0.95) 0%, rgba(22, 22, 22, 0.95) 100%);
+    border-color: rgba(200, 138, 75, 0.35);
+    background: linear-gradient(180deg, rgba(34, 30, 26, 0.95) 0%, rgba(26, 23, 20, 0.95) 100%);
 }
 
 .business-rule-card.highlight-advance-card:hover {
-    border-color: rgba(251, 191, 36, 0.6);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 28px rgba(196, 136, 73, 0.25);
+    border-color: rgba(200, 138, 75, 0.6);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
 }
 
 .business-rule-icon {
@@ -301,30 +300,30 @@
     line-height: 1.5;
 }
 
-/* Botón píldora blanco */
+/* Botón píldora cálido artesanal */
 .btn-pill-white {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.65rem;
-    background-color: #ffffff;
-    color: #000000 !important;
+    background-color: var(--wood-accent);
+    color: #141210 !important;
     font-size: 0.95rem;
     font-weight: 700;
     padding: 0.85rem 2rem;
     border-radius: var(--radius-pill);
     text-decoration: none;
     border: none;
-    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     transition: var(--transition-smooth);
     width: fit-content;
 }
 
 .btn-pill-white:hover {
-    background-color: #f0f0f0;
-    color: #000000 !important;
+    background-color: var(--wood-accent-hover);
+    color: #141210 !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.24);
+    box-shadow: 0 8px 20px rgba(200, 138, 75, 0.25);
 }
 
 .btn-pill-white svg {
@@ -461,7 +460,7 @@
 .form-select-element:focus {
     border-color: var(--border-focus);
     background-color: rgba(255, 255, 255, 0.07);
-    box-shadow: 0 0 0 3px var(--wood-accent-glow);
+    box-shadow: 0 0 0 3px rgba(200, 138, 75, 0.18);
 }
 
 .form-select-element option {

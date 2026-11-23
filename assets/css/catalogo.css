@@ -4,22 +4,22 @@
  */
 
 :root {
-    --bg-page: #121212;
-    --bg-surface: #181818;
-    --bg-surface-elevated: #1e1e1e;
-    --bg-modal: #181818;
+    --bg-page: #141210;
+    --bg-surface: #1c1917;
+    --bg-surface-elevated: #26221e;
+    --bg-modal: #1e1b18;
 
-    --border-subtle: #262626;
-    --border-card: #2a2a2a;
-    --border-hover: #444444;
+    --border-subtle: #2e2823;
+    --border-card: #38322b;
+    --border-hover: #54493f;
 
-    --text-primary: #ffffff;
-    --text-secondary: #a0a0a0;
-    --text-muted: #737373;
+    --text-primary: #f2ede4;
+    --text-secondary: #b5ada4;
+    --text-muted: #80776e;
 
-    --wood-accent: #c48849;
-    --wood-accent-hover: #dc9b57;
-    --wood-accent-subtle: rgba(196, 136, 73, 0.12);
+    --wood-accent: #c88a4b;
+    --wood-accent-hover: #d99b5e;
+    --wood-accent-subtle: rgba(200, 138, 75, 0.12);
 
     --radius-card: 22px;
     --radius-modal: 20px;
@@ -108,11 +108,11 @@
 }
 
 .filter-pill-btn.active {
-    background-color: #ffffff;
-    color: #000000;
-    border-color: #ffffff;
+    background-color: var(--wood-accent);
+    color: #141210;
+    border-color: var(--wood-accent);
     font-weight: 700;
-    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(200, 138, 75, 0.25);
 }
 
 /* ==========================================================================
@@ -407,23 +407,24 @@
     align-items: center;
     justify-content: center;
     gap: 0.65rem;
-    background-color: #ffffff;
-    color: #000000 !important;
+    background-color: var(--wood-accent);
+    color: #141210 !important;
     font-size: 0.92rem;
     font-weight: 800;
     padding: 0.85rem 1.85rem;
     border-radius: var(--radius-pill);
     text-decoration: none;
     border: none;
-    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     transition: var(--transition-smooth);
     width: 100%;
 }
 
 .modal-btn-quote:hover {
-    background-color: #eaeaea;
+    background-color: var(--wood-accent-hover);
+    color: #141210 !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.24);
+    box-shadow: 0 8px 20px rgba(200, 138, 75, 0.25);
 }
 
 /* ==========================================================================

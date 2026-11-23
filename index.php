@@ -15,7 +15,7 @@ if (!isset($_SESSION['id_usuario'])) {
 }
 
 // 2. Parámetros de la vista para el layout
-$titulo_pagina = 'TallerTech | Redefine tu espacio con elegancia';
+$titulo_pagina = 'TallerTech | Carpintería Artesanal y Muebles a Medida';
 $pagina_actual = 'index.php';
 $css_adicional = 'assets/css/home.css';
 
@@ -42,13 +42,13 @@ require_once 'includes/header.php';
             <!-- Contenido textual superpuesto a la izquierda -->
             <div class="hero-banner-content">
                 <h1 class="hero-banner-title">
-                    Redefine tu espacio con elegancia.
+                    Muebles hechos a mano para tu hogar.
                 </h1>
                 <p class="hero-banner-subtitle">
-                    Descubre materiales de primera calidad y diseños contemporáneos pensados para inspirar cada rincón de tu hogar.
+                    Madera selecta, ensambles tradicionales y acabados cálidos a la medida de tu espacio.
                 </p>
-                <a href="catalogo.php" class="btn-pill-white">
-                    <span>Explorar Catalogo</span>
+                <a href="galeria.php" class="btn-pill-white">
+                    <span>Ver Trabajos del Taller</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
@@ -63,7 +63,7 @@ require_once 'includes/header.php';
         <div class="categories-grid">
 
             <!-- Card 1: Cocinas -->
-            <a href="catalogo.php?categoria=cocinas" class="category-card" aria-label="Explorar muebles para Cocinas">
+            <a href="galeria.php?categoria=cocinas" class="category-card" aria-label="Explorar muebles para Cocinas">
                 <img 
                     src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80" 
                     alt="Cocina contemporánea de madera" 
@@ -82,8 +82,8 @@ require_once 'includes/header.php';
                 </div>
             </a>
 
-            <!-- Card 2: Baños -->
-            <a href="catalogo.php?categoria=banos" class="category-card" aria-label="Explorar muebles para Baños">
+            <!-- Card 2: Baños / Proyectos Especiales -->
+            <a href="galeria.php?categoria=especiales" class="category-card" aria-label="Explorar proyectos especiales">
                 <img 
                     src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80" 
                     alt="Mueble de baño en madera y diseño moderno" 
@@ -92,7 +92,7 @@ require_once 'includes/header.php';
                 >
                 <div class="category-card-overlay"></div>
                 <div class="category-card-footer">
-                    <h3 class="category-card-title">Baños</h3>
+                    <h3 class="category-card-title">Proyectos Especiales</h3>
                     <span class="category-card-arrow" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -102,8 +102,8 @@ require_once 'includes/header.php';
                 </div>
             </a>
 
-            <!-- Card 3: Salas de Estar -->
-            <a href="catalogo.php?categoria=salas" class="category-card" aria-label="Explorar muebles para Salas de Estar">
+            <!-- Card 3: Salas & Comedores -->
+            <a href="galeria.php?categoria=mesas" class="category-card" aria-label="Explorar mesas y comedores">
                 <img 
                     src="https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=80" 
                     alt="Sala de estar moderna con muebles a medida" 
@@ -112,7 +112,7 @@ require_once 'includes/header.php';
                 >
                 <div class="category-card-overlay"></div>
                 <div class="category-card-footer">
-                    <h3 class="category-card-title">Salas de Estar</h3>
+                    <h3 class="category-card-title">Mesas &amp; Comedores</h3>
                     <span class="category-card-arrow" aria-hidden="true">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="7" y1="17" x2="17" y2="7"></line>

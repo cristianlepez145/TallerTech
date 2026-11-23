@@ -4,25 +4,26 @@
  */
 
 :root {
-    --bg-page: #101010;
-    --card-bg: #181818;
-    --mosaic-bg: #141414;
-    --border-card: rgba(255, 255, 255, 0.08);
-    --border-input: #2f2f2f;
-    --border-focus: #e5e5e5;
+    --bg-page: #141210;
+    --card-bg: #1c1917;
+    --mosaic-bg: #171513;
+    --border-card: #38322b;
+    --border-input: #3d352e;
+    --border-focus: #c88a4b;
 
-    --text-primary: #ffffff;
-    --text-secondary: #a3a3a3;
-    --text-muted: #737373;
-    --wood-accent: #c48849;
+    --text-primary: #f2ede4;
+    --text-secondary: #b5ada4;
+    --text-muted: #80776e;
+    --wood-accent: #c88a4b;
+    --wood-accent-hover: #d99b5e;
 
-    --error-bg: rgba(239, 68, 68, 0.12);
-    --error-border: rgba(239, 68, 68, 0.3);
-    --error-text: #fca5a5;
+    --error-bg: rgba(179, 74, 59, 0.15);
+    --error-border: rgba(179, 74, 59, 0.35);
+    --error-text: #e89a8f;
 
-    --success-bg: rgba(34, 197, 94, 0.12);
-    --success-border: rgba(34, 197, 94, 0.3);
-    --success-text: #86efac;
+    --success-bg: rgba(61, 122, 90, 0.15);
+    --success-border: rgba(61, 122, 90, 0.35);
+    --success-text: #86c49e;
 
     --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --transition-fast: all 0.2s ease-in-out;
@@ -49,7 +50,7 @@ html, body {
     align-items: center;
     justify-content: center;
     padding: 2.5rem 1.5rem;
-    background: radial-gradient(circle at 50% 30%, #1a1a1a 0%, #101010 100%);
+    background: radial-gradient(circle at 50% 30%, #1e1b18 0%, #141210 100%);
 }
 
 /* Tarjeta principal dividida en dos columnas */
@@ -269,23 +270,23 @@ html, body {
 .form-input:focus {
     background-color: rgba(255, 255, 255, 0.07);
     border-color: var(--border-focus);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 3px rgba(200, 138, 75, 0.18);
 }
 
-/* Botón Píldora de envío */
+/* Botón Píldora cálido artesanal */
 .btn-auth-pill {
     width: 100%;
-    background-color: #ffffff;
-    color: #000000;
+    background-color: var(--wood-accent);
+    color: #141210;
     border: none;
     border-radius: 9999px;
     padding: 0.9rem 1.5rem;
     font-size: 0.92rem;
     font-weight: 800;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.04em;
     cursor: pointer;
     margin-top: 0.75rem;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     align-items: center;
@@ -294,9 +295,10 @@ html, body {
 }
 
 .btn-auth-pill:hover {
-    background-color: #eaeaea;
+    background-color: var(--wood-accent-hover);
+    color: #141210;
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.22);
+    box-shadow: 0 8px 20px rgba(200, 138, 75, 0.25);
 }
 
 .btn-auth-pill:active {

@@ -4,23 +4,23 @@
  */
 
 :root {
-    --bg-page: #121212;
-    --bg-card: #1a1a1a;
-    --bg-card-hover: #202020;
-    --bg-surface: #141414;
-    --border-card: #2a2a2a;
-    --border-card-hover: rgba(196, 136, 73, 0.4);
-    --border-subtle: #242424;
+    --bg-page: #141210;
+    --bg-card: #1c1917;
+    --bg-card-hover: #221f1c;
+    --bg-surface: #171513;
+    --border-card: #38322b;
+    --border-card-hover: rgba(200, 138, 75, 0.45);
+    --border-subtle: #2e2823;
     
-    --text-primary: #ffffff;
-    --text-secondary: #a0a0a0;
-    --text-muted: #737373;
+    --text-primary: #f2ede4;
+    --text-secondary: #b5ada4;
+    --text-muted: #80776e;
     
-    --wood-accent: #c48849;
-    --wood-accent-hover: #dc9b57;
-    --amber-quote: #d97706;
-    --blue-progress: #0284c7;
-    --green-delivered: #16a34a;
+    --wood-accent: #c88a4b;
+    --wood-accent-hover: #d99b5e;
+    --amber-quote: #c88a4b;
+    --blue-progress: #c88a4b;
+    --green-delivered: #3d7a5a;
     
     --radius-card: 20px;
     --radius-pill: 9999px;
@@ -106,11 +106,11 @@
 }
 
 .btn-filter-pill.active {
-    background-color: #ffffff;
-    color: #000000;
-    border-color: #ffffff;
+    background-color: var(--wood-accent);
+    color: #141210;
+    border-color: var(--wood-accent);
     font-weight: 700;
-    box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(200, 138, 75, 0.25);
 }
 
 .filter-count-badge {
@@ -202,37 +202,37 @@
 /* 1. En proceso de cotización / Pendiente de revisión */
 .status-pill-badge.cotizacion,
 .status-pill-badge.pendiente_revision {
-    background-color: rgba(217, 119, 6, 0.15);
-    border: 1px solid rgba(217, 119, 6, 0.35);
-    color: #fbbf24;
+    background-color: rgba(200, 138, 75, 0.16);
+    border: 1px solid rgba(200, 138, 75, 0.35);
+    color: #e8b878;
 }
 
 /* 1b. Propuesta formal enviada al cliente */
 .status-pill-badge.pendiente_cliente {
-    background-color: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.35);
-    color: #34d399;
+    background-color: rgba(90, 130, 109, 0.18);
+    border: 1px solid rgba(90, 130, 109, 0.38);
+    color: #9ecdb5;
 }
 
 /* 1c. Cotización rechazada */
 .status-pill-badge.rechazada {
-    background-color: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.35);
-    color: #f87171;
+    background-color: rgba(179, 74, 59, 0.16);
+    border: 1px solid rgba(179, 74, 59, 0.35);
+    color: #e89a8f;
 }
 
 /* 2. En proceso de trabajo / Fabricación */
 .status-pill-badge.fabricacion {
-    background-color: rgba(2, 132, 199, 0.15);
-    border: 1px solid rgba(2, 132, 199, 0.35);
-    color: #38bdf8;
+    background-color: rgba(200, 138, 75, 0.18);
+    border: 1px solid rgba(200, 138, 75, 0.4);
+    color: #e8b878;
 }
 
 /* 3. Entregado */
 .status-pill-badge.entregado {
-    background-color: rgba(22, 163, 74, 0.15);
-    border: 1px solid rgba(22, 163, 74, 0.35);
-    color: #86efac;
+    background-color: rgba(61, 122, 90, 0.18);
+    border: 1px solid rgba(61, 122, 90, 0.38);
+    color: #86c49e;
 }
 
 /* Cuerpo de la Tarjeta */
@@ -368,47 +368,41 @@
 }
 
 .stepper-step.completed .stepper-node {
-    background-color: #16a34a;
-    border-color: #16a34a;
-    color: #ffffff;
+    background-color: #3d7a5a;
+    border-color: #3d7a5a;
+    color: #f2ede4;
 }
 
 .stepper-step.active .stepper-node {
-    background-color: #1c1c1c;
-    border-color: #ffffff;
-    color: #ffffff;
-    box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
+    background-color: #221f1c;
+    border-color: var(--wood-accent);
+    color: var(--wood-accent);
 }
 
 .stepper-step.active.status-cotizacion .stepper-node,
 .stepper-step.active.status-pendiente_revision .stepper-node {
-    border-color: #fbbf24;
-    color: #fbbf24;
-    box-shadow: 0 0 16px rgba(251, 191, 36, 0.3);
+    border-color: #e8b878;
+    color: #e8b878;
 }
 
 .stepper-step.active.status-pendiente_cliente .stepper-node {
-    border-color: #34d399;
-    color: #34d399;
-    box-shadow: 0 0 16px rgba(52, 211, 153, 0.3);
+    border-color: #9ecdb5;
+    color: #9ecdb5;
 }
 
 .stepper-step.active.status-rechazada .stepper-node {
-    border-color: #f87171;
-    color: #f87171;
-    box-shadow: 0 0 16px rgba(248, 113, 113, 0.3);
+    border-color: #e89a8f;
+    color: #e89a8f;
 }
 
 .stepper-step.active.status-fabricacion .stepper-node {
-    border-color: #38bdf8;
-    color: #38bdf8;
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.3);
+    border-color: #e8b878;
+    color: #e8b878;
 }
 
 .stepper-step.active.status-entregado .stepper-node {
-    border-color: #86efac;
-    color: #86efac;
-    box-shadow: 0 0 16px rgba(134, 239, 172, 0.3);
+    border-color: #86c49e;
+    color: #86c49e;
 }
 
 .stepper-label-box {
@@ -432,7 +426,7 @@
 
 .stepper-step.active .stepper-step-name,
 .stepper-step.completed .stepper-step-name {
-    color: #ffffff;
+    color: #f2ede4;
     font-weight: 700;
 }
 
@@ -440,17 +434,17 @@
 .stepper-line {
     flex: 1;
     height: 3px;
-    background-color: #282828;
+    background-color: #38322b;
     margin: 0 1rem;
     transition: var(--transition-smooth);
 }
 
 .stepper-line.completed {
-    background-color: #16a34a;
+    background-color: #3d7a5a;
 }
 
 .stepper-line.active {
-    background: linear-gradient(90deg, #16a34a, #38bdf8);
+    background: linear-gradient(90deg, #3d7a5a, #c88a4b);
 }
 
 /* Acciones de la Tarjeta */
@@ -490,17 +484,17 @@
 }
 
 .btn-order-action.primary-pill {
-    background-color: #ffffff;
-    color: #000000;
+    background-color: var(--wood-accent);
+    color: #141210;
     border: none;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .btn-order-action.primary-pill:hover {
-    background-color: #f0f0f0;
-    color: #000000;
+    background-color: var(--wood-accent-hover);
+    color: #141210;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 20px rgba(200, 138, 75, 0.25);
 }
 
 .btn-order-action.danger-subtle {

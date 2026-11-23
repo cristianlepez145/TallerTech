@@ -19,38 +19,38 @@ require_once 'includes/header.php';
         <div class="col-lg-9">
 
             <div class="text-center mb-5">
-                <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 mb-3">
+                <span class="badge rounded-pill px-3 py-2 mb-3" style="background: rgba(200, 138, 75, 0.12); color: #c88a4b; border: 1px solid rgba(200, 138, 75, 0.3);">
                     Privacidad y Confidencialidad &bull; TallerTech
                 </span>
-                <h1 class="display-6 fw-bold text-white mb-3">Aviso de Privacidad</h1>
-                <p class="text-secondary small">Cumplimiento con la Ley Federal de Protección de Datos Personales</p>
+                <h1 class="display-6 fw-bold mb-3" style="color: #f2ede4;">Aviso de Privacidad</h1>
+                <p class="small" style="color: #80776e;">Protección de datos conforme a la legislación aplicable</p>
             </div>
 
-            <div class="card bg-dark border border-secondary border-opacity-25 rounded-4 p-4 p-md-5 text-secondary" style="line-height: 1.8;">
+            <div class="rounded-4 p-4 p-md-5" style="background: #1c1917; border: 1px solid #38322b; line-height: 1.8; color: #b5ada4;">
 
-                <h2 class="h5 fw-bold text-white mb-3">1. Identidad y Domicilio del Responsable</h2>
+                <h2 class="h5 fw-bold mb-3" style="color: #f2ede4;">1. Identidad y Domicilio</h2>
                 <p class="mb-4">
-                    <strong>TallerTech S.A.S. de C.V.</strong>, con domicilio en Av. Los Artesanos #450, Col. Centro, CP 44100, es responsable del uso y protección de sus datos personales conforme a los principios de licitud, consentimiento e información.
+                    <strong>TallerTech Carpintería</strong>, con domicilio en Av. Los Artesanos #450, Col. Centro, CP 44100, es responsable del cuidado y confidencialidad de tus datos personales.
                 </p>
 
-                <h2 class="h5 fw-bold text-white mb-3">2. Datos Personales Recabados</h2>
+                <h2 class="h5 fw-bold mb-3" style="color: #f2ede4;">2. Datos que Solicitamos</h2>
                 <p class="mb-4">
-                    Para las finalidades señaladas en el presente aviso, recabamos: nombre completo, correo electrónico, número de teléfono o WhatsApp, dirección física de entrega y fotografías, croquis o bocetos técnicos adjuntados para la fabricación de sus muebles.
+                    Para preparar tus presupuestos y coordinar citas solicitamos: nombre, correo electrónico, teléfono/WhatsApp, dirección para visitas o entregas, y fotografías o croquis de referencia de tus espacios.
                 </p>
 
-                <h2 class="h5 fw-bold text-white mb-3">3. Finalidades del Tratamiento</h2>
+                <h2 class="h5 fw-bold mb-3" style="color: #f2ede4;">3. Uso de la Información</h2>
                 <p class="mb-4">
-                    Sus datos son tratados con el propósito exclusivo de: (a) generar órdenes de cotización y pedidos de carpintería, (b) agendar visitas técnicas de medición a domicilio, (c) mantener el canal de comunicación y notificaciones por WhatsApp o correo sobre el avance de sus muebles, y (d) emitir comprobantes de anticipo y entrega.
+                    Tus datos se usan exclusivamente para: (a) preparar tus cotizaciones y proyectos de carpintería, (b) coordinar visitas de medición en domicilio o taller, (c) mantenerte al tanto del avance de tu mueble, y (d) coordinar la entrega e instalación.
                 </p>
 
-                <h2 class="h5 fw-bold text-white mb-3">4. Confidencialidad y No Transferencia</h2>
+                <h2 class="h5 fw-bold mb-3" style="color: #f2ede4;">4. Confidencialidad</h2>
                 <p class="mb-4">
-                    TallerTech no vende, renta ni transfiere sus datos personales ni sus planos arquitectónicos o bocetos a terceros con fines publicitarios. Toda información técnica cargada en la plataforma se almacena en servidores con cifrado TLS/SSL.
+                    No compartimos ni vendemos tu información ni tus imágenes o planos a terceros con fines de publicidad. La información técnica se resguarda de forma segura bajo cifrado de datos.
                 </p>
 
-                <h2 class="h5 fw-bold text-white mb-3">5. Derechos ARCO y Contacto</h2>
+                <h2 class="h5 fw-bold mb-3" style="color: #f2ede4;">5. Derechos ARCO y Dudas</h2>
                 <p class="mb-0">
-                    Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los usamos y las condiciones de su tratamiento (Acceso, Rectificación, Cancelación y Oposición). Para ejercer cualquiera de estos derechos, puede escribirnos a <strong>contacto@tallertech.com</strong>.
+                    Puedes consultar, actualizar o solicitar la baja de tus datos en cualquier momento enviándonos un correo a <strong>contacto@tallertech.com</strong>.
                 </p>
 
             </div>

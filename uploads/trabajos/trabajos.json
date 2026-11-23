@@ -1,0 +1,145 @@
+[
+    {
+        "id": "trabajo_1795402422_0af2",
+        "titulo": "Base de cama con cajonera",
+        "categoria": "camas",
+        "categoria_label": "Camas & Cabeceras",
+        "descripcion": "acabados naturales",
+        "madera": "Pino",
+        "foto": "uploads\/trabajos\/trabajo_1795402422_8ff91f3b.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795402369_f60b",
+        "titulo": "Closet con cajonera amplia",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "closet de okume entintado tipo caoba",
+        "madera": "okume",
+        "foto": "uploads\/trabajos\/trabajo_1795402369_4040e77e.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795402238_74f0",
+        "titulo": "Puertas de parota",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "Puertas comunes de parota con acabado natural",
+        "madera": "Parota",
+        "foto": "uploads\/trabajos\/trabajo_1795402238_068556ff.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795402143_5402",
+        "titulo": "Mesa hexagonal de juegos con acabado natural",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "Mesa de juegos con acabados naturales",
+        "madera": "Parota",
+        "foto": "uploads\/trabajos\/trabajo_1795402143_04e61c77.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795402035_67e5",
+        "titulo": "Puerta principal de piso a techo con fijo superior en duela horizontal de Parota con acabado satinado para exterior",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "Puerta de ingreso completa de parota solida con acabados para exterior estilo natural",
+        "madera": "Parota",
+        "foto": "uploads\/trabajos\/trabajo_1795402035_064a848f.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795401792_c092",
+        "titulo": "mostrador de heladeria y forraje de paredes con lambril de encino e iluminacion led",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "Mostrador de heladeria completo hecho con mdf melaminado color blanco y forrado de lambril de encino con acabados naturales",
+        "madera": "encino",
+        "foto": "uploads\/trabajos\/trabajo_1795401792_bc6d6e37.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795401525_5a2e",
+        "titulo": "Closet",
+        "categoria": "closets",
+        "categoria_label": "Clósets & Cajoneras",
+        "descripcion": "Closet completo con puertas comunes de bisagra de cocina con acabados naturales",
+        "madera": "Triplay de encino",
+        "foto": "uploads\/trabajos\/trabajo_1795401525_c6859719.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795401373_e4b0",
+        "titulo": "Mueble para baño",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "Mueble poara baño con terminacion lisa hecho con mdf melaminado color blanco",
+        "madera": "MDF melaminado color blanco",
+        "foto": "uploads\/trabajos\/trabajo_1795401373_2906c485.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795401241_4799",
+        "titulo": "Bar",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "mueble hecho de parota con acabado natural y en la parte de abajo una cava para vinos",
+        "madera": "Parota con acabado natural",
+        "foto": "uploads\/trabajos\/trabajo_1795401241_5f24b34e.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795400971_5d59",
+        "titulo": "Credenza",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "Credenza con caba para vinos en parota con terminacion natural",
+        "madera": "Madera sólida",
+        "foto": "uploads\/trabajos\/trabajo_1795400971_a2bd3f3a.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795400771_ac88",
+        "titulo": "Cocina integral",
+        "categoria": "cocinas",
+        "categoria_label": "Cocinas & Alacenas",
+        "descripcion": "Cocina integral entregada con terminados de parota",
+        "madera": "MDF melaminado estilo parota",
+        "foto": "uploads\/trabajos\/trabajo_1795400771_616ead17.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795399956_3fdb",
+        "titulo": "Cajonera",
+        "categoria": "especiales",
+        "categoria_label": "Proyectos Especiales",
+        "descripcion": "Cajonera sencilla con acabados azules y puertas corredizas",
+        "madera": "Pino",
+        "foto": "uploads\/trabajos\/trabajo_1795399956_226498c3.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    },
+    {
+        "id": "trabajo_1795399824_41b7",
+        "titulo": "Cocina integral",
+        "categoria": "cocinas",
+        "categoria_label": "Cocinas & Alacenas",
+        "descripcion": "Ensable enpotrado en pared hasta el techo(doble altura)",
+        "madera": "Melamina con terminado de parota",
+        "foto": "uploads\/trabajos\/trabajo_1795399824_855ae102.jpg",
+        "es_local": true,
+        "fecha": "2026-11-23"
+    }
+]

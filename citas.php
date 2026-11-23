@@ -11,6 +11,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once 'includes/conexion.php';
 require_once 'includes/auth.php';
+require_once 'includes/Notificaciones.php';
 
 // Endpoint AJAX rápido para consultar horarios ocupados de una fecha específica
 if (isset($_GET['check_slots']) && !empty($_GET['fecha'])) {
@@ -311,6 +312,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['agendar_cita'])) {
                                 $textoAdjuntos   = ($totalSubidos > 0) ? " Se vincularon {$totalSubidos} archivo(s) de referencia/diseño." : "";
                                 
                                 $mensaje_exito = "¡Cita reservada con éxito! Folio #CITA-{$id_cita} para el {$fechaFormateada} a las {$hora} hrs.{$textoAdjuntos} Se ha generado tu cotización <strong>#COT-{$idCotCita}</strong> en estado <strong>pendiente de revisión</strong> por el carpintero.";
+
+                                // Notificación por correo vía SMTP Gmail (Disparador 1)
+                                \TallerTech\Notificaciones::notificarNuevaCita($pdo, $id_cita);
+                                \TallerTech\Notificaciones::notificarClienteNuevaCita($pdo, $id_cita);
                             }
 
                         } catch (PDOException $e) {
@@ -400,10 +405,10 @@ require_once 'includes/header.php';
 
         <!-- Encabezado de la Sección -->
         <header class="citas-header-box">
-            <span class="citas-badge-pill">Calendario &amp; Visitas Técnicas</span>
-            <h1 class="citas-main-title">Agendamiento de Citas &amp; Diseños</h1>
+            <span class="citas-badge-pill">Visitas y Medición</span>
+            <h1 class="citas-main-title">Agenda tu Cita con el Carpintero</h1>
             <p class="citas-main-subtitle">
-                Reserva una visita presencial para toma de medidas exactas o acude al taller para seleccionar maderas, acabados y revisar tus referencias de diseño.
+                Podemos visitarte a domicilio para tomar medidas de tu espacio o recibirte en el taller para ver muestras de madera y acabados.
             </p>
         </header>
 
@@ -413,9 +418,9 @@ require_once 'includes/header.php';
             <!-- Columna Izquierda: Panel Informativo (Reglas de Agenda y Referencias) -->
             <aside class="rules-panel-card" aria-label="Reglas de agenda">
                 <div class="rules-panel-header">
-                    <h2 class="rules-panel-title">Reglas de Agenda</h2>
+                    <h2 class="rules-panel-title">Horarios del Taller</h2>
                     <p class="rules-panel-desc">
-                        Para optimizar los tiempos de maquinado y atención técnica, las citas se rigen bajo los siguientes lineamientos:
+                        Para atenderte con calma sin pausar el trabajo de corte y ensamble:
                     </p>
                 </div>
 
@@ -430,9 +435,9 @@ require_once 'includes/header.php';
                         </svg>
                     </div>
                     <div class="rule-item-content">
-                        <h4 class="rule-item-title">Horarios Entre Semana</h4>
+                        <h4 class="rule-item-title">Lunes a Viernes</h4>
                         <p class="rule-item-text">
-                            De Lunes a Viernes las visitas se agendan únicamente en horario vespertino (a partir de las <strong>6:00 PM</strong>) para no interrumpir el maquinado en taller.
+                            A partir de las <strong>6:00 PM</strong> para visitas a domicilio y consultas en taller.
                         </p>
                     </div>
                 </div>
@@ -446,9 +451,9 @@ require_once 'includes/header.php';
                         </svg>
                     </div>
                     <div class="rule-item-content">
-                        <h4 class="rule-item-title">Horarios Fin de Semana</h4>
+                        <h4 class="rule-item-title">Sábados y Domingos</h4>
                         <p class="rule-item-text">
-                            Sábados y Domingos contamos con ventana abierta continua de <strong>9:00 AM a 6:00 PM</strong> para revisiones técnicas y visitas a domicilio.
+                            De <strong>9:00 AM a 6:00 PM</strong> previa cita para revisiones y toma de medidas.
                         </p>
                     </div>
                 </div>
@@ -462,9 +467,9 @@ require_once 'includes/header.php';
                         </svg>
                     </div>
                     <div class="rule-item-content">
-                        <h4 class="rule-item-title">Duración Parametrizada</h4>
+                        <h4 class="rule-item-title">Duración estimada</h4>
                         <p class="rule-item-text">
-                            Bloques de tiempo de <strong>máximo 1 hora</strong> enfocados en toma precisa de medidas, chequeo de plomos y asesoría de maderas.
+                            Aproximadamente <strong>1 hora</strong> para revisar medidas, plomos y muestras de madera.
                         </p>
                     </div>
                 </div>
@@ -479,9 +484,9 @@ require_once 'includes/header.php';
                         </svg>
                     </div>
                     <div class="rule-item-content">
-                        <h4 class="rule-item-title">Referencias, Diseños y Croquis</h4>
+                        <h4 class="rule-item-title">Fotos o croquis</h4>
                         <p class="rule-item-text">
-                            Puedes adjuntar fotos de inspiración (Pinterest, Instagram), planos arquitectónicos en PDF o fotos del espacio para llegar preparados con muestras específicas.
+                            Puedes adjuntar fotos de tu espacio o diseños que te gusten para prepararnos mejor con muestras.
                         </p>
                     </div>
                 </div>
@@ -504,7 +509,7 @@ require_once 'includes/header.php';
                             </span>
                         <?php endif; ?>
                     </div>
-                    <p class="booking-form-subtitle">Selecciona tus preferencias, ingresa tus datos y adjunta tus referencias de diseño.</p>
+                    <p class="booking-form-subtitle">Elige el día y horario que mejor te acomode. Te confirmamos a la brevedad.</p>
                 </div>
 
                 <form method="POST" action="citas.php" enctype="multipart/form-data" id="formCita">

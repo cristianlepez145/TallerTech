@@ -1,0 +1,277 @@
+/* ==========================================================================
+   TALLERTECH - ESTILOS DE GALERÍA DE TRABAJOS HECHOS (WARM WORKSHOP DARK)
+   ========================================================================== */
+
+:root {
+    --bg-galeria-card: #181513;
+    --border-galeria: #2e2823;
+    --border-galeria-hover: #c88a4b;
+    --text-primary-gal: #f2ede4;
+    --text-muted-gal: #a8a29e;
+    --accent-wood: #c88a4b;
+    --accent-wood-hover: #d99b5e;
+}
+
+.galeria-hero {
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.galeria-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(200, 138, 75, 0.12);
+    border: 1px solid rgba(200, 138, 75, 0.3);
+    color: var(--accent-wood);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 1rem;
+    border-radius: 9999px;
+    margin-bottom: 1rem;
+}
+
+.galeria-main-title {
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: var(--text-primary-gal);
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+
+.galeria-main-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted-gal);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Barra de Filtros de Categoría */
+.galeria-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    padding: 0 1rem;
+}
+
+.galeria-filter-btn {
+    background: #1c1917;
+    border: 1px solid var(--border-galeria);
+    color: var(--text-muted-gal);
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0.5rem 1.15rem;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.galeria-filter-btn:hover {
+    background: #25201c;
+    color: var(--text-primary-gal);
+    border-color: #4a3e35;
+}
+
+.galeria-filter-btn.active {
+    background: var(--accent-wood);
+    border-color: var(--accent-wood);
+    color: #141210;
+    font-weight: 700;
+}
+
+/* Grid de Tarjetas de Trabajos */
+.galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+    margin-bottom: 3.5rem;
+}
+
+.galeria-card {
+    background: var(--bg-galeria-card);
+    border: 1px solid var(--border-galeria);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    cursor: pointer;
+}
+
+.galeria-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border-galeria-hover);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+}
+
+.galeria-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    overflow: hidden;
+    background: #201b17;
+}
+
+.galeria-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.galeria-card:hover .galeria-img-wrap img {
+    transform: scale(1.05);
+}
+
+.galeria-badge-cat {
+    position: absolute;
+    top: 0.85rem;
+    left: 0.85rem;
+    background: rgba(20, 18, 16, 0.85);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(200, 138, 75, 0.35);
+    color: var(--accent-wood);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.7rem;
+    border-radius: 9999px;
+    letter-spacing: 0.02em;
+}
+
+.galeria-card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.galeria-card-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary-gal);
+    margin: 0 0 0.4rem 0;
+    line-height: 1.35;
+}
+
+.galeria-card-wood {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: var(--accent-wood);
+    font-weight: 600;
+    margin-bottom: 0.65rem;
+}
+
+.galeria-card-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted-gal);
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    flex-grow: 1;
+}
+
+.galeria-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-galeria);
+    gap: 0.5rem;
+}
+
+.btn-galeria-quote {
+    background: transparent;
+    border: 1px solid var(--accent-wood);
+    color: var(--accent-wood);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-galeria-quote:hover {
+    background: var(--accent-wood);
+    color: #141210;
+}
+
+.btn-galeria-zoom {
+    background: #25201c;
+    border: 1px solid var(--border-galeria);
+    color: var(--text-muted-gal);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.4rem 0.75rem;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Modal Lightbox de Foto */
+.galeria-modal-content {
+    background: #181513;
+    border: 1px solid var(--border-galeria);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.galeria-modal-header {
+    border-bottom: 1px solid var(--border-galeria);
+    padding: 1.25rem 1.5rem;
+    background: #141210;
+}
+
+.galeria-modal-img {
+    width: 100%;
+    max-height: 520px;
+    object-fit: cover;
+    display: block;
+    background: #100e0d;
+}
+
+.galeria-modal-body {
+    padding: 1.5rem;
+}
+
+.galeria-modal-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-primary-gal);
+    margin-bottom: 0.35rem;
+}
+
+.galeria-modal-wood {
+    color: var(--accent-wood);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.85rem;
+}
+
+.galeria-modal-desc {
+    color: var(--text-muted-gal);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .galeria-main-title {
+        font-size: 1.85rem;
+    }
+    .galeria-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+}

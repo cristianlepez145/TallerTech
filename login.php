@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="login-welcome">
                     <h1 class="login-welcome-title">Bienvenido</h1>
-                    <p class="login-welcome-subtitle">Ingresa a tu cuenta para gestionar tus cotizaciones y pedidos.</p>
+                    <p class="login-welcome-subtitle">Ingresa a tu cuenta para revisar tus cotizaciones y pedidos.</p>
                 </div>
 
                 <!-- Mensaje de error discreto y estilizado en rojo suave -->
@@ -173,13 +173,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <!-- Campo Email -->
                     <div class="form-group">
-                        <label for="correo" class="form-label">Email</label>
+                        <label for="correo" class="form-label">Correo electrónico</label>
                         <input 
                             type="email" 
                             id="correo" 
                             name="correo" 
                             class="form-input" 
-                            placeholder="nombre@ejemplo.com" 
+                            placeholder="tu@correo.com" 
                             value="<?= htmlspecialchars($correo, ENT_QUOTES, 'UTF-8') ?>" 
                             required 
                             autofocus
@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Campo Password -->
                     <div class="form-group">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Contraseña</label>
                         <input 
                             type="password" 
                             id="password" 
@@ -199,15 +199,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         >
                     </div>
 
-                    <!-- Botón Píldora LOG IN -->
+                    <!-- Botón Píldora Iniciar Sesión -->
                     <button type="submit" class="btn-login-pill">
-                        LOG IN
+                        Iniciar Sesión
                     </button>
 
                     <!-- Fila Inferior con Enlaces -->
                     <div class="login-links-row">
-                        <a href="#" class="auth-link" title="Recuperar contraseña">Forgot Password</a>
-                        <a href="Registro.php" class="auth-link" title="Crear una nueva cuenta">Sign up</a>
+                        <a href="Registro.php" class="auth-link" title="Crear una nueva cuenta">¿No tienes cuenta? Regístrate</a>
                     </div>
 
                 </form>

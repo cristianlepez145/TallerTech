@@ -20,27 +20,27 @@ require_once 'includes/header.php';
 
             <!-- Banner Hero -->
             <div class="text-center mb-5">
-                <span class="badge rounded-pill bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-3 py-2 mb-3">
+                <span class="badge rounded-pill px-3 py-2 mb-3" style="background: rgba(200, 138, 75, 0.12); color: #c88a4b; border: 1px solid rgba(200, 138, 75, 0.3);">
                     Nuestra Historia &bull; Pasión Artesanal
                 </span>
-                <h1 class="display-5 fw-bold text-white mb-3">Maestría en Madera &amp; Precisión Tecnológica</h1>
-                <p class="text-secondary lead mx-auto" style="max-width: 680px;">
-                    En TallerTech fusionamos las técnicas tradicionales de la ebanistería con el cálculo paramétrico moderno para crear muebles de autor que perduran por generaciones.
+                <h1 class="display-5 fw-bold mb-3" style="color: #f2ede4;">Carpintería Artesanal con Dedicación y Oficio</h1>
+                <p class="lead mx-auto" style="max-width: 680px; color: #b5ada4;">
+                    Somos un taller familiar enfocado en fabricar muebles a la medida con maderas selectas y ensambles tradicionales hechos para durar generaciones.
                 </p>
             </div>
 
             <!-- Grid de Imagen y Filosofía -->
             <div class="row g-4 align-items-center mb-5">
                 <div class="col-md-6">
-                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" alt="Carpintero en taller artesanal" class="img-fluid rounded-4 shadow-lg border border-secondary border-opacity-25 w-100" style="max-height: 380px; object-fit: cover;">
+                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80" alt="Carpintero en taller artesanal" class="img-fluid rounded-4 shadow-lg border w-100" style="max-height: 380px; object-fit: cover; border-color: #38322b !important;">
                 </div>
                 <div class="col-md-6">
-                    <h2 class="h3 fw-bold text-white mb-3">Nuestra Esencia</h2>
-                    <p class="text-secondary mb-3">
-                        Nacimos en el corazón de Jalisco como un taller familiar comprometido con el rescate del oficio carpintero. Frente a la proliferación de muebles desechables y aglomerados de baja densidad, en TallerTech apostamos por maderas estufadas de primera selección (Roble, Nogal, Parota y Cedro) trabajadas con ensambles de espiga y cola de milano.
+                    <h2 class="h3 fw-bold mb-3" style="color: #f2ede4;">Nuestra Filosofía</h2>
+                    <p class="mb-3" style="color: #b5ada4;">
+                        Nacimos como un taller familiar comprometido con el rescate del oficio del carpintero. Trabajamos maderas estufadas de primera selección (Roble, Nogal, Parota y Cedro) cuidando cada ensamble de caja y espiga.
                     </p>
-                    <p class="text-secondary mb-0">
-                        Cada proyecto que ingresa a nuestra plataforma cuenta con una orden de trabajo única, seguimiento paso a paso con registro fotográfico y atención personalizada directa del maestro ebanista.
+                    <p class="mb-0" style="color: #b5ada4;">
+                        Cada proyecto que entra al taller se trabaja de forma personalizada, con comunicación directa con el carpintero para resolver cualquier detalle de tu espacio.
                     </p>
                 </div>
             </div>
@@ -48,24 +48,40 @@ require_once 'includes/header.php';
             <!-- 3 Pilares -->
             <div class="row g-4 mb-5">
                 <div class="col-md-4">
-                    <div class="p-4 rounded-4 h-100" style="background: #1a1a1a; border: 1px solid #2d2d2d;">
-                        <div class="text-warning mb-3" style="font-size: 2rem;">🪵</div>
-                        <h3 class="h5 fw-bold text-white mb-2">Madera Sustentable</h3>
-                        <p class="text-secondary small mb-0">Maderas macizas con certificación de aprovechamiento forestal responsable y secado en estufa para evitar torceduras.</p>
+                    <div class="p-4 rounded-4 h-100" style="background: #1c1917; border: 1px solid #38322b;">
+                        <div class="mb-3" style="color: #c88a4b;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2L6 8h3.5l-4 6h4l-3.5 5h12l-3.5-5h4l-4-6H18L12 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2" style="color: #f2ede4;">Madera Selecta</h3>
+                        <p class="small mb-0" style="color: #b5ada4;">Maderas macizas con secado en estufa para evitar deformaciones con los cambios de clima.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="p-4 rounded-4 h-100" style="background: #1a1a1a; border: 1px solid #2d2d2d;">
-                        <div class="text-warning mb-3" style="font-size: 2rem;">📐</div>
-                        <h3 class="h5 fw-bold text-white mb-2">Corte Milimétrico</h3>
-                        <p class="text-secondary small mb-0">Maquinado de alta precisión en frentes, ingletes a 45 grados y tolerancias perfectas para tus espacios habitables.</p>
+                    <div class="p-4 rounded-4 h-100" style="background: #1c1917; border: 1px solid #38322b;">
+                        <div class="mb-3" style="color: #c88a4b;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="m4.93 4.93 4.24 4.24"/>
+                                <path d="m14.83 9.17 4.24-4.24"/>
+                                <path d="m14.83 14.83 4.24 4.24"/>
+                                <path d="m9.17 14.83-4.24 4.24"/>
+                            </svg>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2" style="color: #f2ede4;">Ensamble Tradicional</h3>
+                        <p class="small mb-0" style="color: #b5ada4;">Cortes precisos, uniones firmes y acabados pulidos a mano que garantizan resistencia.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="p-4 rounded-4 h-100" style="background: #1a1a1a; border: 1px solid #2d2d2d;">
-                        <div class="text-warning mb-3" style="font-size: 2rem;">🛡️</div>
-                        <h3 class="h5 fw-bold text-white mb-2">Garantía Escrita</h3>
-                        <p class="text-secondary small mb-0">Compromiso formal con entrega puntual, instalación limpia y garantía estructural en todos nuestros acabados.</p>
+                    <div class="p-4 rounded-4 h-100" style="background: #1c1917; border: 1px solid #38322b;">
+                        <div class="mb-3" style="color: #c88a4b;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="h5 fw-bold mb-2" style="color: #f2ede4;">Atención y Garantía</h3>
+                        <p class="small mb-0" style="color: #b5ada4;">Compromiso con entrega acordada, instalación cuidadosa y soporte directo en tu taller local.</p>
                     </div>
                 </div>
             </div>

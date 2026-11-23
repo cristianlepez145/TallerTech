@@ -4,25 +4,24 @@
  */
 
 :root {
-    --bg-page: #121212;
-    --bg-card: #181818;
-    --bg-card-info: #1c1c1c;
+    --bg-page: #141210;
+    --bg-card: #1c1917;
+    --bg-card-info: #221f1c;
     --bg-input: rgba(255, 255, 255, 0.04);
 
-    --border-card: #2a2a2a;
-    --border-subtle: #242424;
-    --border-input: #333333;
-    --border-dashed: #3a3a3a;
-    --border-focus: #c48849;
+    --border-card: #38322b;
+    --border-subtle: #2e2823;
+    --border-input: #3d352e;
+    --border-dashed: #4d443b;
+    --border-focus: #c88a4b;
 
-    --text-primary: #ffffff;
-    --text-secondary: #a0a0a0;
-    --text-muted: #737373;
+    --text-primary: #f2ede4;
+    --text-secondary: #b5ada4;
+    --text-muted: #80776e;
 
-    --wood-accent: #c48849;
-    --wood-accent-hover: #dc9b57;
-    --wood-accent-subtle: rgba(196, 136, 73, 0.12);
-    --wood-accent-glow: rgba(196, 136, 73, 0.22);
+    --wood-accent: #c88a4b;
+    --wood-accent-hover: #d99b5e;
+    --wood-accent-subtle: rgba(200, 138, 75, 0.12);
 
     --radius-hero: 24px;
     --radius-card: 20px;
@@ -237,7 +236,7 @@
 .form-field-textarea:focus {
     border-color: var(--border-focus);
     background-color: rgba(255, 255, 255, 0.07);
-    box-shadow: 0 0 0 3px var(--wood-accent-glow);
+    box-shadow: 0 0 0 3px rgba(200, 138, 75, 0.18);
 }
 
 .form-field-select option {
@@ -604,28 +603,28 @@
 }
 
 .appointment-status-pill.pendiente {
-    background-color: rgba(234, 179, 8, 0.15);
-    border: 1px solid rgba(234, 179, 8, 0.3);
-    color: #fde047;
+    background-color: rgba(200, 138, 75, 0.18);
+    border: 1px solid rgba(200, 138, 75, 0.35);
+    color: #e8b878;
 }
 
 .appointment-status-pill.confirmada {
-    background-color: rgba(34, 197, 94, 0.15);
-    border: 1px solid rgba(34, 197, 94, 0.3);
-    color: #86efac;
+    background-color: rgba(61, 122, 90, 0.18);
+    border: 1px solid rgba(61, 122, 90, 0.35);
+    color: #86c49e;
 }
 
 .appointment-status-pill.completada,
 .appointment-status-pill.realizada {
-    background-color: rgba(59, 130, 246, 0.15);
-    border: 1px solid rgba(59, 130, 246, 0.3);
-    color: #93c5fd;
+    background-color: rgba(61, 122, 90, 0.22);
+    border: 1px solid rgba(61, 122, 90, 0.4);
+    color: #a3d9b8;
 }
 
 .appointment-status-pill.cancelada {
-    background-color: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #fca5a5;
+    background-color: rgba(179, 74, 59, 0.16);
+    border: 1px solid rgba(179, 74, 59, 0.35);
+    color: #e89a8f;
 }
 
 .appointment-attachments-gallery {

@@ -268,9 +268,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         >
                     </div>
 
-                    <!-- Botón Píldora CREAR CUENTA -->
+                    <!-- Botón Píldora Crear Cuenta -->
                     <button type="submit" class="btn-auth-pill">
-                        CREAR CUENTA
+                        Crear Cuenta
                     </button>
 
                     <!-- Fila Inferior con Enlace de Iniciar Sesión -->

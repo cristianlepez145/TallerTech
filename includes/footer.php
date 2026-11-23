@@ -17,7 +17,7 @@
                         <span>TallerTech</span>
                     </a>
                     <p class="footer-text">
-                        Diseño y fabricación de muebles a medida con madera selecta, técnicas artesanales y precisión tecnológica para dar vida a tus espacios.
+                        Carpintería artesanal y muebles a la medida. Seleccionamos cada madera y cuidamos cada ensamble para que tu proyecto dure generaciones.
                     </p>
                     <div class="social-links">
                         <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Instagram">
@@ -44,7 +44,7 @@
                 <div class="footer-col">
                     <h4 class="footer-title">Enlaces Rápidos</h4>
                     <ul class="footer-links">
-                        <li><a href="catalogo.php">Catálogo de Muebles</a></li>
+                        <li><a href="galeria.php">Trabajos Hechos</a></li>
                         <li><a href="cotizaciones.php">Cotizador a Medida</a></li>
                         <li><a href="citas.php">Agendar Cita de Medición</a></li>
                         <li><a href="pedidos.php">Seguimiento de Pedidos</a></li>
@@ -87,16 +87,16 @@
                     </ul>
                 </div>
 
-                <!-- Columna 4: Asesoría / Cotizaciones en Línea -->
+                <!-- Columna 4: Asesoría y Contacto del Taller -->
                 <div class="footer-col">
-                    <h4 class="footer-title">Cotizaciones en Línea</h4>
+                    <h4 class="footer-title">Platícanos tu Proyecto</h4>
                     <p class="footer-text">
-                        ¿Tienes un proyecto especial o un plano listo? Déjanos tu correo y te enviamos asesoría técnica personalizada.
+                        ¿Tienes una idea o croquis en mente? Déjanos tu correo y nos ponemos en contacto contigo para asesorarte sin compromiso.
                     </p>
                     <form class="newsletter-form" onsubmit="event.preventDefault(); alert('¡Gracias! Te contactaremos a la brevedad.');">
                         <div class="newsletter-input-group">
-                            <input type="email" class="newsletter-input" placeholder="tu@correo.com" required aria-label="Correo para cotización">
-                            <button type="submit" class="newsletter-btn">Cotizar</button>
+                            <input type="email" class="newsletter-input" placeholder="tu@correo.com" required aria-label="Correo de contacto">
+                            <button type="submit" class="newsletter-btn">Escribirnos</button>
                         </div>
                     </form>
                 </div>

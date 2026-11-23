@@ -4,27 +4,27 @@
  */
 
 :root {
-    --bg-body: #101010;
-    --bg-header: rgba(20, 20, 20, 0.82);
-    --bg-footer: #121212;
-    --bg-surface: #181818;
-    --bg-surface-elevated: #222222;
+    --bg-body: #141210;
+    --bg-header: rgba(20, 18, 16, 0.9);
+    --bg-footer: #110f0e;
+    --bg-surface: #1c1917;
+    --bg-surface-elevated: #26221e;
 
-    --border-subtle: #262626;
-    --border-pill: #333333;
-    --border-hover: #444444;
+    --border-subtle: #2e2823;
+    --border-pill: #3d352e;
+    --border-hover: #54493f;
 
-    --text-primary: #f5f5f5;
-    --text-secondary: #a3a3a3;
-    --text-muted: #737373;
+    --text-primary: #f2ede4;
+    --text-secondary: #b5ada4;
+    --text-muted: #80776e;
 
-    --wood-accent: #c48849;
-    --wood-accent-hover: #dc9b57;
-    --wood-accent-light: rgba(196, 136, 73, 0.15);
+    --wood-accent: #c88a4b;
+    --wood-accent-hover: #d99b5e;
+    --wood-accent-light: rgba(200, 138, 75, 0.14);
 
-    --pill-bg: rgba(28, 28, 28, 0.65);
-    --pill-active-bg: #e5e5e5;
-    --pill-active-text: #121212;
+    --pill-bg: rgba(28, 25, 23, 0.78);
+    --pill-active-bg: #c88a4b;
+    --pill-active-text: #141210;
 
     --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --transition-smooth: all 0.22s ease-in-out;
@@ -93,8 +93,8 @@ html, body {
 }
 
 .brand-logo:hover {
-    color: #ffffff;
-    opacity: 0.95;
+    color: var(--wood-accent-hover);
+    opacity: 1;
 }
 
 .brand-logo svg {
@@ -138,14 +138,14 @@ html, body {
 
 .nav-link-pill:hover {
     color: var(--text-primary);
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: var(--wood-accent-light);
 }
 
 .nav-link-pill.active {
     background-color: var(--pill-active-bg);
     color: var(--pill-active-text);
-    font-weight: 600;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    font-weight: 700;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 /* Lado derecho: Carrito y Acciones de Usuario */
@@ -164,7 +164,7 @@ html, body {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(200, 138, 75, 0.08);
     border: 1px solid var(--border-subtle);
     color: var(--text-primary);
     text-decoration: none;
@@ -172,9 +172,9 @@ html, body {
 }
 
 .cart-action:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: var(--border-pill);
-    color: #ffffff;
+    background-color: var(--wood-accent-light);
+    border-color: var(--wood-accent);
+    color: var(--wood-accent-hover);
     transform: translateY(-1px);
 }
 
@@ -187,9 +187,9 @@ html, body {
     padding: 0 5px;
     border-radius: 9999px;
     background-color: var(--wood-accent);
-    color: #ffffff;
+    color: #141210;
     font-size: 0.7rem;
-    font-weight: 700;
+    font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -203,7 +203,7 @@ html, body {
     gap: 0.5rem;
     padding: 0.35rem 0.85rem;
     border-radius: 9999px;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(200, 138, 75, 0.08);
     border: 1px solid var(--border-subtle);
     color: var(--text-primary);
     font-size: 0.85rem;
@@ -212,8 +212,8 @@ html, body {
 }
 
 .user-profile-badge:hover {
-    border-color: var(--border-pill);
-    color: #ffffff;
+    border-color: var(--wood-accent);
+    color: var(--wood-accent-hover);
 }
 
 .btn-auth-logout {
@@ -222,18 +222,18 @@ html, body {
     gap: 0.35rem;
     padding: 0.4rem 0.85rem;
     border-radius: 9999px;
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    background-color: rgba(239, 68, 68, 0.1);
-    color: #fca5a5;
+    border: 1px solid rgba(179, 74, 59, 0.35);
+    background-color: rgba(179, 74, 59, 0.12);
+    color: #e89a8f;
     font-size: 0.82rem;
     text-decoration: none;
     transition: var(--transition-smooth);
 }
 
 .btn-auth-logout:hover {
-    background-color: rgba(239, 68, 68, 0.2);
-    border-color: rgba(239, 68, 68, 0.5);
-    color: #fee2e2;
+    background-color: rgba(179, 74, 59, 0.22);
+    border-color: rgba(179, 74, 59, 0.5);
+    color: #f7c5be;
 }
 
 .btn-auth-login {
@@ -251,9 +251,9 @@ html, body {
 }
 
 .btn-auth-login:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: #555555;
-    color: #ffffff;
+    background-color: var(--wood-accent-light);
+    border-color: var(--wood-accent);
+    color: var(--wood-accent-hover);
 }
 
 /* Botón Hamburguesa para Móvil */
